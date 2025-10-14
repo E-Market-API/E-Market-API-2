@@ -98,21 +98,26 @@ export const validateCoupon = async (req, res, next) => {
         const coupon = await Coupon.findOne({ code: code.toUpperCase(), status: "active" }).notDeleted();
 
         if (!coupon) {
+            logFailedValidation(req, 'Invalid coupon code');
             return res.status(400).json({ error: "Invalid coupon code" });
         }
 
         const now = new Date();
         if (now < coupon.startDate || now > coupon.expirationDate) {
+            logFailedValidation(req, 'Coupon expired or not active');
             return res.status(400).json({ error: "Coupon has expired or not yet active" });
         }
 
         if (purchaseAmount < coupon.minimumPurchase) {
+            logFailedValidation(req, 'Minimum purchase not met');
             return res.status(400).json({
                 error: `Minimum purchase amount is ${coupon.minimumPurchase}`
             });
         }
 
+
         if (coupon.maxUsage && coupon.usedBy.length >= coupon.maxUsage) {
+            logFailedValidation(req, 'Usage limit reached');
             return res.status(400).json({ error: "Coupon usage limit reached" });
         }
 
@@ -121,6 +126,7 @@ export const validateCoupon = async (req, res, next) => {
         ).reduce((total, usage) => total + usage.usageCount, 0);
 
         if (userUsage >= coupon.maxUsagePerUser) {
+            logFailedValidation(req, 'User usage limit reached');
             return res.status(400).json({ error: "User usage limit reached" });
         }
 
@@ -141,6 +147,7 @@ export const validateCoupon = async (req, res, next) => {
             }
         });
     } catch (error) {
+        logFailedValidation(req, 'Server error');
         next(error);
     }
 };
