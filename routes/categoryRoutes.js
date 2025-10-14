@@ -2,10 +2,12 @@ import express from "express";
 import * as CategoryController from "../controllers/CategoryController.js";
 import validate from "../middlewares/validate.js";
 import { categorySchema } from "../validations/categorySchema.js";
+import { authorizeRoles } from "../middlewares/roles.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/", validate(categorySchema), CategoryController.createCategory);
+router.post("/",isAuthenticated, validate(categorySchema),authorizeRoles("seller", "admin"), CategoryController.createCategory);
 router.get("/", CategoryController.getCategories);
 router.get("/deleted", CategoryController.getDeletedCategories);
 
