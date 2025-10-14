@@ -11,6 +11,7 @@ import cartRoutes from "./routes/cartRoutes.js"
 import logger from "./middlewares/logger.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
+import { isAuthenticated } from "./middlewares/auth.js";
 
 import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
@@ -47,7 +48,8 @@ app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
-app.use("/api/cart", cartRoutes)
+app.use("/api/cart", isAuthenticated, cartRoutes);
+app.use("/api/guest-cart", cartRoutes);
 
 // Catch all unknown routes
 app.use(notFound);

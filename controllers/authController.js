@@ -2,6 +2,8 @@ import User from "../models/User.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
+import CartService from "../services/cartService.js";
+
 const JWT_SECRET = process.env.JWT_SECRET;
 const JWT_EXPIRES_IN = "7d"; // Token validity\
 
@@ -24,6 +26,12 @@ export const register = async (req, res, next) => {
             JWT_SECRET,
             { expiresIn: JWT_EXPIRES_IN }
         );
+
+        // Merge guest cart if sessionId exists
+        const sessionId = req.headers["session-id"];
+        if (sessionId) {
+            await CartService.mergeCarts(user._id, sessionId);
+        }
 
         res.status(201).json({
             message: "User registered successfully",
@@ -52,6 +60,12 @@ export const login = async (req, res, next) => {
             JWT_SECRET,
             { expiresIn: JWT_EXPIRES_IN }
         );
+
+        // Merge guest cart if sessionId exists
+        const sessionId = req.headers["session-id"];
+        if (sessionId) {
+            await CartService.mergeCarts(user._id, sessionId);
+        }
 
         res.json({
             message: "Login successful",

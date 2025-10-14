@@ -5,11 +5,12 @@ import crypto from "crypto";
 
 function getCartIdentifier(req) {
     if (req.user) return { userId: req.user.id };
-    if (!req.sessionId) {
-        // generate a temporary sessionId for guests
-        req.sessionId = crypto.randomBytes(16).toString("hex");
+    let sessionId = req.headers["session-id"];
+
+    if (!sessionId) {
+        sessionId = crypto.randomBytes(16).toString("hex");
     }
-    return { sessionId: req.sessionId };
+    return { sessionId };
 }
 
 export const getCart = async (req, res, next) => {
