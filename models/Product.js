@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import softDeletePlugin from "./plugins/softDeletePlugin.js";
+// import publishedPlugin from "./plugins/publishedPlugin.js";
+import publishedPlugin from "./plugins/publishedPlugin.js";
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -26,7 +28,7 @@ const productSchema = new mongoose.Schema({
     default: 0,
   },
   categories: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: [mongoose.Schema.Types.ObjectId],
     ref: "Category",
   },
   primaryImage: {
@@ -57,6 +59,7 @@ const productSchema = new mongoose.Schema({
 });
 
 productSchema.plugin(softDeletePlugin);
+productSchema.plugin(publishedPlugin);
 
 const Product = mongoose.model("Product", productSchema);
 

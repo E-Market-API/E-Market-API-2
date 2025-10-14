@@ -48,7 +48,21 @@ export const deleteProduct = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
   try {
-    const Products = await Product.find().notDeleted().populate("categories"); // <-- query helper
+    const Products = await Product.find()
+      .notDeleted()
+      .populate("categories"); // <-- query helper
+    res.status(200).json({ Products });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const getPublishedProducts = async (req, res, next) => {
+  try {
+    const Products = await Product.find()
+      .notDeleted()
+      .isPublished()
+      .populate("categories");
     res.status(200).json({ Products });
   } catch (error) {
     next(error);
