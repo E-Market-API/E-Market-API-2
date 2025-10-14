@@ -44,7 +44,6 @@ export const getAllCoupons = async (req,res, next) => {
     next(e);
     }
 }
-
 export  const getCouponById = async (req,res, next) => {
     try {
         const coupon = await Coupon.findById(req.params.id).populate("createdBy", "fullname email");
@@ -77,7 +76,6 @@ export  const updateCoupon = async (req,res,next) => {
         next(e);
     }
 };
-
 export  const deleteCoupon  = async (req,res,next) => {
     try {
         const coupon = await  Coupon.findById(req.params.id);
@@ -93,7 +91,6 @@ export  const deleteCoupon  = async (req,res,next) => {
         next(e);
     }
 };
-
 export const validateCoupon = async (req, res, next) => {
     try {
         const { code, purchaseAmount, userId } = req.body;
