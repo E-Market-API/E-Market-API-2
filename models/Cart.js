@@ -3,7 +3,19 @@ import softDeletePlugin from "./plugins/softDeletePlugin.js";
 
 const cartSchema = new mongoose.Schema(
     {
-        userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+        userId: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+            default: null,
+            unique: true,
+            sparse: true // allows multiple nulls
+        },
+        sessionId: { // used for guests
+            type: String,
+            default: null,
+            unique: true,
+            sparse: true // allows multiple nulls
+        },
         items: [
             {
                 productId: { type: mongoose.Schema.Types.ObjectId, ref: "Product", required: true },
