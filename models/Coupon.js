@@ -100,4 +100,5 @@ const couponSchema = new mongoose.Schema({
 });
 couponSchema.plugin(softDeletePlugin);
 
-module.exports = mongoose.model("Coupon", couponSchema);
+const Coupon = mongoose.model("Coupon", couponSchema);
+export default Coupon;
