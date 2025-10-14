@@ -2,6 +2,7 @@ import express from "express";
 import * as userController from "../controllers/UserController.js";
 import validate from "../middlewares/validate.js";
 import { userSchema } from "../validations/userSchema.js";
+import { checkOwnership } from "../middlewares/ownershipMiddleware.js";
 
 const router = express.Router();
 
@@ -10,7 +11,7 @@ router.get("/", userController.getUsers);
 router.get("/deleted", userController.getDeletedUsers);
 
 router.get("/:id", userController.getUserById);
-router.patch("/:id", validate(userSchema), userController.updateUser);
+router.patch("/:id", validate(userSchema),checkOwnership, userController.updateUser);
 router.delete("/:id", userController.deleteUser);
 
 router.delete("/:id/soft", userController.softDeleteUser);
