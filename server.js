@@ -5,7 +5,8 @@ import connectDB from "./config/db.js";
 import userRoutes from "./routes/userRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
-import authRoutes from "./routes/authRoutes.js"
+import authRoutes from "./routes/authRoutes.js";
+import couponRoutes from "./routes/couponRoutes.js";
 
 import logger from "./middlewares/logger.js";
 import notFound from "./middlewares/notFound.js";
@@ -46,6 +47,7 @@ app.use("/api/users", userRoutes);
 app.use("/api/categories", categoryRoutes);
 app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
+app.use("/api/coupons",couponRoutes)
 
 // Catch all unknown routes
 app.use(notFound);

@@ -15,7 +15,7 @@
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/ElFirdaous28/E-Market-API/issues"
+    "url": "https://github.com/ElFirdaous28/E-Market-API-2/issues"
   },
   "homepage": "https://github.com/ElFirdaous28/E-Market-API#readme",
   "dependencies": {
@@ -25,6 +25,7 @@
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.19.1",
+    "multer": "^2.0.2",
     "nodemon": "^3.1.10",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
