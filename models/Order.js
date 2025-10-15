@@ -1,5 +1,5 @@
 import mongoose from "mongoose";
-import softDeletePlugin from "./plugins/softDeletePlugin";
+import softDeletePlugin from "./plugins/softDeletePlugin.js";
 
 const orderSchema = new mongoose.Schema(
     {

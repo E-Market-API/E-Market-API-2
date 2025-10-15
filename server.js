@@ -7,6 +7,7 @@ import categoryRoutes from "./routes/categoryRoutes.js";
 import productRoutes from "./routes/productRoutes.js";
 import authRoutes from "./routes/authRoutes.js"
 import cartRoutes from "./routes/cartRoutes.js"
+import orderRoutes from "./routes/orderRoutes.js"
 
 import logger from "./middlewares/logger.js";
 import notFound from "./middlewares/notFound.js";
@@ -50,6 +51,7 @@ app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 app.use("/api/cart", isAuthenticated, cartRoutes);
 app.use("/api/guest-cart", cartRoutes);
+app.use("/api/orders", orderRoutes);
 
 // Catch all unknown routes
 app.use(notFound);
