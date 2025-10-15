@@ -96,3 +96,67 @@ export const updateOrderStatus = async (req, res, next) => {
     next(error);
   }
 };
+
+// delete order 
+export const deleteOrder = async (req, res, next) => {
+  try {
+    // Find Order by ID and delete
+    const deletedOrder = await Order.findByIdAndDelete(req.params.id);
+
+    if (!deletedOrder) {
+      return res.status(404).json({ error: "Order not found" });
+    }
+
+    res.status(200).json({ message: "Order deleted successfully" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// get all orders
+export const getOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find().notDeleted();
+    res.status(200).json({ orders });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ======================== soft delte functions ================================
+
+// Soft delete
+export const softDeleteOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+
+    await order.softDelete();
+    res.status(200).json({ message: "Order soft deleted" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Restore
+export const restoreOrder = async (req, res, next) => {
+  try {
+    const order = await Order.findById(req.params.id);
+    if (!order) return res.status(404).json({ error: "Order not found" });
+
+    await order.restore(); // <-- helper
+    res.status(200).json({ message: "Order restored" });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// Get all soft-deleted Orders
+export const getDeletedOrders = async (req, res, next) => {
+  try {
+    const orders = await Order.find().deleted();
+    res.status(200).json({ orders });
+  } catch (error) {
+    next(error);
+  }
+};
