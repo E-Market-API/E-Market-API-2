@@ -60,3 +60,39 @@ export const createOrder = async (req, res) => {
     res.status(400).json({ error: error.message });
   }
 };
+
+export const updateOrderStatus = async (req, res, next) => {
+  try {
+    const { id: orderId } = req.params;
+    const { newStatus } = req.body;
+
+    const validStatuses = ["pending", "shipped", "delivered", "cancelled"];
+    if (!validStatuses.includes(newStatus)) {
+      return res.status(400).json({ message: "Invalid status" });
+    }
+
+    const order = await Order.findById(orderId);
+    if (!order) return res.status(404).json({ message: "Order not found" });
+
+    const statusPriority = {
+      pending: 1,
+      cancelled: 2,
+      shipped: 3,
+      delivered: 4,
+    };
+
+    // Only allow status updates if newStatus is same or higher priority
+    if (statusPriority[newStatus] < statusPriority[order.status]) {
+      return res.status(400).json({
+        message: `Cannot revert order status from ${order.status} to ${newStatus}`,
+      });
+    }
+
+    order.status = newStatus;
+    await order.save();
+
+    res.json({ message: "Order status updated", order });
+  } catch (error) {
+    next(error);
+  }
+};

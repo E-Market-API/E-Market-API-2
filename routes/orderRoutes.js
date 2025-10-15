@@ -7,5 +7,6 @@ import { isAuthenticated } from "../middlewares/auth.js"
 const router = express.Router();
 
 router.post("/", isAuthenticated, OrderController.createOrder);
+router.patch("/:id/status", isAuthenticated, OrderController.updateOrderStatus);
 
 export default router;
