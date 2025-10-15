@@ -27,7 +27,17 @@ router.get("/published", productController.getPublishedProducts);
 router.get("/deleted", productController.getDeletedProducts);
 router.get("/search", productController.searchProducts);
 
+// Get seller's products
+router.get(
+  "/:sellerId",
+  isAuthenticated,
+  productController.getProductsBySeller
+);
+
+// Get a single product by ID
 router.get("/:id", productController.getProductById);
+
+// Update a product
 router.put(
   "/:id",
   isAuthenticated,
@@ -37,19 +47,33 @@ router.put(
   validate(productSchema),
   productController.updateProduct
 );
+
+// Permanent delete a product
 router.delete("/:id", authorizeRoles("admin"), productController.deleteProduct);
 
+// soft delete a product
 router.delete(
   "/:id/soft",
   authorizeRoles("seller"),
   checkProductOwnership,
   productController.softDeleteProduct
 );
+
+// restore a soft-deleted product
 router.patch(
   "/:id/restore",
   authorizeRoles("seller"),
   checkProductOwnership,
   productController.restoreProduct
+);
+
+// Publish a product
+router.patch(
+  "/:id/publish",
+  isAuthenticated,
+  authorizeRoles("seller"),
+  checkProductOwnership,
+  productController.publishProduct
 );
 
 export default router;

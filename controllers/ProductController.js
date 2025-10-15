@@ -239,3 +239,30 @@ export const searchProducts = async (req, res) => {
     res.status(500).json({ error: "Server error while searching products" });
   }
 };
+
+export const getProductsBySeller = async (req, res, next) => {
+  try {
+    const sellerId = req.params.sellerId;
+    const products = await Product.find({ seller_id: sellerId }).notDeleted().populate("categories");
+    if (!products || products.length === 0) {
+      return res
+        .status(404)
+        .json({ message: "No products found for this seller" });
+    }
+    res.status(200).json({ products });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const publishProduct = async (req, res, next) => {
+  try {
+    const product = await Product.findById(req.params.id);
+    if (!product) return res.status(404).json({ error: "Product not found" });
+    product.published = true;
+    await product.save();
+    res.status(200).json({ message: "Product published" });
+  } catch (error) {
+    next(error);
+  }
+};
