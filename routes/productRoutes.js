@@ -2,22 +2,51 @@ import express from "express";
 import * as productController from "../controllers/ProductController.js";
 import validate from "../middlewares/validate.js";
 import { productSchema } from "../validations/productSchema.js";
-import { isAdmin, isAuthenticated, isSeller } from "../middlewares/auth.js";
+import { authorizeRoles } from "../middlewares/roles.js";
+import { createUploadFields } from "../config/multerConfig.js";
+import { isAuthenticated } from "../middlewares/auth.js";
 
 const router = express.Router();
 
-router.post("/", validate(productSchema), isAuthenticated, isSeller,productController.createProduct);
+const productImageUpload = createUploadFields("products", [
+  { name: "primaryImage", maxCount: 1 },
+  { name: "secondaryImages", maxCount: 5 },
+]);
+
+router.post(
+    "/",
+    isAuthenticated,
+  productImageUpload,
+  validate(productSchema),
+  authorizeRoles("seller"),
+  productController.createProduct
+);
 router.get("/", productController.getProducts);
 router.get("/published", productController.getPublishedProducts);
 router.get("/deleted", productController.getDeletedProducts);
 router.get("/search", productController.searchProducts);
 
 router.get("/:id", productController.getProductById);
-router.put("/:id", validate(productSchema), isAuthenticated, isSeller, productController.updateProduct);
-router.delete("/:id", isAuthenticated, isAdmin, productController.deleteProduct);
+router.put(
+    "/:id",
+    isAuthenticated,
+  productImageUpload,
+  validate(productSchema),
+  authorizeRoles("seller"),
+  productController.updateProduct
+);
+router.delete("/:id", authorizeRoles("admin"), productController.deleteProduct);
 
-router.delete("/:id/soft", isAuthenticated, isSeller, productController.softDeleteProduct);
-router.patch("/:id/restore", isAuthenticated, isSeller, productController.restoreProduct);
+router.delete(
+  "/:id/soft",
+  authorizeRoles("seller"),
+  productController.softDeleteProduct
+);
+router.patch(
+  "/:id/restore",
+  authorizeRoles("seller"),
+  productController.restoreProduct
+);
 
 export default router;
 

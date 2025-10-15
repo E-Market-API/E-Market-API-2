@@ -32,8 +32,9 @@ export const productSchema = yup.object({
 
   primaryImage: yup
     .string()
-    // .url("Invalid image URL")
-    .required("You need to add atleast one image"),
+    .url()
+    .notRequired()
+    .nullable(),
 
   secondaryImages: yup.array().of(yup.string().url()).notRequired(),
 

@@ -36,17 +36,3 @@ export const isAdmin = (req, res, next) => {
 
   next();
 };
-
-export const isSeller = (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({ message: "Not authenticated" });
-  }
-
-  if (req.user.role !== "seller") {
-    return res
-      .status(403)
-      .json({ message: "Access denied: seller only", role: req.user.role });
-  }
-
-  next();
-};

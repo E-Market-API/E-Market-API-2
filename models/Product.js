@@ -33,9 +33,9 @@ const productSchema = new mongoose.Schema({
   },
   primaryImage: {
     type: String,
-    required: true,
+    required: false,
   },
-  secondayImages: {
+  secondaryImages: {
     type: [String],
     default: [],
   },

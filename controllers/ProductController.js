@@ -2,7 +2,19 @@ import Product from "../models/Product.js";
 
 export const createProduct = async (req, res, next) => {
   try {
-    const product = new Product(req.body);
+    const data = req.body;
+
+    if (req.files) {
+      if (req.files.primaryImage && req.files.primaryImage[0]) {
+        data.primaryImage = `/uploads/products/${req.files.primaryImage[0].filename}`;
+      }
+      if (req.files.secondaryImages) {
+        data.secondaryImages = req.files.secondaryImages.map(
+          (f) => `/uploads/products/${f.filename}`
+        );
+      }
+    }
+    const product = new Product(data);
     await product.save();
 
     res.status(201).json({ message: "Product created successfully", product });
@@ -13,9 +25,22 @@ export const createProduct = async (req, res, next) => {
 
 export const updateProduct = async (req, res, next) => {
   try {
+    const updates = req.body;
+
+    if (req.files) {
+      if (req.files.primaryImage && req.files.primaryImage[0]) {
+        updates.primaryImage = `/uploads/products/${req.files.primaryImage[0].filename}`;
+      }
+      if (req.files.secondaryImages) {
+        updates.secondaryImages = req.files.secondaryImages.map(
+          (f) => `/uploads/products/${f.filename}`
+        );
+      }
+    }
+
     const updatedProduct = await Product.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updates,
       { new: true, runValidators: true }
     );
 
@@ -48,9 +73,7 @@ export const deleteProduct = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
   try {
-    const Products = await Product.find()
-      .notDeleted()
-      .populate("categories"); // <-- query helper
+    const Products = await Product.find().notDeleted().populate("categories"); // <-- query helper
     res.status(200).json({ Products });
   } catch (error) {
     next(error);
