@@ -17,7 +17,11 @@ const reviewSchema = new mongoose.Schema({
         min: 1,
         max: 5
     },
-    comment: {
+    comment : {
+      type: String,
+      required:true
+    },
+    status: {
         type: String,
         enum: ["pending", "approved", "rejected"],
         default: "pending"
