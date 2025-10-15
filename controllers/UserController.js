@@ -17,9 +17,18 @@ export const createUser = async (req, res, next) => {
 
 export const updateUser = async (req, res, next) => {
   try {
+    const updates = { ...req.body };
+
+    // Si un fichier avatar est uploadé
+    if (req.file) {
+      // Ici tu peux stocker le chemin relatif ou absolu du fichier
+      updates.avatar = `/uploads/avatars/${req.file.filename}`;
+    }
+
+    // Mettre à jour l'utilisateur
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
-      req.body,
+      updates,
       { new: true, runValidators: true }
     );
 
@@ -32,6 +41,7 @@ export const updateUser = async (req, res, next) => {
     next(error);
   }
 };
+
 
 export const deleteUser = async (req, res, next) => {
   try {
