@@ -1,8 +1,14 @@
 import Product from "../models/Product.js";
+import fs from "fs";
+import path from "path";
 
 export const createProduct = async (req, res, next) => {
   try {
-    const data = req.body;
+    const data = { ...req.body };
+
+    if (req.user && req.user.id) {
+      data.seller_id = req.user.id;
+    }
 
     if (req.files) {
       if (req.files.primaryImage && req.files.primaryImage[0]) {
@@ -19,13 +25,39 @@ export const createProduct = async (req, res, next) => {
 
     res.status(201).json({ message: "Product created successfully", product });
   } catch (error) {
+    if (req.files) {
+      const allFiles = [
+        ...(req.files.primaryImage || []),
+        ...(req.files.secondaryImages || []),
+      ];
+      allFiles.forEach((f) => {
+        const p = path.join("uploads", "products", f.filename);
+        fs.existsSync(p) && fs.unlinkSync(p);
+      });
+    }
     next(error);
   }
 };
 
 export const updateProduct = async (req, res, next) => {
   try {
-    const updates = req.body;
+    const updates = { ...req.body };
+    const product = await Product.findById(req.params.id);
+
+    if (!product) {
+      // cleanup uploaded files if any
+      if (req.files) {
+        const allFiles = [
+          ...(req.files.primaryImage || []),
+          ...(req.files.secondaryImages || []),
+        ];
+        allFiles.forEach((f) => {
+          const p = path.join("uploads", "products", f.filename);
+          fs.existsSync(p) && fs.unlinkSync(p);
+        });
+      }
+      return res.status(404).json({ error: "Product not found" });
+    }
 
     if (req.files) {
       if (req.files.primaryImage && req.files.primaryImage[0]) {
@@ -36,6 +68,25 @@ export const updateProduct = async (req, res, next) => {
           (f) => `/uploads/products/${f.filename}`
         );
       }
+    }
+
+    //  remove the previous images if new ones are uploaded
+    const previousPrimaryImages = product.primaryImage;
+    const previousSecondaryImages = product.secondaryImages || [];
+
+    if (updates.primaryImage && previousPrimaryImages) {
+      const p = path.join(
+        "uploads",
+        "products",
+        path.basename(previousPrimaryImages)
+      );
+      fs.existsSync(p) && fs.unlinkSync(p);
+    }
+    if (updates.secondaryImages && previousSecondaryImages.length > 0) {
+      previousSecondaryImages.forEach((imgPath) => {
+        const p = path.join("uploads", "products", path.basename(imgPath));
+        fs.existsSync(p) && fs.unlinkSync(p);
+      });
     }
 
     const updatedProduct = await Product.findByIdAndUpdate(
@@ -52,6 +103,16 @@ export const updateProduct = async (req, res, next) => {
       .status(200)
       .json({ message: "Product updated", Product: updatedProduct });
   } catch (error) {
+    if (req.files) {
+      const allFiles = [
+        ...(req.files.primaryImage || []),
+        ...(req.files.secondaryImages || []),
+      ];
+      allFiles.forEach((f) => {
+        const p = path.join("uploads", "products", f.filename);
+        fs.existsSync(p) && fs.unlinkSync(p);
+      });
+    }
     next(error);
   }
 };

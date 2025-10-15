@@ -5,6 +5,7 @@ import { productSchema } from "../validations/productSchema.js";
 import { authorizeRoles } from "../middlewares/roles.js";
 import { createUploadFields } from "../config/multerConfig.js";
 import { isAuthenticated } from "../middlewares/auth.js";
+import { checkProductOwnership } from "../middlewares/ownershipMiddleware.js";
 
 const router = express.Router();
 
@@ -14,8 +15,8 @@ const productImageUpload = createUploadFields("products", [
 ]);
 
 router.post(
-    "/",
-    isAuthenticated,
+  "/",
+  isAuthenticated,
   productImageUpload,
   validate(productSchema),
   authorizeRoles("seller"),
@@ -28,11 +29,12 @@ router.get("/search", productController.searchProducts);
 
 router.get("/:id", productController.getProductById);
 router.put(
-    "/:id",
-    isAuthenticated,
+  "/:id",
+  isAuthenticated,
+  authorizeRoles("seller"),
+  checkProductOwnership,
   productImageUpload,
   validate(productSchema),
-  authorizeRoles("seller"),
   productController.updateProduct
 );
 router.delete("/:id", authorizeRoles("admin"), productController.deleteProduct);
@@ -40,11 +42,13 @@ router.delete("/:id", authorizeRoles("admin"), productController.deleteProduct);
 router.delete(
   "/:id/soft",
   authorizeRoles("seller"),
+  checkProductOwnership,
   productController.softDeleteProduct
 );
 router.patch(
   "/:id/restore",
   authorizeRoles("seller"),
+  checkProductOwnership,
   productController.restoreProduct
 );
 
