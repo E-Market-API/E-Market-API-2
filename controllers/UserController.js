@@ -168,3 +168,22 @@ export const changeRole = async(req, res, next) => {
     next(error);
   }
 }
+
+export const searchSellers = async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    let filter = { role: "seller", deletedAt: null };
+
+    if (search) {
+      filter.$or = [
+        { fullname: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    const sellers = await User.find(filter);
+    res.status(200).json({ sellers });
+  } catch (error) {
+    next(error);
+  }
+};
