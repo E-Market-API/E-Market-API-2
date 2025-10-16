@@ -63,9 +63,15 @@ export const deleteUser = async (req, res, next) => {
 
 export const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().notDeleted();
+    let users;
+    if (req.user.role === "admin") {
+     users = await User.find({deletedAt: null});
+      
+    }else{
+     users = await User.find({ role: "seller" ,deletedAt: null});
+    }
     res.status(200).json({ users });
-  } catch (error) {
+    } catch (error) {
     next(error);
   }
 }

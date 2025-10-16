@@ -11,7 +11,7 @@ import { authorizeRoles } from "../middlewares/roles.js";
 const router = express.Router();
 
 router.post("/", validate(userSchema), userController.createUser);
-router.get("/", userController.getUsers);
+router.get("/",isAuthenticated, userController.getUsers);
 router.get("/deleted", userController.getDeletedUsers);
 
 router.get("/:id", userController.getUserById);
