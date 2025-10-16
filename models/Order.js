@@ -11,13 +11,20 @@ const orderSchema = new mongoose.Schema(
                 price: { type: Number, required: true }, // snapshot of product price
             },
         ],
-        totalPrice: { type: Number, required: true },
+        // Total before any discount
+        totalAmount: { type: Number, required: true, },
+
+        // Total after discounts/coupons applied
+        finalAmount: { type: Number, required: true, },
+
         status: {
             type: String,
-            enum: ["pending", "paid", "shipped", "delivered", "cancelled"],
+            enum: ["pending", "shipped", "delivered", "cancelled"],
             default: "pending",
         },
-        appliedCoupon: { type: mongoose.Schema.Types.ObjectId, ref: "Coupon", default: null },
+        appliedCoupons: [
+            { type: mongoose.Schema.Types.ObjectId, ref: "Coupon" }
+        ],
         deletedAt: {
             type: Date,
             default: null
