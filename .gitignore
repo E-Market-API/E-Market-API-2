@@ -6,5 +6,6 @@
 public/uploads/
 # Mais garder le dossier uploads lui-même
 !public/
+uploads/products/
 /.idea
 
