@@ -187,3 +187,16 @@ export const searchSellers = async (req, res, next) => {
     next(error);
   }
 };
+
+export const filterUsersByRole = async (req, res, next) => {
+  try{
+    const {role} =  req.query;
+    const users = await User.find({ role, deletedAt: null });
+    if (users.length === 0)
+       return res.status(404).json({ message: `no usesr found with role ${role}` });
+    res.status(200).json({ count: users.length, users });
+  }
+  catch(error){
+    next(error);
+  }
+}

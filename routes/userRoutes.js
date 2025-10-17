@@ -10,6 +10,7 @@ import { authorizeRoles } from "../middlewares/roles.js";
 
 const router = express.Router();
 
+router.get("/filter",isAuthenticated, authorizeRoles("admin"), userController.filterUsersByRole);
 router.get("/sellers", isAuthenticated, userController.searchSellers);
 router.post("/", validate(userSchema), userController.createUser);
 router.get("/",isAuthenticated, userController.getUsers);
