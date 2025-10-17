@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { userFactory } from "../factories/userFactory.js";
 import dotenv from "dotenv";
+import { categoryFactory } from "../factories/categoryFactory.js";
 
 dotenv.config();
 
@@ -14,16 +15,17 @@ const seedDB = async () => {
     await mongoose.connection.dropDatabase();
     console.log("Database cleared.");
 
-    // Create 5 random users
-    const randomUsers = await userFactory(5);
-
-    const [adminUser] = await userFactory(1, {
+    // Creat an admin
+    await userFactory(1, {
       fullname: "Admin User",
       email: "admin@test.com",
       password: "admin123",
       role: "admin",
     });
-    
+
+    await userFactory(5); // seed users
+    const categories = await categoryFactory(6); // seed categories
+
     await mongoose.connection.close();
     console.log("Database seeding completed.");
   } catch (err) {
