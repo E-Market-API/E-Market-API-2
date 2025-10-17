@@ -47,7 +47,7 @@ export const getProductReviews = async (req, res, next) => {
         const reviews = await Review.find(filter)
             .populate("user", "fullname avatar")
             .sort({ createdAt: -1 })
-            .limit(limit * 1)
+            .limit(limit)
             .skip((page - 1) * limit);
 
         const total = await Review.countDocuments(filter);
