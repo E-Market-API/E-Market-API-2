@@ -40,5 +40,5 @@ export const moderateReviewSchema = yup.object({
     status: yup
         .string()
         .required("Status is required")
-        .oneOf(["pending", "approved", "rejected"], "Status must be pending, approved, or rejected")
+        .oneOf(["pending", "cancelled", "shipped","delivered"], "Status must be pending, approved, or rejected")
 });

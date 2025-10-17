@@ -5,9 +5,9 @@ import Order from "../models/Order.js";
 // check if user bought the product
 export const hasUserPurchasedProduct = async (userId, productId) => {
     const order = await Order.findOne({
-        user: userId,
-        "items.product": productId,
-        status: "completed"
+         userId,
+        "items.productId": productId,
+        status: {$in : ["delivered", "shipped"]}
     });
     return !!order;
 

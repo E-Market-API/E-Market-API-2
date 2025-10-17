@@ -14,7 +14,7 @@ router.get("/product/:productId", reviewController.getProductReviews);
 // Routes private
 router.use(isAuthenticated);
 
-router.post("/", reviewRateLimit, validate(createReviewSchema), reviewController.createReview);
+router.post("/", validate(createReviewSchema), reviewController.createReview);
 router.get("/me", reviewController.getUserReviews);
 router.put("/:id", checkReviewOwnership, validate(updateReviewSchema), reviewController.updateReview);
 router.delete("/:id", checkReviewOwnership, reviewController.deleteReview);
