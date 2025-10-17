@@ -3,7 +3,7 @@ import Coupon from "../models/Coupon.js";
 export const createCoupon = async (req, res, next) => {
     try {
         if (req.user.role !== "admin" && req.user.role !== "seller") {
-            return res.status(403).json({error: "Access denied: admin and seller only"});
+            return res.status(403).json({error: `Access denied: admin and seller only : ${req.user.role}`});
         }
         const coupon = new Coupon({
             ...req.body,
