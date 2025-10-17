@@ -1,5 +1,6 @@
 // middlewares/ownershipMiddleware.js
 import User from "../models/User.js";
+import Review from "../models/Review.js";
 
 export const checkOwnership = async (req, res, next) => {
   try {
@@ -26,4 +27,26 @@ export const checkOwnership = async (req, res, next) => {
     console.error("Erreur ownershipMiddleware:", error);
     return res.status(500).json({ message: "Erreur serveur dans ownershipMiddleware" });
   }
+};
+
+// for check if the user have the Access of the user
+export const checkReviewOwnership = async (req, res, next) => {
+    try {
+        const reviewId = req.params.id;
+        const userId = req.user.id;
+        const isAdmin = req.user.role === "admin";
+
+        const review = await Review.findById(reviewId);
+        if (!review) {
+            return res.status(404).json({ error: "Review not found" });
+        }
+
+        if (review.user.toString() !== userId && !isAdmin) {
+            return res.status(403).json({ error: "Access denied" });
+        }
+
+        next();
+    } catch (error) {
+        res.status(500).json({ error: "Server error" });
+    }
 };
