@@ -5,3 +5,4 @@
 public/uploads/
 # Mais garder le dossier uploads lui-même
 !public/
+/.idea
