@@ -28,6 +28,8 @@ export const checkOwnership = async (req, res, next) => {
     return res.status(500).json({ message: "Erreur serveur dans ownershipMiddleware" });
   }
 };
+
+// for check if the user have the Access of the user
 export const checkReviewOwnership = async (req, res, next) => {
     try {
         const reviewId = req.params.id;
