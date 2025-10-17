@@ -3,7 +3,7 @@ import Coupon from "../models/Coupon.js";
 export const createCoupon = async (req, res, next) => {
     try {
         if (req.user.role !== "admin" && req.user.role !== "seller") {
-            return res.status(403).json({error: "Access denied: admin and seller only"});
+            return res.status(403).json({error: `Access denied: admin and seller only : ${req.user.role}`});
         }
         const coupon = new Coupon({
             ...req.body,
@@ -86,11 +86,12 @@ export  const deleteCoupon  = async (req,res,next) => {
             return res.status(403).json({error: "Access denied"});
         }
         await  coupon.softDelete();
-        res.status(204).send();
+        res.status(204).json({message: "Coupon deleted"});
     } catch (e) {
         next(e);
     }
 };
+// fonction doit etre utilisee dans le panier des commandes
 export const validateCoupon = async (req, res, next) => {
     try {
         const { code, purchaseAmount, userId } = req.body;

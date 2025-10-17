@@ -1,4 +1,6 @@
 import User from "../models/User.js";
+import path from "path";
+import fs from "fs";
 
 export const createUser = async (req, res, next) => {
   try {
@@ -61,9 +63,15 @@ export const deleteUser = async (req, res, next) => {
 
 export const getUsers = async (req, res, next) => {
   try {
-    const users = await User.find().notDeleted();
+    let users;
+    if (req.user.role === "admin") {
+     users = await User.find({deletedAt: null});
+      
+    }else{
+     users = await User.find({ role: "seller" ,deletedAt: null});
+    }
     res.status(200).json({ users });
-  } catch (error) {
+    } catch (error) {
     next(error);
   }
 }
@@ -113,6 +121,68 @@ export const getDeletedUsers = async (req, res, next) => {
   try {
     const users = await User.find().deleted();
     res.status(200).json({ users });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const deleteAvatar = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    if (!user.avatar) {
+      return res.status(400).json({ message: "No avatar found for this user" });
+    }
+
+    // Construire le chemin complet vers le fichier sur le serveur
+    // Assure-toi que `user.avatar` contient bien le chemin relatif depuis 'public'
+    const avatarPath = path.join("public", user.avatar);
+
+    try {
+      await fs.unlink(avatarPath);
+      console.log("Avatar file deleted:", avatarPath);
+    } catch (err) {
+      console.warn("Avatar file not found on server, skipping deletion:", avatarPath);
+    }
+
+    // Supprimer la référence dans la base de données
+    user.avatar = null;
+    await user.save();
+
+    res.status(200).json({ message: "Avatar deleted successfully", user });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const changeRole = async(req, res, next) => {
+  try{
+    const user = await User.findById(req.params.id);
+    if (!user) return res.status(404).json({ error: "User not found" });
+
+    user.role = req.body.role;
+    await user.save();
+    res.status(200).json({ message: "Role changed successfully", user });
+  } catch (error) {
+    next(error);
+  }
+}
+
+export const searchSellers = async (req, res, next) => {
+  try {
+    const { search } = req.query;
+    let filter = { role: "seller", deletedAt: null };
+
+    if (search) {
+      filter.$or = [
+        { fullname: { $regex: search, $options: "i" } },
+        { email: { $regex: search, $options: "i" } }
+      ];
+    }
+
+    const sellers = await User.find(filter);
+    res.status(200).json({ sellers });
   } catch (error) {
     next(error);
   }

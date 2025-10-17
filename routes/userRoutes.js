@@ -5,12 +5,14 @@ import { userSchema } from "../validations/userSchema.js";
 import { checkOwnership } from "../middlewares/ownershipMiddleware.js";
 import { createUpload } from "../config/multerConfig.js";
 import { isAuthenticated } from "../middlewares/auth.js";
+import { authorizeRoles } from "../middlewares/roles.js";
 
 
 const router = express.Router();
 
+router.get("/sellers", isAuthenticated, userController.searchSellers);
 router.post("/", validate(userSchema), userController.createUser);
-router.get("/", userController.getUsers);
+router.get("/",isAuthenticated, userController.getUsers);
 router.get("/deleted", userController.getDeletedUsers);
 
 router.get("/:id", userController.getUserById);
@@ -26,6 +28,9 @@ router.delete("/:id", userController.deleteUser);
 
 router.delete("/:id/soft", userController.softDeleteUser);
 router.patch("/:id/restore", userController.restoreUser);
+
+router.delete("/:id/avatar", isAuthenticated, checkOwnership, userController.deleteAvatar);
+router.put("/:id/role", isAuthenticated, authorizeRoles("admin"), userController.changeRole);
 
 export default router;
 
