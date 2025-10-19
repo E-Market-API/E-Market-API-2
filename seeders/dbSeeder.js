@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { userFactory } from "../factories/userFactory.js";
 import dotenv from "dotenv";
 import { categoryFactory } from "../factories/categoryFactory.js";
+import { cartFactory } from "../factories/cartFactory.js";
 
 dotenv.config();
 
@@ -24,7 +25,8 @@ const seedDB = async () => {
     });
 
     await userFactory(5); // seed users
-    const categories = await categoryFactory(6); // seed categories
+    await categoryFactory(6); // seed categories
+    await cartFactory(3); // seedcarts
 
     await mongoose.connection.close();
     console.log("Database seeding completed.");
