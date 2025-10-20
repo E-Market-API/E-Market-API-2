@@ -1,5 +1,7 @@
 import mongoose from "mongoose";
 import softDeletePlugin from "./plugins/softDeletePlugin.js";
+// import publishedPlugin from "./plugins/publishedPlugin.js";
+import publishedPlugin from "./plugins/publishedPlugin.js";
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -15,34 +17,48 @@ const productSchema = new mongoose.Schema({
     required: [true, "Product price is required"],
     min: [0, "Price cannot be negative"],
   },
+  ex_price: {
+    type: Number,
+    min: 0,
+  },
   stock: {
     type: Number,
     required: [true, "Product stock is required"],
     min: [0, "Stock cannot be negative"],
+    default: 0,
   },
-  categories: [
-    {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Category",
-    },
-  ],
-  images: [
-    {
-      type: String,
-    },
-  ],
+  categories: {
+    type: [mongoose.Schema.Types.ObjectId],
+    ref: "Category",
+  },
+  primaryImage: {
+    type: String,
+    required: false,
+  },
+  secondaryImages: {
+    type: [String],
+    default: [],
+  },
+  published: {
+    type: Boolean,
+    default: false,
+  },
+  seller_id: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+  },
   createdAt: {
     type: Date,
     default: Date.now,
   },
   deletedAt: {
     type: Date,
-    default: null
+    default: null,
   },
-
 });
 
 productSchema.plugin(softDeletePlugin);
+productSchema.plugin(publishedPlugin);
 
 const Product = mongoose.model("Product", productSchema);
 
