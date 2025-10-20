@@ -5,7 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "seed": "node seeders/dbSeeder.js",
+    "reset-db": "node seeders/resetDB.js",
+    "test": "mocha --exit --recursive test"
   },
   "repository": {
     "type": "git",
@@ -19,6 +22,7 @@
   },
   "homepage": "https://github.com/ElFirdaous28/E-Market-API#readme",
   "dependencies": {
+    "@faker-js/faker": "^10.1.0",
     "bcryptjs": "^3.0.2",
     "chalk": "^5.6.2",
     "dotenv": "^17.2.3",
@@ -30,5 +34,10 @@
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1",
     "yup": "^1.7.1"
+  },
+  "devDependencies": {
+    "chai": "^6.2.0",
+    "mocha": "^11.7.4",
+    "supertest": "^7.1.4"
   }
 }
