@@ -58,3 +58,5 @@ app.use("/api/orders", orderRoutes);
 // Catch all unknown routes
 app.use(notFound);
 app.use(errorHandler);
+
+export default app;

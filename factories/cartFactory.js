@@ -1,23 +1,38 @@
 import Cart from "../models/Cart.js";
 import { faker } from "@faker-js/faker";
+import Product from "../models/Product.js";
 
 /**
- * Creates one or more guest carts in the database.
- * Each cart has a unique sessionId and random items.
+ * Creates one or more carts in the database.
+ * If userId is provided, sessionId will be null.
  * @param {number} count - Number of carts to create (default 1)
- * @param {Object} overrides - Optional overrides (items, etc.)
+ * @param {Object} overrides - Optional overrides (userId, items, etc.)
  * @returns {Promise<Cart[]>} - Array of created cart documents
  */
 export const cartFactory = async (count = 1, overrides = {}) => {
   const carts = [];
 
   for (let i = 0; i < count; i++) {
+    // If no productId provided, create one real product
+    let productId = overrides.productId;
+    if (!productId) {
+      const product = await Product.create({
+        title: faker.commerce.productName(),
+        description: faker.commerce.productDescription(),
+        price: faker.number.float({ min: 5, max: 100, multipleOf: 0.01 }),
+        category: overrides.categoryId || null,
+        stock: faker.number.int({ min: 10, max: 100 }),
+      });
+      productId = product._id;
+    }
+
+    const isUser = !!overrides.userId;
     const cart = await Cart.create({
-      userId: null, // always guest
-      sessionId: overrides.sessionId || faker.string.uuid(),
+      userId: overrides.userId || null,
+      sessionId: isUser ? null : overrides.sessionId || faker.string.uuid(),
       items: overrides.items || [
         {
-          productId: overrides.productId || faker.database.mongodbObjectId(),
+          productId,
           quantity: faker.number.int({ min: 1, max: 5 }),
         },
       ],
