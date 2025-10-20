@@ -5,6 +5,7 @@ import app from "../server.js";
 import { userFactory } from "../factories/userFactory.js";
 import { cartFactory } from "../factories/cartFactory.js";
 import Cart from "../models/Cart.js";
+import Order from "../models/Order.js";
 
 const { expect } = chai;
 
@@ -35,7 +36,6 @@ describe("Order API", function () {
 
     token = res.body.token;
   });
-
 
   after(async () => {
     if (testConnection) {
@@ -121,5 +121,90 @@ describe("Order API", function () {
     });
   });
 
+  // test update order status
+  describe("PATCH /api/orders/:id/status", () => {
+    let order;
+
+    beforeEach(async () => {
+      await Order.deleteMany({}); // clean previous orders
+      order = await Order.create({
+        userId: user._id,
+        items: [{ productId: new mongoose.Types.ObjectId(), quantity: 1, price: 100 }],
+        totalAmount: 100,
+        discount: 0,
+        finalAmount: 100,
+        appliedCoupons: [],
+        status: "pending",
+      });
+    });
+
+    it("should update order status successfully", async () => {
+      try {
+        const res = await request(app)
+          .patch(`/api/orders/${order._id.toString()}/status`) // <-- ensure string
+          .set("Authorization", `Bearer ${token}`)
+          .send({ newStatus: "shipped" });
+
+        expect(res.status).to.equal(200);
+        expect(res.body.order.status).to.equal("shipped");
+      } catch (err) {
+        console.error("Error in update order status test:", err);
+        throw err;
+      }
+    });
+
+    it("should return 400 for invalid status", async () => {
+      try {
+        const res = await request(app)
+          .patch(`/api/orders/${order._id}/status`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ newStatus: "invalid_status" });
+
+        expect(res.status).to.equal(400);
+        expect(res.body).to.have.property("message", "Invalid status");
+      } catch (err) {
+        console.error("Error in invalid status test:", err);
+        throw err;
+      }
+    });
+
+    it("should not allow reverting status", async () => {
+      try {
+        // First update to shipped
+        await request(app)
+          .patch(`/api/orders/${order._id}/status`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ newStatus: "shipped" });
+
+        // Now try to revert
+        const res = await request(app)
+          .patch(`/api/orders/${order._id}/status`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ newStatus: "pending" });
+
+        expect(res.status).to.equal(400);
+        expect(res.body.message).to.include("Cannot revert order status");
+      } catch (err) {
+        console.error("Error in revert status test:", err);
+        throw err;
+      }
+    });
+
+    it("should return 404 for non-existent order", async () => {
+      try {
+        const fakeId = new mongoose.Types.ObjectId();
+        const res = await request(app)
+          .patch(`/api/orders/${fakeId}/status`)
+          .set("Authorization", `Bearer ${token}`)
+          .send({ newStatus: "shipped" });
+
+        expect(res.status).to.equal(404);
+        expect(res.body).to.have.property("message", "Order not found");
+      } catch (err) {
+        console.error("Error in non-existent order test:", err);
+        throw err;
+      }
+    });
+  });
 
 });
