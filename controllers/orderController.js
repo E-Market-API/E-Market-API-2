@@ -124,3 +124,20 @@ export const getDeletedOrders = async (req, res, next) => {
     next(error);
   }
 };
+
+// get user not deleted orders
+export const getUserOrders = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+
+    // Non-admin users can only fetch their own orders
+    // if (!req.user.isAdmin && req.user.id !== userId) {
+    //   return res.status(403).json({ message: "Forbidden" });
+    // }
+
+    const orders = await Order.find({ userId }).notDeleted();
+    res.status(200).json({ orders });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -23,8 +23,11 @@ class OrderService {
     const validCoupons = [];
 
     for (const code of couponCodes) {
-      const { valid, coupon } = await DiscountService.validateCouponForUser(code, userId, totalAmount);
-      if (!valid) continue;
+      const { valid, coupon, message } = await DiscountService.validateCouponForUser(code, userId, totalAmount);
+
+      if (!valid) {
+        throw new Error(`Coupon "${code}" is invalid: ${message}`);
+      }
 
       const discount = DiscountService.calculateDiscount(coupon, totalAmount);
       totalDiscount += discount;
