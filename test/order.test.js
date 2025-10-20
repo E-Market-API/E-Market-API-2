@@ -22,6 +22,10 @@ describe("Order API", function () {
 
     // Connect to test DB
     await mongoose.connect(process.env.MONGO_URI_TEST);
+    // Recreate indexes for Cart
+    await Cart.collection.createIndex({ userId: 1 }, { unique: true, sparse: true });
+    await Cart.collection.createIndex({ sessionId: 1 }, { unique: true, sparse: true });
+    
     testConnection = mongoose.connection;
     // Seed a user
     [user] = await userFactory(1, { email: "testuser@test.com", password: "123456" });
