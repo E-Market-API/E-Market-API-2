@@ -1,14 +1,14 @@
 import express from "express";
 import * as OrderController from "../controllers/orderController.js";
 import { isAuthenticated, isAdmin } from "../middlewares/auth.js"
-// import validate from "../middlewares/validate.js";
-// import { cartSchema } from "../validations/cartSchema.js";
+import { isAdminOrOwner } from "../middlewares/adminOrOwne.js";
 
 const router = express.Router();
 
 
 router.get("/", isAuthenticated, isAdmin, OrderController.getOrders);
 router.get("/deleted", isAuthenticated, isAdmin, OrderController.getDeletedOrders);
+router.get("/:userId", isAuthenticated, isAdminOrOwner,OrderController.getUserOrders);
 
 router.post("/", isAuthenticated, OrderController.createOrder);
 router.patch("/:id/status", isAuthenticated, OrderController.updateOrderStatus);

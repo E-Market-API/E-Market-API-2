@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import dotenv from "dotenv";
-import Cart from "../models/Cart";
+import Cart from "../models/Cart.js";
 
 dotenv.config();
 
@@ -12,7 +12,6 @@ const connectDB = async () => {
     // Ensure Cart indexes are created
     try {
       await Cart.init();
-      console.log("Cart indexes ensured");
     } catch (err) {
       console.error("Error ensuring Cart indexes:", err);
     }
