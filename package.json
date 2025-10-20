@@ -22,7 +22,7 @@
   },
   "homepage": "https://github.com/ElFirdaous28/E-Market-API#readme",
   "dependencies": {
-    "@faker-js/faker": "^10.1.0",
+    "@faker-js/faker": "^8.4.1",
     "bcryptjs": "^3.0.2",
     "chalk": "^5.6.2",
     "dotenv": "^17.2.3",

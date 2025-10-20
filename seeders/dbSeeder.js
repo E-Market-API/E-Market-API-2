@@ -14,8 +14,8 @@ const seedDB = async () => {
     await mongoose.connect(process.env.DB_URI);
 
     // Clear DB
-    await mongoose.connection.dropDatabase();
-    console.log("Database cleared.");
+    //await mongoose.connection.dropDatabase();
+    //console.log("Database cleared.");
 
     // Creat an admin
     await userFactory(1, {
@@ -25,10 +25,10 @@ const seedDB = async () => {
       role: "admin",
     });
 
-    await userFactory(5); // seed users
+    //await userFactory(5); // seed users
     await categoryFactory(6); // seed categories
-    await cartFactory(3); // seed carts
-    await orderFactory(3); // seed orders
+    //await cartFactory(3); // seed carts
+    // await orderFactory(3); // seed orders
 
     await mongoose.connection.close();
     console.log("Database seeding completed.");
