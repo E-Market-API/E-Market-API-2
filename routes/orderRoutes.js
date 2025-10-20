@@ -2,8 +2,6 @@ import express from "express";
 import * as OrderController from "../controllers/orderController.js";
 import { isAuthenticated, isAdmin } from "../middlewares/auth.js";
 import { authorizeRoles } from "../middlewares/roles.js";
-
-import { isAuthenticated, isAdmin } from "../middlewares/auth.js"
 import { isAdminOrOwner } from "../middlewares/adminOrOwne.js";
 
 const router = express.Router();

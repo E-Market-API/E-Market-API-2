@@ -15,16 +15,8 @@ describe("Order API", function () {
   let user, cart;
 
   before(async () => {
-    // Create test DB connection
-    if (mongoose.connection.readyState) {
-      await mongoose.disconnect();
-    }
-
     // Connect to test DB
     await mongoose.connect(process.env.MONGO_URI_TEST);
-    // Recreate indexes for Cart
-    await Cart.collection.createIndex({ userId: 1 }, { unique: true, sparse: true });
-    await Cart.collection.createIndex({ sessionId: 1 }, { unique: true, sparse: true });
     
     testConnection = mongoose.connection;
     // Seed a user

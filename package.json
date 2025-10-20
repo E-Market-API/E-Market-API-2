@@ -8,7 +8,7 @@
     "devStart": "nodemon server.js",
     "seed": "node seeders/dbSeeder.js",
     "reset-db": "node seeders/resetDB.js",
-    "test": "mocha --exit --recursive test"
+    "test": "cross-env NODE_ENV=test mocha --timeout 10000 --exit"
   },
   "repository": {
     "type": "git",
