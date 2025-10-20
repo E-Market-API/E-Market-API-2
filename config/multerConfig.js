@@ -51,3 +51,15 @@ export const createUpload = (uploadPath, fieldName, maxCount = 1) => {
     return multer(uploadConfig).array(fieldName, maxCount); // req.files
   }
 };
+
+
+export const createUploadFields = (uploadPath, fieldsArray) => {
+  const uploadConfig = {
+    storage: createStorage(uploadPath),
+    fileFilter: imageFilter,
+    limits: {
+      fileSize: 5 * 1024 * 1024,
+    },
+  };
+  return multer(uploadConfig).fields(fieldsArray);
+};
