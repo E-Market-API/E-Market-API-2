@@ -3,16 +3,12 @@ import request from "supertest";
 import mongoose from "mongoose";
 import app from "../server.js";
 import { userFactory } from "../factories/userFactory.js";
-import { categoryFactory } from "../factories/categoryFactory.js";
 import { cartFactory } from "../factories/cartFactory.js";
-import Order from "../models/Order.js";
 import Cart from "../models/Cart.js";
 
 const { expect } = chai;
 
 describe("Order API", function () {
-  this.timeout(10000); // increase timeout for DB ops
-
   let testConnection;
   let token;
   let user, cart;
