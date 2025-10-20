@@ -23,7 +23,7 @@ export const createProduct = async (req, res, next) => {
     const product = new Product(data);
     await product.save();
 
-    res.status(201).json({ message: "Product created successfully", product });
+    res.status(201).json({ message: "Product created successfully", data: product });
   } catch (error) {
     if (req.files) {
       const allFiles = [
@@ -101,7 +101,7 @@ export const updateProduct = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ message: "Product updated", Product: updatedProduct });
+      .json({ message: "Product updated", data: updatedProduct });
   } catch (error) {
     if (req.files) {
       const allFiles = [
@@ -134,8 +134,8 @@ export const deleteProduct = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
   try {
-    const Products = await Product.find().notDeleted().populate("categories"); // <-- query helper
-    res.status(200).json({ Products });
+    const Products = await Product.find().notDeleted().populate("categories");
+    res.status(200).json({ data: Products });
   } catch (error) {
     next(error);
   }
@@ -147,7 +147,7 @@ export const getPublishedProducts = async (req, res, next) => {
       .notDeleted()
       .isPublished()
       .populate("categories");
-    res.status(200).json({ Products });
+    res.status(200).json({ data: Products });
   } catch (error) {
     next(error);
   }
@@ -204,7 +204,6 @@ export const getDeletedProducts = async (req, res, next) => {
 };
 
 // search function
-// Simple + safe product search (Express + Mongoose)
 export const searchProducts = async (req, res) => {
   try {
     const {
@@ -213,52 +212,41 @@ export const searchProducts = async (req, res) => {
       minPrice,
       maxPrice,
       page = 1,
-      limit = 2,
+      limit = 10,
       sortBy = "createdAt",
       sortOrder = "desc",
-      fields,           // optional: "title,price,category"
-      useTextSearch = "true"
+      fields,
     } = req.query;
 
-    // Normalize pagination + limits
-    const pageNum = Math.max(1, parseInt(page, 10) || 1);
-    const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20)); // cap to 100
-    const skip = (pageNum - 1) * limitNum;
+    const limitNum = Math.min(100, Math.max(1, limit));
+    const skip = (page - 1) * limitNum;
     const sort = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
 
-    // Build filter
     const filter = {};
 
-    // Title: prefer $text (fast) if available, otherwise safe regex
     if (title) {
-      if (useTextSearch === "true") {
         filter.$text = { $search: title };
-      } else {
-        const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-        filter.title = { $regex: escapeRegex(title), $options: "i" };
-      }
     }
 
-    // Categories: accept comma-separated (e.g. ?categories=phones,accessories)
     if (categories) {
       const arr = categories.split(",").map(s => s.trim()).filter(Boolean);
       if (arr.length) filter.categories = { $in: arr };
     }
 
     // Price range
-    if (minPrice !== undefined || maxPrice !== undefined) {
+    if (minPrice || maxPrice) {
       const priceFilter = {};
       if (!Number.isNaN(Number(minPrice))) priceFilter.$gte = Number(minPrice);
       if (!Number.isNaN(Number(maxPrice))) priceFilter.$lte = Number(maxPrice);
       if (Object.keys(priceFilter).length) filter.price = priceFilter;
     }
 
-    // Projection: optional fields param to return fewer fields
+    // Choose fields to return
     const projection = fields ? fields.split(",").map(f => f.trim()).join(" ") : "";
 
     // Fetch results + total count in parallel for better response time
     const [products, total] = await Promise.all([
-      Product.find(filter)
+      Product.find(filter).populate("categories")
         .sort(sort)
         .skip(skip)
         .limit(limitNum)
@@ -272,12 +260,12 @@ export const searchProducts = async (req, res) => {
       success: true,
       meta: {
         total,
-        page: pageNum,
+        page: page,
         limit: limitNum,
         pages: Math.ceil(total / limitNum),
       },
       count: products.length,
-      products,
+      data: products,
     });
   } catch (err) {
     console.error("Search error:", err);
