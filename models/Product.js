@@ -60,6 +60,11 @@ const productSchema = new mongoose.Schema({
 productSchema.plugin(softDeletePlugin);
 productSchema.plugin(publishedPlugin);
 
+productSchema.index({ title: "text", description: "text" }); // for $text search
+productSchema.index({ price: 1 });
+productSchema.index({ categories: 1 });
+productSchema.index({ createdAt: -1 }); 
+
 const Product = mongoose.model("Product", productSchema);
 
 export default Product;

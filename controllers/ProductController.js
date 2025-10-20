@@ -204,41 +204,87 @@ export const getDeletedProducts = async (req, res, next) => {
 };
 
 // search function
+// Simple + safe product search (Express + Mongoose)
 export const searchProducts = async (req, res) => {
   try {
-    const { title, categories, minPrice, maxPrice } = req.query;
+    const {
+      title,
+      categories,
+      minPrice,
+      maxPrice,
+      page = 1,
+      limit = 2,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+      fields,           // optional: "title,price,category"
+      useTextSearch = "true"
+    } = req.query;
+
+    // Normalize pagination + limits
+    const pageNum = Math.max(1, parseInt(page, 10) || 1);
+    const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10) || 20)); // cap to 100
+    const skip = (pageNum - 1) * limitNum;
+    const sort = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
+
+    // Build filter
     const filter = {};
 
-    // Filter by title (case-insensitive)
+    // Title: prefer $text (fast) if available, otherwise safe regex
     if (title) {
-      filter.title = { $regex: title, $options: "i" };
+      if (useTextSearch === "true") {
+        filter.$text = { $search: title };
+      } else {
+        const escapeRegex = s => s.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+        filter.title = { $regex: escapeRegex(title), $options: "i" };
+      }
     }
 
-    // Filter by one or more categories
+    // Categories: accept comma-separated (e.g. ?categories=phones,accessories)
     if (categories) {
-      const categoryArray = categories.split(",");
-      filter.categories = { $in: categoryArray };
+      const arr = categories.split(",").map(s => s.trim()).filter(Boolean);
+      if (arr.length) filter.categories = { $in: arr };
     }
 
-    // Filter by price range
-    if (minPrice || maxPrice) {
-      filter.price = {};
-      if (minPrice) filter.price.$gte = Number(minPrice);
-      if (maxPrice) filter.price.$lte = Number(maxPrice);
+    // Price range
+    if (minPrice !== undefined || maxPrice !== undefined) {
+      const priceFilter = {};
+      if (!Number.isNaN(Number(minPrice))) priceFilter.$gte = Number(minPrice);
+      if (!Number.isNaN(Number(maxPrice))) priceFilter.$lte = Number(maxPrice);
+      if (Object.keys(priceFilter).length) filter.price = priceFilter;
     }
 
-    const products = await Product.find(filter);
+    // Projection: optional fields param to return fewer fields
+    const projection = fields ? fields.split(",").map(f => f.trim()).join(" ") : "";
 
-    res.json({
+    // Fetch results + total count in parallel for better response time
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .sort(sort)
+        .skip(skip)
+        .limit(limitNum)
+        .select(projection)
+        .lean()
+        .exec(),
+      Product.countDocuments(filter).exec()
+    ]);
+
+    return res.json({
       success: true,
+      meta: {
+        total,
+        page: pageNum,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum),
+      },
       count: products.length,
       products,
     });
-  } catch (error) {
-    console.error("Error searching products:", error);
-    res.status(500).json({ error: "Server error while searching products" });
+  } catch (err) {
+    console.error("Search error:", err);
+    return res.status(500).json({ error: "Server error while searching products" });
   }
 };
+
 
 export const getProductsBySeller = async (req, res, next) => {
   try {
