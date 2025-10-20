@@ -63,15 +63,25 @@ export const deleteUser = async (req, res, next) => {
 
 export const getUsers = async (req, res, next) => {
   try {
+    const page = parseInt(req.query.page) || 1;
+    let limit;
+    let totalUsers;
+    let skip;
     let users;
     if (req.user.role === "admin") {
-     users = await User.find({deletedAt: null});
-      
-    }else{
-     users = await User.find({ role: "seller" ,deletedAt: null});
+      limit = parseInt(req.query.limit) || 10;
+      skip = (page - 1) * limit;
+      users = await User.find({ deletedAt: null }).skip(skip).limit(limit);
+      totalUsers = await User.countDocuments({ deletedAt: null });
+    } else {
+      limit = 10;
+      skip = (page - 1) * limit;
+      users = await User.find({ role: "seller", deletedAt: null }).skip(skip).limit(limit);
+      totalUsers = await User.countDocuments({ role: "seller", deletedAt: null });
     }
-    res.status(200).json({ users });
-    } catch (error) {
+
+    res.status(200).json({ users , totalUsers, limit, page ,totalPages: Math.ceil(totalUsers / limit),});
+  } catch (error) {
     next(error);
   }
 }
@@ -156,8 +166,8 @@ export const deleteAvatar = async (req, res, next) => {
   }
 };
 
-export const changeRole = async(req, res, next) => {
-  try{
+export const changeRole = async (req, res, next) => {
+  try {
     const user = await User.findById(req.params.id);
     if (!user) return res.status(404).json({ error: "User not found" });
 
@@ -187,3 +197,16 @@ export const searchSellers = async (req, res, next) => {
     next(error);
   }
 };
+
+export const filterUsersByRole = async (req, res, next) => {
+  try {
+    const { role } = req.query;
+    const users = await User.find({ role, deletedAt: null });
+    if (users.length === 0)
+      return res.status(404).json({ message: `no usesr found with role ${role}` });
+    res.status(200).json({ count: users.length, users });
+  }
+  catch (error) {
+    next(error);
+  }
+}
