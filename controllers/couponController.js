@@ -1,5 +1,9 @@
 import Coupon from "../models/Coupon.js";
 
+const logFailedValidation = (req, reason) => {
+    console.log(`[Coupon Validation Failed] ${reason} - IP: ${req.ip}`);
+};
+
 export const createCoupon = async (req, res, next) => {
     try {
         if (req.user.role !== "admin" && req.user.role !== "seller") {
@@ -96,6 +100,11 @@ export const validateCoupon = async (req, res, next) => {
     try {
         const { code, purchaseAmount, userId } = req.body;
 
+        // Validate required fields
+        if (!code || !purchaseAmount) {
+            return res.status(400).json({ error: "Code and purchase amount are required" });
+        }
+
         const coupon = await Coupon.findOne({ code: code.toUpperCase(), status: "active" }).notDeleted();
 
         if (!coupon) {
@@ -116,19 +125,21 @@ export const validateCoupon = async (req, res, next) => {
             });
         }
 
-
         if (coupon.maxUsage && coupon.usedBy.length >= coupon.maxUsage) {
             logFailedValidation(req, 'Usage limit reached');
             return res.status(400).json({ error: "Coupon usage limit reached" });
         }
 
-        const userUsage = coupon.usedBy.filter(usage =>
-            usage.user.toString() === userId
-        ).reduce((total, usage) => total + usage.usageCount, 0);
+        // Only check user usage if userId is provided
+        if (userId) {
+            const userUsage = coupon.usedBy.filter(usage =>
+                usage.user.toString() === userId
+            ).reduce((total, usage) => total + usage.usageCount, 0);
 
-        if (userUsage >= coupon.maxUsagePerUser) {
-            logFailedValidation(req, 'User usage limit reached');
-            return res.status(400).json({ error: "User usage limit reached" });
+            if (userUsage >= coupon.maxUsagePerUser) {
+                logFailedValidation(req, 'User usage limit reached');
+                return res.status(400).json({ error: "User usage limit reached" });
+            }
         }
 
         let discountAmount = 0;
@@ -149,6 +160,7 @@ export const validateCoupon = async (req, res, next) => {
         });
     } catch (error) {
         logFailedValidation(req, 'Server error');
+        console.error("Error in validationCoupon:", error)
         next(error);
     }
 };
