@@ -12,7 +12,7 @@ import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
 
 
-import logger from "./middlewares/logger.js";
+import requestLogger from "./middlewares/requestLogger.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import { isAuthenticated } from "./middlewares/auth.js";
@@ -34,7 +34,7 @@ if (process.env.NODE_ENV !== "test") {
 }
 
 // logger
-app.use(logger);
+app.use(requestLogger);
 
 // Test route
 app.get("/", (req, res) => {
