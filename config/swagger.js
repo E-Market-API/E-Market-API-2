@@ -12,8 +12,22 @@ const swaggerOptions = {
         url: "http://localhost:3000/api",
       },
     ],
+    components: {
+      securitySchemes: {
+        bearerAuth: {
+          type: "http",
+          scheme: "bearer",
+          bearerFormat: "JWT", // tells Swagger it's a JWT
+        },
+      },
+    },
+    security: [
+      {
+        bearerAuth: [], // apply globally to all routes
+      },
+    ],
   },
-  apis: ["./routes/*.js"], // <-- files to scan for annotations
+  apis: ["./routes/*.js"], // files to scan for route annotations
 };
 
 export default swaggerOptions;
