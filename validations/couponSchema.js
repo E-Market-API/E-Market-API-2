@@ -34,7 +34,9 @@ export const couponSchema = yup.object({
         .date()
         .required("Expiration date is required")
         .test("after-start", "Expiration date must be after start date", function(value) {
-            return value > this.parent.startDate;
+            const startDate = this.parent.startDate;
+            if (!startDate || !value) return true;
+            return new Date(value) > new Date(startDate);
         }),
 
     maxUsage: yup
