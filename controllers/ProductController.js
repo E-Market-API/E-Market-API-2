@@ -23,7 +23,7 @@ export const createProduct = async (req, res, next) => {
     const product = new Product(data);
     await product.save();
 
-    res.status(201).json({ message: "Product created successfully", product });
+    res.status(201).json({ message: "Product created successfully", data: product });
   } catch (error) {
     if (req.files) {
       const allFiles = [
@@ -101,7 +101,7 @@ export const updateProduct = async (req, res, next) => {
 
     res
       .status(200)
-      .json({ message: "Product updated", Product: updatedProduct });
+      .json({ message: "Product updated", data: updatedProduct });
   } catch (error) {
     if (req.files) {
       const allFiles = [
@@ -134,8 +134,8 @@ export const deleteProduct = async (req, res, next) => {
 
 export const getProducts = async (req, res, next) => {
   try {
-    const Products = await Product.find().notDeleted().populate("categories"); // <-- query helper
-    res.status(200).json({ Products });
+    const Products = await Product.find().notDeleted().populate("categories");
+    res.status(200).json({ data: Products });
   } catch (error) {
     next(error);
   }
@@ -147,7 +147,7 @@ export const getPublishedProducts = async (req, res, next) => {
       .notDeleted()
       .isPublished()
       .populate("categories");
-    res.status(200).json({ Products });
+    res.status(200).json({ data: Products });
   } catch (error) {
     next(error);
   }
@@ -206,39 +206,73 @@ export const getDeletedProducts = async (req, res, next) => {
 // search function
 export const searchProducts = async (req, res) => {
   try {
-    const { title, categories, minPrice, maxPrice } = req.query;
+    const {
+      title,
+      categories,
+      minPrice,
+      maxPrice,
+      page = 1,
+      limit = 10,
+      sortBy = "createdAt",
+      sortOrder = "desc",
+      fields,
+    } = req.query;
+
+    const limitNum = Math.min(100, Math.max(1, limit));
+    const skip = (page - 1) * limitNum;
+    const sort = { [sortBy]: sortOrder === "asc" ? 1 : -1 };
+
     const filter = {};
 
-    // Filter by title (case-insensitive)
     if (title) {
-      filter.title = { $regex: title, $options: "i" };
+        filter.$text = { $search: title };
     }
 
-    // Filter by one or more categories
     if (categories) {
-      const categoryArray = categories.split(",");
-      filter.categories = { $in: categoryArray };
+      const arr = categories.split(",").map(s => s.trim()).filter(Boolean);
+      if (arr.length) filter.categories = { $in: arr };
     }
 
-    // Filter by price range
+    // Price range
     if (minPrice || maxPrice) {
-      filter.price = {};
-      if (minPrice) filter.price.$gte = Number(minPrice);
-      if (maxPrice) filter.price.$lte = Number(maxPrice);
+      const priceFilter = {};
+      if (!Number.isNaN(Number(minPrice))) priceFilter.$gte = Number(minPrice);
+      if (!Number.isNaN(Number(maxPrice))) priceFilter.$lte = Number(maxPrice);
+      if (Object.keys(priceFilter).length) filter.price = priceFilter;
     }
 
-    const products = await Product.find(filter);
+    // Choose fields to return
+    const projection = fields ? fields.split(",").map(f => f.trim()).join(" ") : "";
 
-    res.json({
+    // Fetch results + total count in parallel for better response time
+    const [products, total] = await Promise.all([
+      Product.find(filter).populate("categories")
+        .sort(sort)
+        .skip(skip)
+        .limit(limitNum)
+        .select(projection)
+        .lean()
+        .exec(),
+      Product.countDocuments(filter).exec()
+    ]);
+
+    return res.json({
       success: true,
+      meta: {
+        total,
+        page: page,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum),
+      },
       count: products.length,
-      products,
+      data: products,
     });
-  } catch (error) {
-    console.error("Error searching products:", error);
-    res.status(500).json({ error: "Server error while searching products" });
+  } catch (err) {
+    console.error("Search error:", err);
+    return res.status(500).json({ error: "Server error while searching products" });
   }
 };
+
 
 export const getProductsBySeller = async (req, res, next) => {
   try {
