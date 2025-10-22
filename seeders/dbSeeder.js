@@ -4,11 +4,13 @@ import dotenv from "dotenv";
 import { categoryFactory } from "../factories/categoryFactory.js";
 import { cartFactory } from "../factories/cartFactory.js";
 import { orderFactory } from "../factories/orderFactory.js";
+import productFactory from "../factories/productFactory.js";
 
 dotenv.config();
 
 
 const seedDB = async () => {
+  
   try {
     // Connect to DB
     await mongoose.connect(process.env.DB_URI);
@@ -25,8 +27,29 @@ const seedDB = async () => {
       role: "admin",
     });
 
+    // seed sellers for creating products
+    await userFactory(1, {
+      fullname: "Seller User",
+      email: "seller@test.com",
+      password: "seller123",
+      role: "seller",
+    });
+    await userFactory(1, {
+      fullname: "Seller User 2",
+      email: "seller2@test.com",
+      password: "seller123",
+      role: "seller",
+    });
+    await userFactory(1, {
+      fullname: "Seller User 3",
+      email: "seller3@test.com",
+      password: "seller123",
+      role: "seller",
+    });
+
     await userFactory(5); // seed users
     await categoryFactory(6); // seed categories
+    await productFactory(10); // seed products
     await cartFactory(3); // seed carts
     await orderFactory(3); // seed orders
 
