@@ -8,11 +8,11 @@
     "devStart": "nodemon server.js",
     "seed": "node seeders/dbSeeder.js",
     "reset-db": "node seeders/resetDB.js",
-    "test": "mocha --exit --recursive test"
+    "test": "cross-env NODE_ENV=test mocha --timeout 10000 --exit"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ElFirdaous28/E-Market-API.git"
+    "url": "git+https://github.com/ElFirdaous28/E-Market-API-2.git"
   },
   "keywords": [],
   "author": "",
@@ -31,8 +31,9 @@
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",
     "nodemon": "^3.1.10",
-    "swagger-jsdoc": "^6.2.8",
+    "swagger-jsdoc": "^3.7.0",
     "swagger-ui-express": "^5.0.1",
+    "winston": "^3.18.3",
     "yup": "^1.7.1"
   },
   "devDependencies": {

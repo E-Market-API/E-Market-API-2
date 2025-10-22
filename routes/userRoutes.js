@@ -9,25 +9,21 @@ import { authorizeRoles } from "../middlewares/roles.js";
 
 
 const router = express.Router();
+router.use(isAuthenticated);
 
-router.get("/sellers", isAuthenticated, userController.searchSellers);
-router.post("/", validate(userSchema), userController.createUser);
-router.get("/",isAuthenticated, userController.getUsers);
-router.get("/deleted", userController.getDeletedUsers);
+router.get("/filter",isAuthenticated, authorizeRoles("admin"), userController.filterUsersByRole);
+router.get("/sellers", userController.searchSellers);
+router.post("/", validate(userSchema),isAuthenticated,authorizeRoles("admin"), userController.createUser);
+router.get("/",isAuthenticated,authorizeRoles("admin"), userController.getUsers);
+router.get("/deleted",isAuthenticated,authorizeRoles("admin"), userController.getDeletedUsers);
 
-router.get("/:id", userController.getUserById);
+router.get("/:id",isAuthenticated,authorizeRoles("admin"), userController.getUserById);
 // router.patch("/:id",isAuthenticated,createUpload("avatars", "avatar", 1), validate(userSchema),checkOwnership, userController.updateUser);
-router.patch(
-  "/:id",
-  isAuthenticated,
-  createUpload("avatars", "avatar", 1), // d'abord Multer
-  checkOwnership,
-  userController.updateUser
-);
-router.delete("/:id", userController.deleteUser);
+router.patch("/:id", isAuthenticated,createUpload("avatars", "avatar", 1), checkOwnership,userController.updateUser);
+router.delete("/:id",isAuthenticated,authorizeRoles("admin"), userController.deleteUser);
 
-router.delete("/:id/soft", userController.softDeleteUser);
-router.patch("/:id/restore", userController.restoreUser);
+router.delete("/:id/soft",isAuthenticated,authorizeRoles("admin"), userController.softDeleteUser);
+router.patch("/:id/restore",isAuthenticated,authorizeRoles("admin"), userController.restoreUser);
 
 router.delete("/:id/avatar", isAuthenticated, checkOwnership, userController.deleteAvatar);
 router.put("/:id/role", isAuthenticated, authorizeRoles("admin"), userController.changeRole);
