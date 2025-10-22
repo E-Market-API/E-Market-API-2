@@ -16,13 +16,9 @@ describe("Review API", function () {
     let userId;
     let productId;
     let productId2;
-    let originalConnection;
 
     before(async () => {
-        if (mongoose.connection.readyState) {
-            originalConnection = process.env.DB_URI;
-            await mongoose.disconnect();
-        }
+
 
         await mongoose.connect(process.env.MONGO_URI_TEST);
 
@@ -68,9 +64,6 @@ describe("Review API", function () {
         await mongoose.connection.db.dropDatabase();
         await mongoose.connection.close();
 
-        if (originalConnection) {
-            await mongoose.connect(originalConnection);
-        }
     });
     describe("Verification achat produit", () => {
         it("Should allow review if the user has purchased the product", async () => {

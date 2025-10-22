@@ -9,14 +9,9 @@ describe("Coupon API", function () {
 
     let adminToken;
     let userToken;
-    let originalConnection;
     let adminUserId;
 
     before(async () => {
-        if (mongoose.connection.readyState) {
-            originalConnection = process.env.DB_URI;
-            await mongoose.disconnect();
-        }
 
         await mongoose.connect(process.env.MONGO_URI_TEST);
 
@@ -40,9 +35,6 @@ describe("Coupon API", function () {
         await mongoose.connection.dropDatabase();
         await mongoose.connection.close();
 
-        if (originalConnection) {
-            await mongoose.connect(originalConnection);
-        }
     });
 
     describe("Coupon Calculations", () => {

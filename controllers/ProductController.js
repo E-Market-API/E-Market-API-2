@@ -194,6 +194,7 @@ export const restoreProduct = async (req, res, next) => {
 };
 
 // Get all soft-deleted products
+// Get all soft-deleted products
 export const getDeletedProducts = async (req, res, next) => {
   try {
     const products = await Product.find().deleted();
