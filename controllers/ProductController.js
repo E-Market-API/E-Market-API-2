@@ -1,6 +1,16 @@
 import Product from "../models/Product.js";
 import fs from "fs";
 import path from "path";
+import cacheService from "../services/cacheService.js";
+
+// helper function for invalide cache
+const invalidateProductCache = async () => {
+    await Promise.all([
+        cacheService.del('products:*'),
+        cacheService.del('search:*'),
+        cacheService.del('published:*'),
+    ])
+}
 
 export const createProduct = async (req, res, next) => {
   try {
@@ -23,6 +33,7 @@ export const createProduct = async (req, res, next) => {
     const product = new Product(data);
     await product.save();
 
+    await invalidateProductCache();
     res.status(201).json({ message: "Product created successfully", data: product });
   } catch (error) {
     if (req.files) {
@@ -98,7 +109,7 @@ export const updateProduct = async (req, res, next) => {
     if (!updatedProduct) {
       return res.status(404).json({ error: "Product not found" });
     }
-
+    await invalidateProductCache();
     res
       .status(200)
       .json({ message: "Product updated", data: updatedProduct });
@@ -193,7 +204,6 @@ export const restoreProduct = async (req, res, next) => {
   }
 };
 
-// Get all soft-deleted products
 // Get all soft-deleted products
 export const getDeletedProducts = async (req, res, next) => {
   try {
