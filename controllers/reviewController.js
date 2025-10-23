@@ -27,7 +27,7 @@ export const createReview = async (req, res, next) => {
         // Mettre à jour la note moyenne du produit
         await reviewService.updateProductRating(productId);
 
-        res.status(201).json({message: "Review created successfully", review});
+        res.status(201).json({message: "Review created successfully", data: review});
     } catch (error) {
         next(error);
     }
@@ -53,7 +53,7 @@ export const getProductReviews = async (req, res, next) => {
         const total = await Review.countDocuments(filter);
 
         res.status(200).json({
-            reviews,
+            data: reviews,
             averageRating:reviews.reduce((acc,review)=>acc+review.rating,0)/reviews.length,
             totalPages: Math.ceil(total / limit),
             currentPage: page,
@@ -73,7 +73,7 @@ export const getUserReviews = async (req, res, next) => {
             .populate("product", "title images price")
             .sort({createdAt: -1});
 
-        res.status(200).json({reviews});
+        res.status(200).json({data: reviews});
     } catch (error) {
         next(error);
     }
@@ -98,7 +98,7 @@ export const updateReview = async (req, res, next) => {
         // Recalculer la note moyenne du produit
         await reviewService.updateProductRating(review.product);
 
-        res.status(200).json({message: "Review updated successfully", review});
+        res.status(200).json({message: "Review updated successfully", data: review});
     } catch (error) {
         next(error);
     }
@@ -139,7 +139,7 @@ export const moderateReview = async (req, res, next) => {
         // Recalculer la note moyenne si approuvé/rejeté
         await reviewService.updateProductRating(review.product);
 
-        res.status(200).json({message: "Review moderated successfully", review});
+        res.status(200).json({message: "Review moderated successfully", data:review});
     } catch (error) {
         next(error);
     }
