@@ -47,7 +47,8 @@ const couponSchema = new mongoose.Schema({
         required: [true, "Expiration date is required"],
         validate: {
             validator: function (v) {
-                return v > this.startDate;
+                if (!this.startDate || !v) return true;
+                return new Date(v) > new Date(this.startDate);
             },
             message: "Expiration date must be after start date"
         }

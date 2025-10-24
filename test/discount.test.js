@@ -9,14 +9,9 @@ describe("Coupon API", function () {
 
     let adminToken;
     let userToken;
-    let originalConnection;
     let adminUserId;
 
     before(async () => {
-        if (mongoose.connection.readyState) {
-            originalConnection = process.env.DB_URI;
-            await mongoose.disconnect();
-        }
 
         await mongoose.connect(process.env.MONGO_URI_TEST);
 
@@ -40,9 +35,6 @@ describe("Coupon API", function () {
         await mongoose.connection.dropDatabase();
         await mongoose.connection.close();
 
-        if (originalConnection) {
-            await mongoose.connect(originalConnection);
-        }
     });
 
     describe("Coupon Calculations", () => {
@@ -68,7 +60,7 @@ describe("Coupon API", function () {
                     purchaseAmount: 100,
                 });
             expect(res.status).to.equal(200);
-            expect(res.body.coupon.discountAmount).to.equal(10);
+            expect(res.body.data.discountAmount).to.equal(10);
         });
 
         it("Should calculate correct fixed discount", async () => {
@@ -83,7 +75,7 @@ describe("Coupon API", function () {
                     purchaseAmount: 100,
                 });
             expect(res.status).to.equal(200);
-            expect(res.body.coupon.discountAmount).to.equal(20);
+            expect(res.body.data.discountAmount).to.equal(20);
         });
 
         it("Should validate minimum purchase condition", async () => {
