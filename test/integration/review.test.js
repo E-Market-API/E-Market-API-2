@@ -84,7 +84,7 @@ describe("Review API", function () {
 
             expect(res.status).to.equal(201);
             expect(res.body.message).to.equal("Review created successfully");
-            expect(res.body.review.rating).to.equal(5);
+            expect(res.body.data.rating).to.equal(5);
         });
     });
 
@@ -155,7 +155,7 @@ describe("Review API", function () {
                 .set("Authorization", `Bearer ${userToken}`);
 
             expect(res.status).to.equal(200);
-            expect(res.body.reviews).to.have.length(3);
+            expect(res.body.data).to.have.length(3);
             expect(res.body.averageRating).to.be.a('number');
         });
     });
@@ -185,7 +185,7 @@ describe("Review API", function () {
 
             expect(res.status).to.equal(200);
             expect(res.body.message).to.equal("Review updated successfully");
-            expect(res.body.review.rating).to.equal(5);
+            expect(res.body.data.rating).to.equal(5);
         });
     });
 
@@ -265,7 +265,7 @@ describe("Review API", function () {
 
             expect(res.status).to.equal(200);
             expect(res.body.message).to.equal("Review moderated successfully");
-            expect(res.body.review.status).to.equal("approved");
+            expect(res.body.data.status).to.equal("approved");
         });
     });
 

@@ -60,7 +60,7 @@ describe("Coupon API", function () {
                     purchaseAmount: 100,
                 });
             expect(res.status).to.equal(200);
-            expect(res.body.coupon.discountAmount).to.equal(10);
+            expect(res.body.data.discountAmount).to.equal(10);
         });
 
         it("Should calculate correct fixed discount", async () => {
@@ -75,7 +75,7 @@ describe("Coupon API", function () {
                     purchaseAmount: 100,
                 });
             expect(res.status).to.equal(200);
-            expect(res.body.coupon.discountAmount).to.equal(20);
+            expect(res.body.data.discountAmount).to.equal(20);
         });
 
         it("Should validate minimum purchase condition", async () => {
