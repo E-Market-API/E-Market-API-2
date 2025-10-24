@@ -65,7 +65,7 @@ describe("Coupon API", function () {
 
             expect(res.status).to.equal(201);
             expect(res.body.message).to.equal("Coupon created successfully");
-            expect(res.body.coupon.code).to.equal("ADMIN20");
+            expect(res.body.data.code).to.equal("ADMIN20");
         });
 
         it("should allow seller to create coupon", async () => {
@@ -90,7 +90,7 @@ describe("Coupon API", function () {
 
             expect(res.status).to.equal(201);
             expect(res.body.message).to.equal("Coupon created successfully");
-            expect(res.body.coupon.code).to.equal("SELLER15");
+            expect(res.body.data.code).to.equal("SELLER15");
         });
     });
 
@@ -131,7 +131,7 @@ describe("Coupon API", function () {
                 .set("Authorization", `Bearer ${adminToken}`);
 
             expect(res.status).to.equal(200);
-            expect(res.body.coupons).to.have.length(5);
+            expect(res.body.data).to.have.length(5);
         });
 
         it("should allow seller to see only their coupons", async () => {
@@ -140,7 +140,7 @@ describe("Coupon API", function () {
                 .set("Authorization", `Bearer ${sellerToken}`);
 
             expect(res.status).to.equal(200);
-            expect(res.body.coupons).to.have.length(2);
+            expect(res.body.data).to.have.length(2);
         });
     });
 
@@ -172,7 +172,7 @@ describe("Coupon API", function () {
 
             expect(res.status).to.equal(200);
             expect(res.body.valid).to.be.true;
-            expect(res.body.coupon.discountAmount).to.equal(20);
+            expect(res.body.data.discountAmount).to.equal(20);
         });
     });
 
@@ -299,8 +299,8 @@ describe("Coupon API", function () {
 
             expect(res.status).to.equal(200);
             expect(res.body.valid).to.be.true;
-            expect(res.body.coupon.code).to.equal("ORDER15");
-            expect(res.body.coupon.discountAmount).to.equal(30);
+            expect(res.body.data.code).to.equal("ORDER15");
+            expect(res.body.data.discountAmount).to.equal(30);
         });
     });
 
@@ -341,7 +341,7 @@ describe("Coupon API", function () {
 
             expect(res.status).to.equal(200);
             expect(res.body.message).to.equal("Coupon updated");
-            expect(res.body.coupon.code).to.equal("UPDATED25");
+            expect(res.body.data.code).to.equal("UPDATED25");
         });
 
         it("should allow admin to update any coupon", async () => {
@@ -367,7 +367,7 @@ describe("Coupon API", function () {
             //console.log("Response body:", res.body)
 
             expect(res.status).to.equal(200);
-            expect(res.body.coupon.value).to.equal(30);
+            expect(res.body.data.value).to.equal(30);
         });
     });
 
