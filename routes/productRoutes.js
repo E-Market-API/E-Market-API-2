@@ -2,20 +2,81 @@ import express from "express";
 import * as productController from "../controllers/ProductController.js";
 import validate from "../middlewares/validate.js";
 import { productSchema } from "../validations/productSchema.js";
+import { authorizeRoles } from "../middlewares/roles.js";
+import { createUploadFields } from "../config/multerConfig.js";
+import { isAuthenticated } from "../middlewares/auth.js";
+import { checkProductOwnership } from "../middlewares/ownershipMiddleware.js";
+import {cacheMiddleware} from "../middlewares/cache.js";
 
 const router = express.Router();
 
-router.post("/", validate(productSchema), productController.createProduct);
-router.get("/", productController.getProducts);
+const productImageUpload = createUploadFields("products", [
+  { name: "primaryImage", maxCount: 1 },
+  { name: "secondaryImages", maxCount: 5 },
+]);
+
+router.post(
+  "/",
+  isAuthenticated,
+  productImageUpload,
+  validate(productSchema),
+  authorizeRoles("seller"),
+  productController.createProduct
+);
+router.get("/",cacheMiddleware('products', 600), productController.getProducts);
+//router.get("/", productController.getProducts);
+router.get("/published",cacheMiddleware('published', 600), productController.getPublishedProducts);
 router.get("/deleted", productController.getDeletedProducts);
-router.get("/search", productController.searchProducts);
+router.get("/search",cacheMiddleware('search', 300), productController.searchProducts);
 
+// Get seller's products
+router.get(
+  "/:sellerId",
+  isAuthenticated,
+  productController.getProductsBySeller
+);
+
+// Get a single product by ID
 router.get("/:id", productController.getProductById);
-router.patch("/:id", validate(productSchema), productController.updateProduct);
-router.delete("/:id", productController.deleteProduct);
 
-router.delete("/:id/soft", productController.softDeleteProduct);
-router.patch("/:id/restore", productController.restoreProduct);
+// Update a product
+router.put(
+  "/:id",
+  isAuthenticated,
+  authorizeRoles("seller"),
+  checkProductOwnership,
+  productImageUpload,
+  validate(productSchema),
+  productController.updateProduct
+);
+
+// Permanent delete a product
+router.delete("/:id", authorizeRoles("admin"), productController.deleteProduct);
+
+// soft delete a product
+router.delete(
+  "/:id/soft",
+  authorizeRoles("seller"),
+  checkProductOwnership,
+  productController.softDeleteProduct
+);
+
+// restore a soft-deleted product
+router.patch(
+  "/:id/restore",
+  authorizeRoles("seller"),
+  checkProductOwnership,
+  productController.restoreProduct
+);
+
+// Publish a product
+router.patch(
+  "/:id/publish",
+  isAuthenticated,
+  authorizeRoles("seller"),
+  checkProductOwnership,
+  productController.publishProduct
+);
 
 export default router;
 
