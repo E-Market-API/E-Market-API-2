@@ -1,6 +1,8 @@
 import Product from "../models/Product.js";
 import fs from "fs";
 import path from "path";
+import { notificationEmitter } from "../events/notificationEmitter.js";
+import User from "../models/User.js";
 
 export const createProduct = async (req, res, next) => {
   try {
@@ -22,6 +24,16 @@ export const createProduct = async (req, res, next) => {
     }
     const product = new Product(data);
     await product.save();
+
+    const users = await User.find({ role: "user" }, "_id");
+    console.log("Users to notify:", users);
+    const usersToNotify = users.map(u => u._id);
+
+    notificationEmitter.emit("newProduct", {
+      sellerId: req.user.id,
+      productName: product.title,
+      usersToNotify
+    });
 
     res.status(201).json({ message: "Product created successfully", product });
   } catch (error) {
