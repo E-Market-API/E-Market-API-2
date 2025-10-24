@@ -141,3 +141,14 @@ export const getDeletedOrders = async (req, res, next) => {
     next(error);
   }
 };
+
+// get user not deleted orders
+export const getUserOrders = async (req, res, next) => {
+  try {
+    const { userId } = req.params;
+    const orders = await Order.find({ userId }).notDeleted();
+    res.status(200).json({ orders });
+  } catch (error) {
+    next(error);
+  }
+};

@@ -14,7 +14,7 @@ import notificationRoutes from "./routes/notificationRoutes.js"
 import './events/notificationListener.js';
 import './events/orderListener.js';
 
-import logger from "./middlewares/logger.js";
+import requestLogger from "./middlewares/requestLogger.js";
 import notFound from "./middlewares/notFound.js";
 import errorHandler from "./middlewares/errorHandler.js";
 import { isAuthenticated } from "./middlewares/auth.js";
@@ -30,10 +30,13 @@ app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
 // Connect to MongoDB
-connectDB();
+if (process.env.NODE_ENV !== "test") {
+  connectDB();
+  app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+}
 
 // logger
-app.use(logger);
+app.use(requestLogger);
 
 // Test route
 app.get("/", (req, res) => {
@@ -41,6 +44,7 @@ app.get("/", (req, res) => {
 });
 
 // Start server
+
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
