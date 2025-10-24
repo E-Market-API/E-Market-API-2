@@ -11,10 +11,8 @@ const router = express.Router();
 /**
  * @swagger
  * tags:
- *   - name: Coupons
- *     description: Coupon management
  *   - name: Coupons Admin & Seller
- *     description: Admin & Seller coupon management
+ *     description: Coupon management
  */
 
 /**
@@ -66,7 +64,7 @@ router.use(isAuthenticated);
  * @swagger
  * /coupons:
  *   post:
- *     tags: [Coupons Admin]
+ *     tags: [Coupons Admin & Seller]
  *     summary: Create a new coupon
  *     security:
  *       - bearerAuth: []
@@ -132,7 +130,7 @@ router.post("/", authorizeRoles("admin", "seller"), validate(couponSchema), coup
  * @swagger
  * /coupons:
  *   get:
- *     tags: [Coupons Admin]
+ *     tags: [Coupons Admin & Seller]
  *     summary: Get all coupons
  *     security:
  *       - bearerAuth: []
@@ -157,7 +155,7 @@ router.get("/", authorizeRoles("admin", "seller"), couponController.getAllCoupon
  * @swagger
  * /coupons/{id}:
  *   get:
- *     tags: [Coupons Admin]
+ *     tags: [Coupons Admin & Seller]
  *     summary: Get coupon by ID
  *     security:
  *       - bearerAuth: []
@@ -188,7 +186,7 @@ router.get("/:id", authorizeRoles("admin", "seller"), couponController.getCoupon
  * @swagger
  * /coupons/{id}:
  *   put:
- *     tags: [Coupons Admin]
+ *     tags: [Coupons Admin & Seller]
  *     summary: Update a coupon
  *     security:
  *       - bearerAuth: []
@@ -256,7 +254,7 @@ router.put("/:id", authorizeRoles("admin", "seller"), validate(couponSchema), co
  * @swagger
  * /coupons/{id}:
  *   delete:
- *     tags: [Coupons Admin]
+ *     tags: [Coupons Admin & Seller]
  *     summary: Delete a coupon
  *     security:
  *       - bearerAuth: []
@@ -275,12 +273,17 @@ router.put("/:id", authorizeRoles("admin", "seller"), validate(couponSchema), co
  *         description: Coupon not found
  */
 router.delete("/:id", authorizeRoles("admin", "seller"), couponController.deleteCoupon);
-
+/**
+ * @swagger
+ * tags:
+ *   - name: Coupons User
+ *     description: Coupon management
+ */
 /**
  * @swagger
  * /coupons/validate:
  *   post:
- *     tags: [Coupons]
+ *     tags: [Coupons User]
  *     summary: Validate a coupon
  *     security:
  *       - bearerAuth: []
