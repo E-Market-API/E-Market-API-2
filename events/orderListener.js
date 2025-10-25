@@ -18,18 +18,18 @@ notificationEmitter.on("newOrder", async ({ orderId, buyerId, sellerId }) => {
   }
 });
 
-// Quand une commande est modifiée
-notificationEmitter.on("orderUpdated", async ({ orderId, buyerId, sellerId, status }) => {
+// Quand une commande est supprimée
+notificationEmitter.on("orderDeleted", async ({ orderId, buyerId, sellerId, status }) => {
   try {
     // Message pour le vendeur
-    const messageSeller = `Commande ${orderId} mise à jour : ${status}`;
+    const messageSeller = `Commande ${orderId} a été supprimée `;
     await Notification.create({ userId: sellerId, message: messageSeller });
 
     // Message pour l’acheteur
-    const messageBuyer = `Votre commande ${orderId} a été mise à jour : ${status}`;
+    const messageBuyer = `Votre commande ${orderId} a été supprimée : ${status}`;
     await Notification.create({ userId: buyerId, message: messageBuyer });
 
-    console.log("Notifications créées pour la commande mise à jour !");
+    console.log("Notifications créées pour la suppression de la commande !");
   } catch (error) {
     console.error("Erreur lors de la création des notifications de mise à jour :", error);
   }

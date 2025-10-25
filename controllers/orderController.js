@@ -88,6 +88,21 @@ export const deleteOrder = async (req, res, next) => {
       return res.status(404).json({ error: "Order not found" });
     }
 
+     const productIds = deletedOrder.items.map(i => i.productId);
+    const products = await Product.find({ _id: { $in: productIds } }, "seller_id");
+    const sellerIds = [...new Set(products.map(p => p.seller_id.toString()))];
+
+    // Notification pour chaque vendeur concerné
+    sellerIds.forEach(sellerId => {
+      notificationEmitter.emit("orderDeleted", {
+        orderId: deletedOrder._id,
+        buyerId: deletedOrder.userId,
+        sellerId,
+        status: "deleted"
+      });
+    });
+
+
     res.status(200).json({ message: "Order deleted successfully" });
   } catch (error) {
     next(error);
