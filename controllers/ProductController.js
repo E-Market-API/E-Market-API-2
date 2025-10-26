@@ -7,11 +7,11 @@ import cacheService from "../services/cacheService.js";
 
 // helper function for invalide cache
 const invalidateProductCache = async () => {
-    await Promise.all([
-        cacheService.del('products:*'),
-        cacheService.del('search:*'),
-        cacheService.del('published:*'),
-    ])
+  await Promise.all([
+    cacheService.del('products:*'),
+    cacheService.del('search:*'),
+    cacheService.del('published:*'),
+  ])
 }
 
 export const createProduct = async (req, res, next) => {
@@ -122,6 +122,13 @@ export const updateProduct = async (req, res, next) => {
     if (!updatedProduct) {
       return res.status(404).json({ error: "Product not found" });
     }
+
+    //Événement pour le stock faible
+    if (updates.stock !== undefined && updates.stock !== product.stock) {
+      notificationEmitter.emit("stockUpdated", { productId: updatedProduct._id, newStock: updates.stock });
+    }
+    /////////////////////////////////////////
+
     await invalidateProductCache();
     res
       .status(200)
@@ -249,7 +256,7 @@ export const searchProducts = async (req, res) => {
     const filter = {};
 
     if (title) {
-        filter.$text = { $search: title };
+      filter.$text = { $search: title };
     }
 
     if (categories) {

@@ -13,6 +13,7 @@ import orderRoutes from "./routes/orderRoutes.js"
 import notificationRoutes from "./routes/notificationRoutes.js"
 import './events/notificationListener.js';
 import './events/orderListener.js';
+import "./jobs/lowStockNotifier.js";
 
 import requestLogger from "./middlewares/requestLogger.js";
 import notFound from "./middlewares/notFound.js";
@@ -48,6 +49,9 @@ app.get("/", (req, res) => {
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
 });
+
+// Start cron jobs
+// lowStockJob.start();
 
 // swager documentation
 const specs = swaggerJsDoc(swaggerOptions);
