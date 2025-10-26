@@ -4,8 +4,8 @@ import dotenv from "dotenv";
 import { categoryFactory } from "../factories/categoryFactory.js";
 import { cartFactory } from "../factories/cartFactory.js";
 import { orderFactory } from "../factories/orderFactory.js";
-import { couponFactory } from "../factories/couponFactory.js";
-import { reviewFactory } from "../factories/reviewFactory.js";
+import {  couponFactory  } from "../factories/couponFactory.js";
+import {  reviewFactory  } from "../factories/reviewFactory.js";
 import coupon from "../models/Coupon.js";
 import User from "../models/User.js";
 import productFactory from "../factories/productFactory.js";
@@ -25,33 +25,27 @@ const seedDB = async () => {
     await userFactory(1, {
       fullname: "Admin User",
       email: "admin@test.com",
-      password: "admin123",
+      password: "password",
       role: "admin",
     });
 
-    // seed sellers for creating products
+    // Creat a seller
     await userFactory(1, {
-      fullname: "Seller User",
+      fullname: "seller User",
       email: "seller@test.com",
-      password: "seller123",
-      role: "seller",
-    });
-    await userFactory(1, {
-      fullname: "Seller User 2",
-      email: "seller2@test.com",
-      password: "seller123",
-      role: "seller",
-    });
-    await userFactory(1, {
-      fullname: "Seller User 3",
-      email: "seller3@test.com",
-      password: "seller123",
+      password: "password",
       role: "seller",
     });
 
+    // Creat a user
+    await userFactory(1, {
+      fullname: " User",
+      email: "user@test.com",
+      password: "password",
+      role: "user",
+    });
     await userFactory(5); // seed users
     await categoryFactory(6); // seed categories
-    await productFactory(10); // seed products
 
     // Get users to create carts for them
     const users = await User.find().limit(3);

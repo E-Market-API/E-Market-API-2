@@ -14,7 +14,7 @@ export const createCoupon = async (req, res, next) => {
             createdBy: req.user.id
         });
         await coupon.save();
-        res.status(201).json({message: "Coupon created successfully", coupon});
+        res.status(201).json({message: "Coupon created successfully", data: coupon});
     } catch (e) {
         next(e);
     }
@@ -36,7 +36,7 @@ export const getAllCoupons = async (req,res, next) => {
             .limit(limit);
         const total = await Coupon.countDocuments(filter);
         res.status(200).json({
-            coupons,
+            data: coupons,
             pagination: {
                 page,
                 limit,
@@ -57,7 +57,7 @@ export  const getCouponById = async (req,res, next) => {
         if (req.user.role !== "admin" && coupon.createdBy._id.toString() !== req.user.id) {
             return res.status(403).json({error: "Access denied"});
         }
-        res.status(200).json(coupon);
+        res.status(200).json({data: coupon});
     } catch (e) {
         next(e);
     }
@@ -75,7 +75,7 @@ export  const updateCoupon = async (req,res,next) => {
         const updatedCoupon = await  Coupon.findByIdAndUpdate(
             req.params.id, req.body, {new: true, runValidators: true}
         );
-        res.status(200).json({message: "Coupon updated", coupon: updatedCoupon});
+        res.status(200).json({message: "Coupon updated", data: updatedCoupon});
     } catch (e) {
         next(e);
     }
@@ -151,7 +151,7 @@ export const validateCoupon = async (req, res, next) => {
 
         res.status(200).json({
             valid: true,
-            coupon: {
+            data: {
                 code: coupon.code,
                 type: coupon.type,
                 value: coupon.value,

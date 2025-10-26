@@ -1,6 +1,8 @@
 import mongoose from "mongoose";
 import Order from "../models/Order.js";
 import OrderService from "../services/orderServices.js";
+import { notificationEmitter } from "../events/notificationEmitter.js";
+import Product from "../models/Product.js";
 
 export const createOrder = async (req, res, next) => {
   const session = await mongoose.startSession();
@@ -11,6 +13,21 @@ export const createOrder = async (req, res, next) => {
     const couponCodes = req.body.coupons || [];
 
     const result = await OrderService.createOrder(userId, couponCodes, session);
+    console.log("Order data:", result.order);
+    
+    //récupérer les seller_id depuis les products de la commande
+    const productIds = result.order.items.map(i => i.productId);
+    const products = await Product.find({ _id: { $in: productIds } }, "seller_id");
+    const sellerIds = [...new Set(products.map(p => p.seller_id.toString()))]; // ids uniques
+
+    //notification pour chaque vendeur
+    sellerIds.forEach(sellerId => {
+      notificationEmitter.emit("newOrder", {
+        orderId: result.order._id,
+        buyerId: userId,
+        sellerId
+      });
+    });
 
     await session.commitTransaction();
     res.status(201).json({
@@ -56,22 +73,6 @@ export const updateOrderStatus = async (req, res, next) => {
     await order.save();
 
     res.json({ message: "Order status updated", order });
-  } catch (error) {
-    next(error);
-  }
-};
-
-// delete order 
-export const deleteOrder = async (req, res, next) => {
-  try {
-    // Find Order by ID and delete
-    const deletedOrder = await Order.findByIdAndDelete(req.params.id);
-
-    if (!deletedOrder) {
-      return res.status(404).json({ error: "Order not found" });
-    }
-
-    res.status(200).json({ message: "Order deleted successfully" });
   } catch (error) {
     next(error);
   }

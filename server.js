@@ -10,7 +10,9 @@ import couponRoutes from "./routes/couponRoutes.js";
 import reviewRoutes from "./routes/reviewRoutes.js";
 import cartRoutes from "./routes/cartRoutes.js"
 import orderRoutes from "./routes/orderRoutes.js"
-
+import notificationRoutes from "./routes/notificationRoutes.js"
+import './events/notificationListener.js';
+import './events/orderListener.js';
 
 import requestLogger from "./middlewares/requestLogger.js";
 import notFound from "./middlewares/notFound.js";
@@ -64,7 +66,7 @@ app.use("/api/coupons",couponRoutes);
 app.use("/api/cart", isAuthenticated, cartRoutes);
 app.use("/api/guest-cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
-
+app.use("/api/notifications",notificationRoutes);
 
 // Catch all unknown routes
 app.use(notFound);

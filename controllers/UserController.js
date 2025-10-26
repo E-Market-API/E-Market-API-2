@@ -4,11 +4,7 @@ import fs from "fs";
 
 export const createUser = async (req, res, next) => {
   try {
-    // if first user role = admin
-    const userCount = await User.countDocuments();
-    const role = userCount === 0 ? "admin" : req.body.role || "user";
-
-    const user = new User(req.body, role);
+    const user = new User(req.body);
     await user.save();
 
     res.status(201).json({ message: "User created successfully", user });

@@ -1,6 +1,18 @@
 import Product from "../models/Product.js";
 import fs from "fs";
 import path from "path";
+import { notificationEmitter } from "../events/notificationEmitter.js";
+import User from "../models/User.js";
+import cacheService from "../services/cacheService.js";
+
+// helper function for invalide cache
+const invalidateProductCache = async () => {
+    await Promise.all([
+        cacheService.del('products:*'),
+        cacheService.del('search:*'),
+        cacheService.del('published:*'),
+    ])
+}
 
 export const createProduct = async (req, res, next) => {
   try {
@@ -23,6 +35,18 @@ export const createProduct = async (req, res, next) => {
     const product = new Product(data);
     await product.save();
 
+    const users = await User.find({ role: "user" }, "_id");
+    console.log("Users to notify:", users);
+    const usersToNotify = users.map(u => u._id);
+
+    notificationEmitter.emit("newProduct", {
+      sellerId: req.user.id,
+      productName: product.title,
+      usersToNotify
+    });
+
+    res.status(201).json({ message: "Product created successfully", product });
+    await invalidateProductCache();
     res.status(201).json({ message: "Product created successfully", data: product });
   } catch (error) {
     if (req.files) {
@@ -98,7 +122,7 @@ export const updateProduct = async (req, res, next) => {
     if (!updatedProduct) {
       return res.status(404).json({ error: "Product not found" });
     }
-
+    await invalidateProductCache();
     res
       .status(200)
       .json({ message: "Product updated", data: updatedProduct });
