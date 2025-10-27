@@ -7,6 +7,7 @@ import { createUploadFields } from "../config/multerConfig.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 import { checkProductOwnership } from "../middlewares/ownershipMiddleware.js";
 import {cacheMiddleware} from "../middlewares/cache.js";
+import { optimizeImages } from "../middlewares/optimizeImages.js";
 
 const router = express.Router();
 
@@ -19,6 +20,7 @@ router.post(
   "/",
   isAuthenticated,
   productImageUpload,
+  optimizeImages,
   validate(productSchema),
   authorizeRoles("seller"),
   productController.createProduct
