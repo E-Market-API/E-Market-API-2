@@ -5,7 +5,7 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "devStart": "nodemon server.js",
+    "dev": "nodemon server.js",
     "seed": "node seeders/dbSeeder.js",
     "reset-db": "node seeders/resetDB.js",
     "test": "cross-env NODE_ENV=test mocha --timeout 10000 --exit",
@@ -33,6 +33,7 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.18.0",
     "multer": "^2.0.2",
+    "node-cron": "^4.2.1",
     "nodemailer": "^7.0.10",
     "nodemon": "^3.1.10",
     "redis": "^4.6.0",

@@ -10,9 +10,9 @@ client.on('connect', () => console.log('Connected to Redis'));
 const connectRedis = async () => {
     try {
         await client.connect();
-        console.log('✅ Redis connected successfully');
+        // console.log('✅ Redis connected successfully');
     } catch (error) {
-        console.error('❌ Redis connection failed:', error);
+        // console.error('❌ Redis connection failed:', error);
     }
 };
 
