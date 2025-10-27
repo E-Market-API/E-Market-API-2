@@ -1,127 +1,251 @@
 import sharp from "sharp";
 import fs from "fs/promises";
-import fsSync from "fs";
 import path from "path";
 
-
 const defaultOptions = {
-  maxWidth: 1600,
-  jpegQuality: 80,
-  webpQuality: 80,
-  pngCompressionLevel: 9,
-  skipGif: true,
+  maxWidth: 1200,
+  quality: 80,
+  convertToWebP: true,
+  skipIfSmaller: true,
+  keepOriginalFormat: false,
 };
-export const optimizeImages = (opts = {}) => {
-  const options = { ...defaultOptions, ...opts };
+
+// Check if an image should be optimized
+function shouldOptimizeImage(filename) {
+  const imageExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+  const ext = path.extname(filename).toLowerCase();
+  return imageExtensions.includes(ext);
+}
+
+// Generate WebP filename
+function getWebPFilename(originalFilename) {
+  const nameWithoutExt = path.basename(
+    originalFilename,
+    path.extname(originalFilename)
+  );
+  return `${nameWithoutExt}.webp`;
+}
+
+// Optimize image and convert to WebP
+async function optimizeSingleImage(file, options) {
+  try {
+    const filePath = file.path;
+
+    // Skip if not an image or if file doesn't exist
+    if (!shouldOptimizeImage(file.filename) || !filePath) {
+      console.log(`Skipping ${file.filename} - not an optimizable image`);
+      return file;
+    }
+
+    // Read the original file
+    const imageBuffer = await fs.readFile(filePath);
+    const originalStats = await fs.stat(filePath);
+
+    const metadata = await sharp(imageBuffer).metadata();
+    const originalFormat = path
+      .extname(file.filename)
+      .toLowerCase()
+      .replace(".", "");
+
+    // Skip if image is already small and we're not converting to WebP
+    if (
+      options.skipIfSmaller &&
+      metadata.width &&
+      metadata.width <= options.maxWidth &&
+      !options.convertToWebP
+    ) {
+      console.log(`Skipping ${file.filename} - already optimized size`);
+      return file;
+    }
+
+    let optimizedBuffer;
+    let outputFormat = originalFormat;
+    let outputFilename = file.filename;
+    let outputPath = filePath;
+
+    // Create sharp instance with basic operations
+    let sharpInstance = sharp(imageBuffer).rotate().resize({
+      width: options.maxWidth,
+      withoutEnlargement: true,
+      fit: "inside",
+    });
+
+    // Decide on output format
+    if (options.convertToWebP && originalFormat !== "gif") {
+      // Convert to WebP
+      outputFormat = "webp";
+      outputFilename = getWebPFilename(file.filename);
+      outputPath = path.join(path.dirname(filePath), outputFilename);
+
+      optimizedBuffer = await sharpInstance
+        .webp({
+          quality: options.quality,
+          effort: 4, // CPU effort
+        })
+        .toBuffer();
+
+      console.log(`Converting ${file.filename} to WebP format`);
+    } else {
+      // Keep original format but optimize
+      switch (originalFormat) {
+        case "jpg":
+        case "jpeg":
+          optimizedBuffer = await sharpInstance
+            .jpeg({
+              quality: options.quality,
+              progressive: true, // Progressive loading
+              mozjpeg: true, // Better compression
+            })
+            .toBuffer();
+          break;
+
+        case "png":
+          optimizedBuffer = await sharpInstance
+            .png({
+              compressionLevel: 9,
+              progressive: true,
+              palette: true, // Reduce colors for smaller files
+            })
+            .toBuffer();
+          break;
+
+        case "webp":
+          optimizedBuffer = await sharpInstance
+            .webp({
+              quality: options.quality,
+              effort: 4,
+            })
+            .toBuffer();
+          break;
+
+        case "gif":
+          if (options.convertToWebP) {
+            outputFormat = "webp";
+            outputFilename = getWebPFilename(file.filename);
+            outputPath = path.join(path.dirname(filePath), outputFilename);
+
+            optimizedBuffer = await sharpInstance
+              .webp({
+                quality: options.quality,
+                effort: 4,
+              })
+              .toBuffer();
+          } else {
+            console.log(`Keeping GIF ${file.filename} as original format`);
+            return file;
+          }
+          break;
+
+        default:
+          console.log(`Unsupported format for ${file.filename}`);
+          return file;
+      }
+    }
+
+    // Only replace if new file is smaller
+    const shouldReplace =
+      !options.skipIfSmaller ||
+      optimizedBuffer.length < originalStats.size ||
+      options.convertToWebP;
+
+    if (shouldReplace) {
+      // Write the optimized file
+      await fs.writeFile(outputPath, optimizedBuffer);
+
+      // If we created a new file delete the original
+      if (outputPath !== filePath && !options.keepOriginalFormat) {
+        await fs.unlink(filePath);
+      }
+
+      // Update file object with new information
+      file.filename = outputFilename;
+      file.path = outputPath;
+      file.size = optimizedBuffer.length;
+
+      const sizeReduction = (
+        ((originalStats.size - optimizedBuffer.length) / originalStats.size) *
+        100
+      ).toFixed(1);
+      console.log(
+        `Optimized ${file.filename}: ${originalStats.size} → ${optimizedBuffer.length} bytes (${sizeReduction}% reduction)`
+      );
+    } else {
+      console.log(
+        `Kept original ${file.filename} - optimization didn't reduce size`
+      );
+    }
+
+    return file;
+  } catch (error) {
+    console.error(`Error optimizing ${file.filename}:`, error.message);
+    // keep original file if optimization fails
+    return file;
+  }
+}
+
+// Main optimization middleware with WebP support
+export const optimizeImages = (userOptions = {}) => {
+  const options = { ...defaultOptions, ...userOptions };
 
   return async (req, res, next) => {
     try {
-      // collect Images:
-      const fileGroups = [];
+      // If no files, move to next middleware
+      if (!req.files && !req.file) {
+        return next();
+      }
 
+      console.log("Starting image optimization with WebP conversion...");
+
+      // Collect all files
+      const allFiles = [];
+
+      // Handle single file
       if (req.file) {
-        fileGroups.push([req.file]);
-      }
-      if (Array.isArray(req.files)) {
-        fileGroups.push(req.files);
-      } else if (req.files && typeof req.files === "object") {
-        Object.values(req.files).forEach((arr) => {
-          if (Array.isArray(arr)) fileGroups.push(arr);
-        });
+        allFiles.push(req.file);
       }
 
-      if (fileGroups.length === 0) return next();
-
-      // process each file
-      for (const group of fileGroups) {
-        for (const file of group) {
-          // determine full path (support diskStorage and memoryStorage)
-          let filePath = file.path || (file.destination && file.filename ? path.join(file.destination, file.filename) : null);
-          const isMemory = !!file.buffer;
-
-          // if memory storage and no destination/filename, try to create a file name under uploads/products
-          if (!filePath && isMemory) {
-            const destDir = file.destination ? file.destination : path.join(process.cwd(), "uploads", "products");
-            if (!fsSync.existsSync(destDir)) {
-              await fs.mkdir(destDir, { recursive: true });
+      // Handle multiple files
+      if (req.files) {
+        if (Array.isArray(req.files)) {
+          allFiles.push(...req.files);
+        } else {
+          // If req.files is an object with arrays
+          Object.values(req.files).forEach((fieldFiles) => {
+            if (Array.isArray(fieldFiles)) {
+              allFiles.push(...fieldFiles);
             }
-            const filename = file.filename || (file.originalname ? `${Date.now()}-${file.originalname.replace(/\s+/g, "_")}` : `${Date.now()}.jpg`);
-            filePath = path.join(destDir, filename);
-
-            // ensure multer downstream sees a filename/path if needed
-            file.filename = file.filename || path.basename(filename);
-            file.destination = file.destination || destDir;
-            file.path = file.path || filePath;
-          }
-
-          if (!filePath) {
-            // nothing we can do
-            console.warn("optimizeImages: no disk path or buffer available for file, skipping");
-            continue;
-          }
-
-          // make sure file exists (if disk) or buffer exists (if memory)
-          if (!isMemory) {
-            try {
-              await fs.access(filePath);
-            } catch {
-              // file not found, skip
-              console.warn("optimizeImages: file not found on disk, skipping:", filePath);
-              continue;
-            }
-          }
-
-          const ext = path.extname(filePath).toLowerCase();
-
-          const tmpPath = `${filePath}.tmp`;
-
-          try {
-            // Build sharp pipeline from buffer (memory) or from disk path
-            const input = isMemory ? file.buffer : filePath;
-            const pipeline = sharp(input).rotate().resize({
-              width: options.maxWidth,
-              withoutEnlargement: true,
-            });
-
-            // apply format-specific options and write to tmpPath
-            if (ext === ".jpg" || ext === ".jpeg") {
-              await pipeline.jpeg({ quality: options.jpegQuality }).toFile(tmpPath);
-            } else if (ext === ".png") {
-              await pipeline.png({ compressionLevel: options.pngCompressionLevel }).toFile(tmpPath);
-            } else if (ext === ".webp") {
-              await pipeline.webp({ quality: options.webpQuality }).toFile(tmpPath);
-            } else {
-              // unknown/unsupported types: skip
-              console.warn("optimizeImages: unsupported extension, skipping:", ext, filePath);
-              continue;
-            }
-
-            // replace original with optimized file (if original was in memory we now have a disk file)
-            await fs.rename(tmpPath, filePath);
-
-            // update file metadata
-            try {
-              const stats = await fs.stat(filePath);
-              file.size = stats.size;
-              file.path = filePath;
-            } catch (e) {
-              // ignore
-            }
-          } catch (procErr) {
-            // if tmp exists, try to remove it
-            try {
-              if (fsSync.existsSync(tmpPath)) await fs.unlink(tmpPath);
-            } catch (e) { /* ignore */ }
-
-            console.error("Image optimization failed for", filePath, procErr);
-            continue;
-          }
+          });
         }
       }
 
-      return next();
-    } catch (err) {
-      return next(err);
+      // Filter only images that need optimization
+      const imagesToOptimize = allFiles.filter(
+        (file) => file && shouldOptimizeImage(file.filename)
+      );
+
+      console.log(`Found ${imagesToOptimize.length} images to optimize`);
+
+      // Process images in parallel
+      const optimizationPromises = imagesToOptimize.map((file) =>
+        optimizeSingleImage(file, options)
+      );
+
+      // Wait for all optimizations to complete
+      await Promise.all(optimizationPromises);
+
+      console.log("Image optimization with WebP conversion completed");
+      next();
+    } catch (error) {
+      console.error("Error in optimizeImages middleware:", error);
+      // Don't stop the request if optimization fails
+      next();
     }
   };
+};
+
+// Export additional utility function for WebP checking
+export const checkWebPSupport = (req) => {
+  // Check if client supports WebP via Accept header
+  const acceptHeader = req.headers.accept || "";
+  return acceptHeader.includes("image/webp");
 };

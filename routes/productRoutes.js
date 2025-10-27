@@ -20,7 +20,7 @@ router.post(
   "/",
   isAuthenticated,
   productImageUpload,
-  optimizeImages,
+  optimizeImages(),
   validate(productSchema),
   authorizeRoles("seller"),
   productController.createProduct

@@ -45,8 +45,7 @@ export const createProduct = async (req, res, next) => {
       usersToNotify
     });
 
-    res.status(201).json({ message: "Product created successfully", product });
-    await invalidateProductCache();
+    // await invalidateProductCache();
     res.status(201).json({ message: "Product created successfully", data: product });
   } catch (error) {
     if (req.files) {
