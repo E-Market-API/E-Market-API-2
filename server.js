@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import connectDB from "./config/db.js";
+import config from "./config/config.js";
 
 import userRoutes from "./routes/userRoutes.js";
 import categoryRoutes from "./routes/categoryRoutes.js";
@@ -24,11 +25,16 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger.js";
 
-dotenv.config();
-
+const env = process.env.NODE_ENV || 'development'; // Default to development
+dotenv.config({ path: `./.env.${env}`});
+const uri = process.env.DB_URI;
+//dotenv.config();
 const app = express();
 app.use(express.json());
-const PORT = process.env.PORT || 3000;
+// console.log(config);
+
+const PORT = config.port;
+// console.log(process.env);
 
 if (process.env.NODE_ENV !== "test") {
   // Connect to MongoDB

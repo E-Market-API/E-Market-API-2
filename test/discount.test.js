@@ -13,7 +13,7 @@ describe("Coupon API", function () {
 
     before(async () => {
 
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
 
         const adminRes = await request(app).post("/api/auth/register").send({
             fullname: "Admin User",
