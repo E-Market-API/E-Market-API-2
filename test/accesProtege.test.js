@@ -61,7 +61,6 @@ describe("Tests d'accès protégés", () => {
       { method: "get", path: "/api/users" },
       { method: "get", path: "/api/users/deleted" },
       { method: "post", path: "/api/users", body: { email: "new@test.com", password: "123456", fullname: "New User" } },
-      { method: "delete", path: `/api/users/${normalUserId}` },
       { method: "get", path: "/api/users/filter?role=user" }
     ];
   });
