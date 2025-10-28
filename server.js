@@ -25,7 +25,10 @@ import swaggerJsDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 import swaggerOptions from "./config/swagger.js";
 
-dotenv.config();
+const env = process.env.NODE_ENV || 'development'; // Default to development
+dotenv.config({ path: `./.env.${env}`});
+const uri = process.env.DB_URI;
+//dotenv.config();
 const app = express();
 app.use(express.json());
 // console.log(config);

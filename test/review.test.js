@@ -20,7 +20,7 @@ describe("Review API", function () {
     before(async () => {
 
 
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
 
         // create user
         const user = await userFactory(1, {email: "testuser@test.com", password: "test123"});
