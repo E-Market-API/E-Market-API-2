@@ -15,7 +15,7 @@ export const register = async (req, res, next) => {
 
         // Check if user already exists
         const existingUser = await User.findOne({ email });
-        if (existingUser) return res.status(400).json({ message: "Email already in use" });
+        if (existingUser) return res.status(400).json({ message: "Email already in use"});
 
         const user = new User({ fullname, email, password });
         await user.save();
@@ -35,8 +35,16 @@ export const register = async (req, res, next) => {
 
         res.status(201).json({
             message: "User registered successfully",
-            token,
-            user: { id: user._id, fullname: user.fullname, email: user.email, role: user.role , avatar: user.avatar},
+            data: {
+                token,
+                user: {
+                    id: user._id,
+                    fullname: user.fullname,
+                    email: user.email,
+                    role: user.role,
+                    avatar: user.avatar,
+                },
+            },
         });
     } catch (error) {
         next(error);
@@ -67,11 +75,20 @@ export const login = async (req, res, next) => {
             await CartService.mergeCarts(user._id, sessionId);
         }
 
-        res.json({
-            message: "Login successful",
-            token,
-            user: { id: user._id, fullname: user.fullname, email: user.email, role: user.role },
-        });
+        
+    res.json({
+      message: "Login successful",
+      data: {
+        token,
+        user: {
+          id: user._id,
+          fullname: user.fullname,
+          email: user.email,
+          role: user.role,
+          avatar: user.avatar,
+        },
+      },
+    });
     } catch (error) {
         next(error);
     }
