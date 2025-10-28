@@ -43,7 +43,8 @@ export const updateUser = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json({ message: "User updated", user: updatedUser });
+    res.status(200).json({ message: "User updated", data: {
+        updatedUser }});
   } catch (error) {
     next(error);
   }
@@ -68,7 +69,16 @@ export const getUsers = async (req, res, next) => {
       totalUsers = await User.countDocuments({ role: "seller", deletedAt: null });
     }
 
-    res.status(200).json({ users, totalUsers, limit, page, totalPages: Math.ceil(totalUsers / limit), });
+     res.status(200).json({
+      message: "Users retrieved successfully",
+      data: {
+        users: filteredUsers,
+        totalUsers,
+        limit,
+        page,
+        totalPages: Math.ceil(totalUsers / limit),
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -82,7 +92,10 @@ export const getUserById = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json(user);
+     res.status(200).json({
+      message: "User retrieved successfully",
+      data: {filteredUser },
+    });
   } catch (error) {
     next(error);
   }
@@ -118,7 +131,7 @@ export const restoreUser = async (req, res, next) => {
 export const getDeletedUsers = async (req, res, next) => {
   try {
     const users = await User.find().deleted();
-    res.status(200).json({ users });
+    res.status(200).json({ message: "Users retrieved successfully", data: users });
   } catch (error) {
     next(error);
   }
@@ -148,7 +161,7 @@ export const deleteAvatar = async (req, res, next) => {
     user.avatar = null;
     await user.save();
 
-    res.status(200).json({ message: "Avatar deleted successfully", user });
+    res.status(200).json({ message: "Avatar deleted successfully",data: user });
   } catch (error) {
     next(error);
   }
@@ -161,7 +174,7 @@ export const changeRole = async (req, res, next) => {
 
     user.role = req.body.role;
     await user.save();
-    res.status(200).json({ message: "Role changed successfully", user });
+    res.status(200).json({ message: "Role changed successfully",data: user });
   } catch (error) {
     next(error);
   }
@@ -180,7 +193,7 @@ export const searchSellers = async (req, res, next) => {
     }
 
     const sellers = await User.find(filter);
-    res.status(200).json({ sellers });
+    res.status(200).json({ message: "Sellers found", data: sellers });
   } catch (error) {
     next(error);
   }
@@ -192,7 +205,8 @@ export const filterUsersByRole = async (req, res, next) => {
     const users = await User.find({ role, deletedAt: null });
     if (users.length === 0)
       return res.status(404).json({ message: `no usesr found with role ${role}` });
-    res.status(200).json({ count: users.length, users });
+    res.status(200).json({ message: "Users found", 
+      data: { count: users.length, users }});
   }
   catch (error) {
     next(error);
