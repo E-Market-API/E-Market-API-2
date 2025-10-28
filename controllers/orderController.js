@@ -14,7 +14,7 @@ export const createOrder = async (req, res, next) => {
 
     const result = await OrderService.createOrder(userId, couponCodes, session);
     console.log("Order data:", result.order);
-    
+
     //récupérer les seller_id depuis les products de la commande
     const productIds = result.order.items.map(i => i.productId);
     const products = await Product.find({ _id: { $in: productIds } }, "seller_id");
@@ -71,6 +71,22 @@ export const updateOrderStatus = async (req, res, next) => {
 
     order.status = newStatus;
     await order.save();
+
+    if (newStatus === "cancelled") {
+      const productIds = deletedOrder.items.map(i => i.productId);
+      const products = await Product.find({ _id: { $in: productIds } }, "seller_id");
+      const sellerIds = [...new Set(products.map(p => p.seller_id.toString()))];
+
+      // Notification pour chaque vendeur concerné
+      sellerIds.forEach(sellerId => {
+        notificationEmitter.emit("orderDeleted", {
+          orderId: deletedOrder._id,
+          buyerId: deletedOrder.userId,
+          sellerId,
+          status: "deleted"
+        });
+      });
+    }
 
     res.json({ message: "Order status updated", order });
   } catch (error) {

@@ -19,3 +19,15 @@ notificationEmitter.on("newProduct", async ({ sellerId, productName, usersToNoti
     console.error("Erreur lors de la création des notifications :", error);
   }
 });
+
+notificationEmitter.on("lowStock", async ({ userId, product }) => {
+  try {
+    const message = `Attention ! Le produit "${product.title}" dans votre panier est presque épuisé. Stock restant : ${product.stock}`;
+
+    await Notification.create({ userId, message });
+
+    console.log(`Notification low stock créée pour ${userId} - ${product.title}`);
+  } catch (err) {
+    console.error("Erreur création notification low stock :", err);
+  }
+});

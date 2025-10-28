@@ -13,6 +13,7 @@ import orderRoutes from "./routes/orderRoutes.js"
 import notificationRoutes from "./routes/notificationRoutes.js"
 import './events/notificationListener.js';
 import './events/orderListener.js';
+import "./jobs/lowStockNotifier.js";
 
 import requestLogger from "./middlewares/requestLogger.js";
 import notFound from "./middlewares/notFound.js";
@@ -29,9 +30,10 @@ const app = express();
 app.use(express.json());
 const PORT = process.env.PORT || 3000;
 
-// Connect to MongoDB
 if (process.env.NODE_ENV !== "test") {
+  // Connect to MongoDB
   connectDB();
+  // Start server
   app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 }
 
@@ -43,11 +45,8 @@ app.get("/", (req, res) => {
   res.send(`Server is running on http://localhost:${PORT}`);
 });
 
-// Start server
-
-app.listen(PORT, () => {
-  console.log(`Server running on http://localhost:${PORT}`);
-});
+// Start cron jobs
+// lowStockJob.start();
 
 // swager documentation
 const specs = swaggerJsDoc(swaggerOptions);
@@ -60,13 +59,13 @@ app.use("/api/products", productRoutes);
 app.use("/api/auth", authRoutes);
 
 
-app.use("/api/reviews",reviewRoutes);
-app.use("/api/coupons",couponRoutes);
+app.use("/api/reviews", reviewRoutes);
+app.use("/api/coupons", couponRoutes);
 
 app.use("/api/cart", isAuthenticated, cartRoutes);
 app.use("/api/guest-cart", cartRoutes);
 app.use("/api/orders", orderRoutes);
-app.use("/api/notifications",notificationRoutes);
+app.use("/api/notifications", notificationRoutes);
 
 // Catch all unknown routes
 app.use(notFound);

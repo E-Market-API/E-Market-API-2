@@ -1,6 +1,7 @@
 import Cart from "../models/Cart.js";
 import { faker } from "@faker-js/faker";
 import Product from "../models/Product.js";
+import User from "../models/User.js";
 
 /**
  * Creates one or more carts in the database.
@@ -12,7 +13,12 @@ import Product from "../models/Product.js";
 export const cartFactory = async (count = 1, overrides = {}) => {
   const carts = [];
 
+  const seller = await User.findOne({ role: "seller" });
+  if (!seller) {
+    throw new Error("Aucun vendeur trouvé dans la base de données.");
+  }
   for (let i = 0; i < count; i++) {
+
     // If no productId provided, create one real product
     let productId = overrides.productId;
     if (!productId) {
@@ -22,6 +28,7 @@ export const cartFactory = async (count = 1, overrides = {}) => {
         price: faker.number.float({ min: 5, max: 100, multipleOf: 0.01 }),
         category: overrides.categoryId || null,
         stock: faker.number.int({ min: 10, max: 100 }),
+        seller_id: seller._id,
       });
       productId = product._id;
     }

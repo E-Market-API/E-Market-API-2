@@ -3,6 +3,7 @@ import request from "supertest";
 import app from "../server.js";
 import User from "../models/User.js";
 import { userFactory } from "../factories/userFactory.js";
+import mongoose from "mongoose";
 
 let adminToken, userToken, otherUserToken, ownershipToken;
 let adminUserId, normalUserId, otherUserId, ownershipUserId;
@@ -11,11 +12,20 @@ let adminRoutes;
 describe("Tests d'accès protégés", () => {
 
   before(async function () {
-    this.timeout(15000);
-
-    await User.deleteMany({
-    email: { $in: ["admin@test.com", "user@test.com", "other@test.com", "ownership@test.com", "new@test.com"] }
-  });
+    this.timeout(20000);
+   //assurer la connexion Mongoose avant toute opération
+    mongoose.set("bufferTimeoutMS", 30000);
+    if (mongoose.connection.readyState !== 1) {
+      const uri = process.env.MONGO_URI || "mongodb://localhost:27017/emarket-test";
+      await mongoose.connect(uri, {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      });
+    }
+    
+     await User.deleteMany({
+      email: { $in: ["admin@test.com", "user@test.com", "other@test.com", "ownership@test.com", "new@test.com"] }
+    });
 
   // --- Créer utilisateurs via la factory ---
   const [adminUser] = await userFactory(1, { email: "admin@test.com", password: "password123",fullname: "Admin User",role: "admin" });
@@ -56,11 +66,17 @@ describe("Tests d'accès protégés", () => {
     ];
   });
 
-  after(async () => {
+  after(async function () {
+    this.timeout(15000);
     // --- Nettoyer après tests ---
     await User.deleteMany({
       email: { $in: ["admin@test.com", "user@test.com", "other@test.com", "ownership@test.com", "new@test.com"] }
     });
+
+     // Fermer la connexion pour que Mocha termine proprement
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.disconnect();
+    }
   });
 
   // ---------------- Routes admin ----------------

@@ -6,7 +6,9 @@ import { authorizeRoles } from "../middlewares/roles.js";
 import { createUploadFields } from "../config/multerConfig.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 import { checkProductOwnership } from "../middlewares/ownershipMiddleware.js";
-import {cacheMiddleware} from "../middlewares/cache.js";
+import { cacheMiddleware } from "../middlewares/cache.js";
+import { optimizeImages } from "../middlewares/optimizeImages.js";
+import { productRateLimit } from "../middlewares/rateLimiter.js";
 
 const router = express.Router();
 
@@ -17,17 +19,33 @@ const productImageUpload = createUploadFields("products", [
 
 router.post(
   "/",
+  productRateLimit,
   isAuthenticated,
   productImageUpload,
+  optimizeImages(),
   validate(productSchema),
   authorizeRoles("seller"),
   productController.createProduct
 );
-router.get("/",cacheMiddleware('products', 600), productController.getProducts);
+router.get(
+  "/",
+  productRateLimit,
+  cacheMiddleware("products", 600),
+  productController.getProducts
+);
 //router.get("/", productController.getProducts);
-router.get("/published",cacheMiddleware('published', 600), productController.getPublishedProducts);
+router.get(
+  "/published",
+  cacheMiddleware("published", 600),
+  productController.getPublishedProducts
+);
 router.get("/deleted", productController.getDeletedProducts);
-router.get("/search",cacheMiddleware('search', 300), productController.searchProducts);
+router.get(
+  "/search",
+  productRateLimit,
+  cacheMiddleware("search", 300),
+  productController.searchProducts
+);
 
 // Get seller's products
 router.get(
@@ -98,6 +116,8 @@ export default router;
  *         - description
  *         - price
  *         - stock
+ *         - categories
+ *         - seller_id
  *       properties:
  *         title:
  *           type: string
@@ -109,6 +129,10 @@ export default router;
  *           type: number
  *           description: The price of the product
  *           minimum: 0
+ *         ex_price:
+ *           type: number
+ *           description: The ex price of the product
+ *           minimum: 0
  *         stock:
  *           type: number
  *           description: The number of items in stock
@@ -118,11 +142,20 @@ export default router;
  *           description: IDs of categories this product belongs to
  *           items:
  *             type: string
- *         images:
+ *         primaryImage:
+ *           type: string
+ *           description: URL or path to product image
+ *         secondaryImages:
  *           type: array
  *           items:
  *             type: string
- *             description: URL or path to product image
+ *             description: URL or path to secondary product images
+ *         published:
+ *           type: boolean
+ *           description: the publishing status of the product
+ *         seller_id:
+ *           type: string
+ *           description: Id of seller that created the product
  *         createdAt:
  *           type: string
  *           format: date-time
@@ -134,9 +167,12 @@ export default router;
  *         title: "Wireless Mouse"
  *         description: "Ergonomic wireless mouse with USB receiver"
  *         price: 29.99
+ *         ex_price: 39.99
  *         stock: 150
  *         categories: ["60d21b4567d0d8992e610c80"]
- *         images: ["uploads/mouse1.jpg", "uploads/mouse2.jpg"]
+ *         primaryImage: "uploads/mouse1.jpg"
+ *         secondaryImages: ["uploads/mouse2.jpg", "uploads/mouse3.jpg"]
+ *         published: true
  *         createdAt: "2025-10-12T07:14:46.501Z"
  *         deletedAt: null
  */

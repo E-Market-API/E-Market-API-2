@@ -4,10 +4,11 @@ import dotenv from "dotenv";
 import { categoryFactory } from "../factories/categoryFactory.js";
 import { cartFactory } from "../factories/cartFactory.js";
 import { orderFactory } from "../factories/orderFactory.js";
-import { couponFactory } from "../factories/couponFactory.js";
-import { reviewFactory } from "../factories/reviewFactory.js";
+import {  couponFactory  } from "../factories/couponFactory.js";
+import {  reviewFactory  } from "../factories/reviewFactory.js";
 import coupon from "../models/Coupon.js";
 import User from "../models/User.js";
+import productFactory from "../factories/productFactory.js";
 
 dotenv.config();
 
