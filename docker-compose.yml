@@ -9,7 +9,7 @@ services:
     networks: 
       - app-network
     environment: 
-      DB_URI : mongodb://mongo:27017/expressdb
+      DB_URI : mongodb://mongo:27017/my_database
     restart : always
 
   api:
