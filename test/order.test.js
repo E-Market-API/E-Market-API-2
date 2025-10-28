@@ -17,10 +17,12 @@ describe("Order API", function () {
   before(async () => {
     // Connect to test DB
     await mongoose.connect(process.env.MONGO_URI_TEST);
-    
+
     testConnection = mongoose.connection;
     // Seed a user
     [user] = await userFactory(1, { email: "testuser@test.com", password: "123456" });
+    // creat a seller
+    await userFactory(1, { email: "selleruser@test.com", password: "123456", role: "seller" });
 
     // Seed a cart for the user
     [cart] = await cartFactory(1, { userId: user._id });
