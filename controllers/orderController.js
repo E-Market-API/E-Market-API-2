@@ -30,10 +30,13 @@ export const createOrder = async (req, res, next) => {
     });
 
     await session.commitTransaction();
+
     res.status(201).json({
+      success: true,
       message: "Order created successfully",
-      ...result,
+      data: { ...result },
     });
+
   } catch (error) {
     await session.abortTransaction();
     next(error);
@@ -49,11 +52,11 @@ export const updateOrderStatus = async (req, res, next) => {
 
     const validStatuses = ["pending", "shipped", "delivered", "cancelled"];
     if (!validStatuses.includes(newStatus)) {
-      return res.status(400).json({ message: "Invalid status" });
+      return res.status(400).json({ success: false, message: "Invalid status" });
     }
 
     const order = await Order.findById(orderId);
-    if (!order) return res.status(404).json({ message: "Order not found" });
+    if (!order) return res.status(404).json({ success: false, message: "Order not found" });
 
     const statusPriority = {
       pending: 1,
@@ -65,6 +68,7 @@ export const updateOrderStatus = async (req, res, next) => {
     // Only allow status updates if newStatus is same or higher priority
     if (statusPriority[newStatus] < statusPriority[order.status]) {
       return res.status(400).json({
+        success: false,
         message: `Cannot revert order status from ${order.status} to ${newStatus}`,
       });
     }
@@ -73,22 +77,26 @@ export const updateOrderStatus = async (req, res, next) => {
     await order.save();
 
     if (newStatus === "cancelled") {
-      const productIds = deletedOrder.items.map(i => i.productId);
+      const productIds = order.items.map(i => i.productId);
       const products = await Product.find({ _id: { $in: productIds } }, "seller_id");
       const sellerIds = [...new Set(products.map(p => p.seller_id.toString()))];
 
       // Notification pour chaque vendeur concerné
       sellerIds.forEach(sellerId => {
         notificationEmitter.emit("orderDeleted", {
-          orderId: deletedOrder._id,
-          buyerId: deletedOrder.userId,
+          orderId: order._id,
+          buyerId: order.userId,
           sellerId,
           status: "deleted"
         });
       });
     }
 
-    res.json({ message: "Order status updated", order });
+    res.json({
+      success: true,
+      message: "Order status updated",
+      data: { order }
+    });
   } catch (error) {
     next(error);
   }
@@ -98,7 +106,11 @@ export const updateOrderStatus = async (req, res, next) => {
 export const getOrders = async (req, res, next) => {
   try {
     const orders = await Order.find().notDeleted();
-    res.status(200).json({ orders });
+    res.status(200).json({
+      success: true,
+      message: "Orders retrieved successfully",
+      data: orders
+    });
   } catch (error) {
     next(error);
   }
@@ -110,10 +122,10 @@ export const getOrders = async (req, res, next) => {
 export const softDeleteOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
-    if (!order) return res.status(404).json({ error: "Order not found" });
+    if (!order) return res.status(404).json({ success: false, error: "Order not found" });
 
     await order.softDelete();
-    res.status(200).json({ message: "Order soft deleted" });
+    res.status(200).json({ success: true, message: "Order soft deleted" });
   } catch (error) {
     next(error);
   }
@@ -123,10 +135,14 @@ export const softDeleteOrder = async (req, res, next) => {
 export const restoreOrder = async (req, res, next) => {
   try {
     const order = await Order.findById(req.params.id);
-    if (!order) return res.status(404).json({ error: "Order not found" });
+    if (!order) return res.status(404).json({ success: false, error: "Order not found" });
 
     await order.restore(); // <-- helper
-    res.status(200).json({ message: "Order restored" });
+    res.status(200).json({
+      success: true,
+      message: "Order restored",
+      data: order
+    });
   } catch (error) {
     next(error);
   }
@@ -136,7 +152,11 @@ export const restoreOrder = async (req, res, next) => {
 export const getDeletedOrders = async (req, res, next) => {
   try {
     const orders = await Order.find().deleted();
-    res.status(200).json({ orders });
+    res.status(200).json({
+      success: true,
+      message: "Soft deleted order retrieved successfully",
+      data: orders
+    });
   } catch (error) {
     next(error);
   }
@@ -147,7 +167,11 @@ export const getUserOrders = async (req, res, next) => {
   try {
     const { userId } = req.params;
     const orders = await Order.find({ userId }).notDeleted();
-    res.status(200).json({ orders });
+    res.status(200).json({
+      success: true,
+      message: "Orders retrieved successfully",
+      data: orders
+    });
   } catch (error) {
     next(error);
   }
