@@ -39,6 +39,8 @@ services:
       - ME_CONFIG_MONGODB_PORT=27017
     depends_on:
       - mongo
+    networks:
+     - app-network
   redis:
     image: redis:7
     container_name: redis_container

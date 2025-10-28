@@ -70,4 +70,26 @@ const logFailedValidation = (req, reason) => {
     });
 };
 
+export const productRateLimit = (req, res, next) => {
+    const key = req.ip;
+    const now = Date.now();
+    const windowMs = 60000; // 1 minute 
+    const maxAttempts = 10; // max 10 requests per minute
+
+    if (!attempts.has(key)) {
+        attempts.set(key, []);
+    }
+
+    const userAttempts = attempts.get(key);
+    const recentAttempts = userAttempts.filter(time => now - time < windowMs);
+
+    if (recentAttempts.length >= maxAttempts) {
+        return res.status(429).json({ error: 'Too many product requests. Try again later.' });
+    }
+
+    userAttempts.push(now);
+    attempts.set(key, userAttempts.slice(-maxAttempts));
+    next();
+};
+
 export { logFailedValidation };

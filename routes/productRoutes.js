@@ -6,8 +6,9 @@ import { authorizeRoles } from "../middlewares/roles.js";
 import { createUploadFields } from "../config/multerConfig.js";
 import { isAuthenticated } from "../middlewares/auth.js";
 import { checkProductOwnership } from "../middlewares/ownershipMiddleware.js";
-import {cacheMiddleware} from "../middlewares/cache.js";
+import { cacheMiddleware } from "../middlewares/cache.js";
 import { optimizeImages } from "../middlewares/optimizeImages.js";
+import { productRateLimit } from "../middlewares/rateLimiter.js";
 
 const router = express.Router();
 
@@ -18,6 +19,7 @@ const productImageUpload = createUploadFields("products", [
 
 router.post(
   "/",
+  productRateLimit,
   isAuthenticated,
   productImageUpload,
   optimizeImages(),
@@ -25,11 +27,25 @@ router.post(
   authorizeRoles("seller"),
   productController.createProduct
 );
-router.get("/",cacheMiddleware('products', 600), productController.getProducts);
+router.get(
+  "/",
+  productRateLimit,
+  cacheMiddleware("products", 600),
+  productController.getProducts
+);
 //router.get("/", productController.getProducts);
-router.get("/published",cacheMiddleware('published', 600), productController.getPublishedProducts);
+router.get(
+  "/published",
+  cacheMiddleware("published", 600),
+  productController.getPublishedProducts
+);
 router.get("/deleted", productController.getDeletedProducts);
-router.get("/search",cacheMiddleware('search', 300), productController.searchProducts);
+router.get(
+  "/search",
+  productRateLimit,
+  cacheMiddleware("search", 300),
+  productController.searchProducts
+);
 
 // Get seller's products
 router.get(
