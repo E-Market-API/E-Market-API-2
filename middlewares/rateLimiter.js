@@ -1,3 +1,6 @@
+import rateLimit from 'express-rate-limit';
+const skipIfTest = process.env.NODE_ENV === "test";
+
 const attempts = new Map();
 const reviewAttempts = new Map();
 
@@ -46,10 +49,27 @@ export const reviewRateLimit = (req, res, next) => {
     next();
 };
 
+// ============ carte and order  rate limit ============
+// get limitter
+export const getLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000,
+    max: 60,
+    message: "Too many requests. Try again later.",
+    skip: () => skipIfTest,
+});
+
+// (POST, PUT, DELETE) limiter
+export const modifyLimiter = rateLimit({
+    windowMs: 1 * 60 * 1000,
+    max: 5,
+    message: "Too many modifications. Try again later.",
+    skip: () => skipIfTest,
+});
+
 const logFailedValidation = (req, reason) => {
     const logEntry = `[${new Date().toISOString()}] COUPON_VALIDATION_FAILED - IP: ${req.ip}, Code: ${req.body?.code}, Reason: ${reason}\n`;
     import('fs').then(fs => {
-        fs.appendFile('./logs/coupon-failures.log', logEntry, () => {});
+        fs.appendFile('./logs/coupon-failures.log', logEntry, () => { });
     });
 };
 
