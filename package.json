@@ -5,9 +5,10 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "nodemon server.js",
-    "seed": "node seeders/dbSeeder.js",
-    "reset-db": "node seeders/resetDB.js",
+    "dev": "cross-env NODE_ENV=development nodemon server.js",
+    "start": "cross-env NODE_ENV=production node server.js",
+    "seed":  "cross-env NODE_ENV=development node seeders/dbSeeder.js",
+    "reset-db": "cross-env NODE_ENV=development node seeders/resetDB.js",
     "test": "cross-env NODE_ENV=test mocha --timeout 10000 --exit",
     "test:integration": "cross-env NODE_ENV=test mocha test/integration/**/*.test.js --timeout 10000 --exit",
     "test:all": "cross-env NODE_ENV=test mocha test/**/*.test.js --timeout 10000 --exit",
