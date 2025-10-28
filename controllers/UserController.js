@@ -1,6 +1,8 @@
 import User from "../models/User.js";
 import path from "path";
 import fs from "fs";
+import bcrypt from "bcryptjs";
+
 
 export const createUser = async (req, res, next) => {
   try {
@@ -22,7 +24,9 @@ export const updateUser = async (req, res, next) => {
       // Ici tu peux stocker le chemin relatif ou absolu du fichier
       updates.avatar = `/uploads/avatars/${req.file.filename}`;
     }
-
+    if (updates.password) {
+     updates.password = await bcrypt.hash(updates.password, 10);
+    }
     // Mettre à jour l'utilisateur
     const updatedUser = await User.findByIdAndUpdate(
       req.params.id,
@@ -76,7 +80,7 @@ export const getUsers = async (req, res, next) => {
       totalUsers = await User.countDocuments({ role: "seller", deletedAt: null });
     }
 
-    res.status(200).json({ users , totalUsers, limit, page ,totalPages: Math.ceil(totalUsers / limit),});
+    res.status(200).json({ users, totalUsers, limit, page, totalPages: Math.ceil(totalUsers / limit), });
   } catch (error) {
     next(error);
   }
