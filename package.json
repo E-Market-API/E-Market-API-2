@@ -8,6 +8,7 @@
     "dev": "cross-env NODE_ENV=development nodemon server.js",
     "start": "cross-env NODE_ENV=production node server.js",
     "seed":  "cross-env NODE_ENV=development node seeders/dbSeeder.js",
+    "seed:prod" : "node seeders/dbSeeder.js",
     "reset-db": "cross-env NODE_ENV=development node seeders/resetDB.js",
     "test": "cross-env NODE_ENV=test mocha --timeout 10000 --exit",
     "test:integration": "cross-env NODE_ENV=test mocha test/integration/**/*.test.js --timeout 10000 --exit",
