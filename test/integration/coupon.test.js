@@ -22,13 +22,13 @@ describe("Coupon API", function () {
         [normalUser] = await userFactory(1, { email: "user@test.com", password: "123456", role: "user" });
 
         const adminRes = await request(app).post("/api/auth/login").send({ email: "admin@test.com", password: "123456" });
-        adminToken = adminRes.body.token;
+        adminToken = adminRes.body.data.token;
 
         const sellerRes = await request(app).post("/api/auth/login").send({ email: "seller@test.com", password: "123456" });
-        sellerToken = sellerRes.body.token;
+        sellerToken = sellerRes.body.data.token;
 
         const userRes = await request(app).post("/api/auth/login").send({ email: "user@test.com", password: "123456" });
-        userToken = userRes.body.token;
+        userToken = userRes.body.data.token;
     });
 
     after(async () => {

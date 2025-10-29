@@ -9,7 +9,7 @@ export const createUser = async (req, res, next) => {
     const user = new User(req.body);
     await user.save();
 
-     res.status(201).json({
+    res.status(201).json({
       message: "User created successfully",
       data: {
         user
@@ -30,7 +30,7 @@ export const updateUser = async (req, res, next) => {
       updates.avatar = `/uploads/avatars/${req.file.filename}`;
     }
     if (updates.password) {
-     updates.password = await bcrypt.hash(updates.password, 10);
+      updates.password = await bcrypt.hash(updates.password, 10);
     }
     // Mettre à jour l'utilisateur
     const updatedUser = await User.findByIdAndUpdate(
@@ -43,8 +43,11 @@ export const updateUser = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-    res.status(200).json({ message: "User updated", data: {
-        updatedUser }});
+    res.status(200).json({
+      message: "User updated", data: {
+        updatedUser
+      }
+    });
   } catch (error) {
     next(error);
   }
@@ -69,10 +72,10 @@ export const getUsers = async (req, res, next) => {
       totalUsers = await User.countDocuments({ role: "seller", deletedAt: null });
     }
 
-     res.status(200).json({
+    res.status(200).json({
       message: "Users retrieved successfully",
       data: {
-        users: filteredUsers,
+        users,
         totalUsers,
         limit,
         page,
@@ -92,9 +95,9 @@ export const getUserById = async (req, res, next) => {
       return res.status(404).json({ error: "User not found" });
     }
 
-     res.status(200).json({
+    res.status(200).json({
       message: "User retrieved successfully",
-      data: {filteredUser },
+      data: { user },
     });
   } catch (error) {
     next(error);
@@ -161,7 +164,7 @@ export const deleteAvatar = async (req, res, next) => {
     user.avatar = null;
     await user.save();
 
-    res.status(200).json({ message: "Avatar deleted successfully",data: user });
+    res.status(200).json({ message: "Avatar deleted successfully", data: user });
   } catch (error) {
     next(error);
   }
@@ -174,7 +177,7 @@ export const changeRole = async (req, res, next) => {
 
     user.role = req.body.role;
     await user.save();
-    res.status(200).json({ message: "Role changed successfully",data: user });
+    res.status(200).json({ message: "Role changed successfully", data: user });
   } catch (error) {
     next(error);
   }
@@ -205,8 +208,10 @@ export const filterUsersByRole = async (req, res, next) => {
     const users = await User.find({ role, deletedAt: null });
     if (users.length === 0)
       return res.status(404).json({ message: `no usesr found with role ${role}` });
-    res.status(200).json({ message: "Users found", 
-      data: { count: users.length, users }});
+    res.status(200).json({
+      message: "Users found",
+      data: { count: users.length, users }
+    });
   }
   catch (error) {
     next(error);

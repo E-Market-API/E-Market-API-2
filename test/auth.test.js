@@ -46,9 +46,9 @@ describe("Auth API", function () {
 
             // Vérification des propriétés de la réponse
             expect(res.body).to.have.property("message", "User registered successfully");
-            expect(res.body).to.have.property("token");
-            expect(res.body.user).to.have.property("email", "testuser@test.com");
-            expect(res.body.user).to.have.property("fullname", "Test User");
+            expect(res.body.data).to.have.property("token");
+            expect(res.body.data.user).to.have.property("email", "testuser@test.com");
+            expect(res.body.data.user).to.have.property("fullname", "Test User");
             // expect(res.body.user).to.have.property("role", "user");
             // expect(res.body.user).to.have.property("avatar");
         });
@@ -85,8 +85,8 @@ describe("Auth API", function () {
             // Vérification du succès
             expect(res.status).to.equal(200);
             expect(res.body).to.have.property("message", "Login successful");
-            expect(res.body).to.have.property("token");
-            expect(res.body.user).to.have.property("email", "login@test.com");
+            expect(res.body.data).to.have.property("token");
+            expect(res.body.data.user).to.have.property("email", "login@test.com");
         });
 
         it("should return 404 if user not found", async () => {

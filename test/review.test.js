@@ -29,7 +29,7 @@ describe("Review API", function () {
         const loginRes = await request(app)
             .post("/api/auth/login")
             .send({email: "testuser@test.com", password: "test123"});
-        userToken = loginRes.body.token;
+        userToken = loginRes.body.data.token;
 
         // create product
         const product = await Product.create({

@@ -37,7 +37,7 @@ describe("Product API", function () {
       .post("/api/auth/login")
       .send({ email: "testuser@test.com", password: "123456" });
 
-    token = res.body.token;
+    token = res.body.data.token;
   });
 
   after(async () => {
