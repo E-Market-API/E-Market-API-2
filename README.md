@@ -84,7 +84,7 @@ PORT=3000
 
 # Database (MongoDB)
 DB_URI=mongodb://127.0.0.1:27017/emarket_db
-MONGO_URI_TEST=mongodb://127.0.0.1:27017/emarket_test_db
+DB_URI=mongodb://127.0.0.1:27017/emarket_test_db
 
 # JWT
 JWT_SECRET=votre_jwt_secret_super_securise

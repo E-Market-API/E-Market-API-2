@@ -20,12 +20,13 @@ router.get("/deleted",isAuthenticated,authorizeRoles("admin"), userController.ge
 router.get("/:id",isAuthenticated,authorizeRoles("admin"), userController.getUserById);
 // router.patch("/:id",isAuthenticated,createUpload("avatars", "avatar", 1), validate(userSchema),checkOwnership, userController.updateUser);
 router.patch("/:id", isAuthenticated,createUpload("avatars", "avatar", 1), checkOwnership,userController.updateUser);
+router.delete("/:id",isAuthenticated,authorizeRoles("admin"), userController.deleteUser);
 
 router.delete("/:id/soft",isAuthenticated,authorizeRoles("admin"), userController.softDeleteUser);
 router.patch("/:id/restore",isAuthenticated,authorizeRoles("admin"), userController.restoreUser);
 
 router.delete("/:id/avatar", isAuthenticated, checkOwnership, userController.deleteAvatar);
-router.patch("/:id/role", isAuthenticated, authorizeRoles("admin"), userController.changeRole);
+router.put("/:id/role", isAuthenticated, authorizeRoles("admin"), userController.changeRole);
 
 export default router;
 
