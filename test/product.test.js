@@ -22,7 +22,7 @@ describe("Product API", function () {
     }
 
     // Connect to test DB
-    await mongoose.connect(process.env.MONGO_URI_TEST);
+    await mongoose.connect(process.env.DB_URI);
     testConnection = mongoose.connection;
     // Seed a user
     [user] = await userFactory(1, {

@@ -10,7 +10,9 @@ import coupon from "../models/Coupon.js";
 import User from "../models/User.js";
 import productFactory from "../factories/productFactory.js";
 
-dotenv.config();
+//dotenv.config();
+const env = process.env.NODE_ENV || 'development'; // Default to development
+dotenv.config({ path: `./.env.${env}` });
 
 const seedDB = async () => {
   try {

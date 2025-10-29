@@ -22,7 +22,7 @@ describe("Review API", function () {
     let testOrder;
 
     before(async () => {
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
         testConnection = mongoose.connection;
 
         [adminUser] = await userFactory(1,{email:"admin@test.com", password: "admin123", role: "admin"});

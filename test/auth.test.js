@@ -15,7 +15,7 @@ describe("Auth API", function () {
         if (mongoose.connection.readyState) {
             await mongoose.disconnect();
         }
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
     });
 
     // Après tous les tests : nettoyer et fermer la connexion
