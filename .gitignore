@@ -1,4 +1,7 @@
 .env
+.env.development
+.env.test
+.env.production
 /node_modules
 /logs/
 .idea
@@ -9,4 +12,3 @@ public/uploads/
 uploads/products/
 /.idea
 /coverage
-

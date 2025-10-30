@@ -123,9 +123,9 @@ export const updateProduct = async (req, res, next) => {
     }
 
     //Événement pour le stock faible
-    if (updates.stock !== undefined && updates.stock !== product.stock) {
-      notificationEmitter.emit("stockUpdated", { productId: updatedProduct._id, newStock: updates.stock });
-    }
+    // if (updates.stock !== undefined && updates.stock !== product.stock) {
+    //   notificationEmitter.emit("stockUpdated", { productId: updatedProduct._id, newStock: updates.stock });
+    // }
     /////////////////////////////////////////
 
     await invalidateProductCache();

@@ -13,7 +13,7 @@ describe("Coupon API", function () {
 
     before(async () => {
 
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
 
         const adminRes = await request(app).post("/api/auth/register").send({
             fullname: "Admin User",
@@ -26,9 +26,9 @@ describe("Coupon API", function () {
             email: "user@test.com",
             password: "user123",
         });
-        adminToken = adminRes.body.token;
-        userToken = userRes.body.token;
-        adminUserId = adminRes.body.user.id;
+        adminToken = adminRes.body.data.token;
+        userToken = userRes.body.data.token;
+        adminUserId = adminRes.body.data.user.id;
     });
 
     after(async () => {

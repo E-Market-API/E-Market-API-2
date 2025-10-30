@@ -16,7 +16,7 @@ describe("Order API", function () {
 
   before(async () => {
     // Connect to test DB
-    await mongoose.connect(process.env.MONGO_URI_TEST);
+    await mongoose.connect(process.env.DB_URI);
 
     testConnection = mongoose.connection;
     // Seed a user
@@ -32,7 +32,7 @@ describe("Order API", function () {
       .post("/api/auth/login")
       .send({ email: "testuser@test.com", password: "123456" });
 
-    token = res.body.token;
+    token = res.body.data.token;
   });
 
   after(async () => {
@@ -61,7 +61,7 @@ describe("Order API", function () {
 
         expect(res.status).to.equal(201);
         expect(res.body).to.have.property("message", "Order created successfully");
-        expect(res.body).to.have.property("order");
+        expect(res.body.data).to.have.property("order");
       } catch (err) {
         console.error("Test error:", err);
         throw err;
@@ -81,7 +81,7 @@ describe("Order API", function () {
         .post("/api/auth/login")
         .send({ email: "emptycart@test.com", password: "123456" });
 
-      const token = resLogin.body.token;
+      const token = resLogin.body.data.token;
 
       // Call the order creation endpoint
       const res = await request(app)
@@ -106,7 +106,7 @@ describe("Order API", function () {
         .post("/api/auth/login")
         .send({ email: "couponfail@test.com", password: "123456" });
 
-      const token = resLogin.body.token;
+      const token = resLogin.body.data.token;
 
       // Use an invalid coupon code
       const res = await request(app)
@@ -144,7 +144,7 @@ describe("Order API", function () {
           .send({ newStatus: "shipped" });
 
         expect(res.status).to.equal(200);
-        expect(res.body.order.status).to.equal("shipped");
+        expect(res.body.data.order.status).to.equal("shipped");
       } catch (err) {
         console.error("Error in update order status test:", err);
         throw err;

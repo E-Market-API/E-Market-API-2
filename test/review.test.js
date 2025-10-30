@@ -20,7 +20,7 @@ describe("Review API", function () {
     before(async () => {
 
 
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
 
         // create user
         const user = await userFactory(1, {email: "testuser@test.com", password: "test123"});
@@ -29,7 +29,7 @@ describe("Review API", function () {
         const loginRes = await request(app)
             .post("/api/auth/login")
             .send({email: "testuser@test.com", password: "test123"});
-        userToken = loginRes.body.token;
+        userToken = loginRes.body.data.token;
 
         // create product
         const product = await Product.create({

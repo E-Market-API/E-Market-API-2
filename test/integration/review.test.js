@@ -22,7 +22,7 @@ describe("Review API", function () {
     let testOrder;
 
     before(async () => {
-        await mongoose.connect(process.env.MONGO_URI_TEST);
+        await mongoose.connect(process.env.DB_URI);
         testConnection = mongoose.connection;
 
         [adminUser] = await userFactory(1,{email:"admin@test.com", password: "admin123", role: "admin"});
@@ -30,11 +30,11 @@ describe("Review API", function () {
         [user2] = await userFactory(1,{email:"user2@test.com", password: "user123"});
 
         const adminRes = await request(app).post("/api/auth/login").send({email:"admin@test.com",password:"admin123"});
-        adminToken = adminRes.body.token;
+        adminToken = adminRes.body.data.token;
         const userRes = await request(app).post("/api/auth/login").send({email:"user@test.com",password:"user123"});
-        userToken = userRes.body.token;
+        userToken = userRes.body.data.token;
         const user2Res = await request(app).post("/api/auth/login").send({email:"user2@test.com",password:"user123"});
-        user2Token = user2Res.body.token;
+        user2Token = user2Res.body.data.token;
 
         testProduct = new Product({
             title: "Test Product",

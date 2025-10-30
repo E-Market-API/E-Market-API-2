@@ -9,7 +9,7 @@ services:
     networks: 
       - app-network
     environment: 
-      DB_URI : mongodb://mongo:27017/expressdb
+      DB_URI : mongodb://mongo:27017/my_database
     restart : always
 
   api:
@@ -19,7 +19,7 @@ services:
     image : mern-api-image
     container_name: express_container
     ports:
-      - '3000:3000'
+      - '8000:8000'
     depends_on: 
       - mongo
     volumes:
@@ -39,6 +39,8 @@ services:
       - ME_CONFIG_MONGODB_PORT=27017
     depends_on:
       - mongo
+    networks:
+     - app-network
   redis:
     image: redis:7
     container_name: redis_container

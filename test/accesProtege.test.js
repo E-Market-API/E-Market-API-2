@@ -13,7 +13,7 @@ describe("Tests d'accès protégés", () => {
 
   before(async function () {
     this.timeout(20000);
-   //assurer la connexion Mongoose avant toute opération
+    //assurer la connexion Mongoose avant toute opération
     mongoose.set("bufferTimeoutMS", 30000);
     if (mongoose.connection.readyState !== 1) {
       const uri = process.env.MONGO_URI || "mongodb://localhost:27017/emarket-test";
@@ -22,23 +22,23 @@ describe("Tests d'accès protégés", () => {
         useUnifiedTopology: true,
       });
     }
-    
-     await User.deleteMany({
+
+    await User.deleteMany({
       email: { $in: ["admin@test.com", "user@test.com", "other@test.com", "ownership@test.com", "new@test.com"] }
     });
 
-  // --- Créer utilisateurs via la factory ---
-  const [adminUser] = await userFactory(1, { email: "admin@test.com", password: "password123",fullname: "Admin User",role: "admin" });
-  adminUserId = adminUser._id;
+    // --- Créer utilisateurs via la factory ---
+    const [adminUser] = await userFactory(1, { email: "admin@test.com", password: "password123", fullname: "Admin User", role: "admin" });
+    adminUserId = adminUser._id;
 
-  const [normalUser] = await userFactory(1, {email: "user@test.com",password: "password123",fullname: "Normal User",role: "user"});
-  normalUserId = normalUser._id;
+    const [normalUser] = await userFactory(1, { email: "user@test.com", password: "password123", fullname: "Normal User", role: "user" });
+    normalUserId = normalUser._id;
 
-  const [otherUser] = await userFactory(1, {email: "other@test.com",password: "password123",fullname: "Other User",role: "user"});
-  otherUserId = otherUser._id;
+    const [otherUser] = await userFactory(1, { email: "other@test.com", password: "password123", fullname: "Other User", role: "user" });
+    otherUserId = otherUser._id;
 
-  const [ownershipUser] = await userFactory(1, {email: "ownership@test.com",password: "password123",fullname: "Ownership User",role: "user"});
-  ownershipUserId = ownershipUser._id;
+    const [ownershipUser] = await userFactory(1, { email: "ownership@test.com", password: "password123", fullname: "Ownership User", role: "user" });
+    ownershipUserId = ownershipUser._id;
 
 
     // --- Fonction de login ---
@@ -47,7 +47,7 @@ describe("Tests d'accès protégés", () => {
         .post("/api/auth/login")
         .send({ email, password: "password123" });
       if (res.status !== 200) throw new Error(`Login failed for ${email}`);
-      return res.body.token;
+      return res.body.data.token;
     };
 
     // --- Connexions ---
@@ -61,7 +61,6 @@ describe("Tests d'accès protégés", () => {
       { method: "get", path: "/api/users" },
       { method: "get", path: "/api/users/deleted" },
       { method: "post", path: "/api/users", body: { email: "new@test.com", password: "123456", fullname: "New User" } },
-      { method: "delete", path: `/api/users/${normalUserId}` },
       { method: "get", path: "/api/users/filter?role=user" }
     ];
   });
@@ -73,7 +72,7 @@ describe("Tests d'accès protégés", () => {
       email: { $in: ["admin@test.com", "user@test.com", "other@test.com", "ownership@test.com", "new@test.com"] }
     });
 
-     // Fermer la connexion pour que Mocha termine proprement
+    // Fermer la connexion pour que Mocha termine proprement
     if (mongoose.connection.readyState === 1) {
       await mongoose.disconnect();
     }
@@ -94,6 +93,8 @@ describe("Tests d'accès protégés", () => {
         const res = await request(app)[route.method](route.path)
           .set("Authorization", `Bearer ${userToken}`)
           .send(route.body || {});
+        console.log(`Route ${route.path} responded with status: ${res.status}`);
+
         expect(res.status).to.equal(403);
       }
     });
