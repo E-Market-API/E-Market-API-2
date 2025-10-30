@@ -32,7 +32,7 @@ describe("Order API", function () {
       .post("/api/auth/login")
       .send({ email: "testuser@test.com", password: "123456" });
 
-    token = res.body.token;
+    token = res.body.data.token;
   });
 
   after(async () => {
@@ -81,7 +81,7 @@ describe("Order API", function () {
         .post("/api/auth/login")
         .send({ email: "emptycart@test.com", password: "123456" });
 
-      const token = resLogin.body.token;
+      const token = resLogin.body.data.token;
 
       // Call the order creation endpoint
       const res = await request(app)
@@ -106,7 +106,7 @@ describe("Order API", function () {
         .post("/api/auth/login")
         .send({ email: "couponfail@test.com", password: "123456" });
 
-      const token = resLogin.body.token;
+      const token = resLogin.body.data.token;
 
       // Use an invalid coupon code
       const res = await request(app)

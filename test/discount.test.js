@@ -26,9 +26,9 @@ describe("Coupon API", function () {
             email: "user@test.com",
             password: "user123",
         });
-        adminToken = adminRes.body.token;
-        userToken = userRes.body.token;
-        adminUserId = adminRes.body.user.id;
+        adminToken = adminRes.body.data.token;
+        userToken = userRes.body.data.token;
+        adminUserId = adminRes.body.data.user.id;
     });
 
     after(async () => {
