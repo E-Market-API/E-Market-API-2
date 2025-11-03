@@ -1,10 +1,10 @@
-import express from "express";
-import * as couponController from "../controllers/couponController.js";
-import validate from "../middlewares/validate.js";
-import { couponSchema } from "../validations/couponSchema.js";
-import { isAuthenticated } from "../middlewares/auth.js";
-import { authorizeRoles } from "../middlewares/roles.js";
-import {couponRateLimit} from "../middlewares/rateLimiter.js";
+import express from 'express';
+import * as couponController from '../controllers/couponController.js';
+import validate from '../middlewares/validate.js';
+import { couponSchema } from '../validations/couponSchema.js';
+import { isAuthenticated } from '../middlewares/auth.js';
+import { authorizeRoles } from '../middlewares/roles.js';
+import { couponRateLimit } from '../middlewares/rateLimiter.js';
 
 const router = express.Router();
 
@@ -124,7 +124,12 @@ router.use(isAuthenticated);
  *       403:
  *         description: Access denied
  */
-router.post("/", authorizeRoles("admin", "seller"), validate(couponSchema), couponController.createCoupon);
+router.post(
+  '/',
+  authorizeRoles('admin', 'seller'),
+  validate(couponSchema),
+  couponController.createCoupon
+);
 
 /**
  * @swagger
@@ -149,7 +154,11 @@ router.post("/", authorizeRoles("admin", "seller"), validate(couponSchema), coup
  *       403:
  *         description: Access denied
  */
-router.get("/", authorizeRoles("admin", "seller"), couponController.getAllCoupons);
+router.get(
+  '/',
+  authorizeRoles('admin', 'seller'),
+  couponController.getAllCoupons
+);
 
 /**
  * @swagger
@@ -180,7 +189,11 @@ router.get("/", authorizeRoles("admin", "seller"), couponController.getAllCoupon
  *       404:
  *         description: Coupon not found
  */
-router.get("/:id", authorizeRoles("admin", "seller"), couponController.getCouponById);
+router.get(
+  '/:id',
+  authorizeRoles('admin', 'seller'),
+  couponController.getCouponById
+);
 
 /**
  * @swagger
@@ -248,7 +261,12 @@ router.get("/:id", authorizeRoles("admin", "seller"), couponController.getCoupon
  *       404:
  *         description: Coupon not found
  */
-router.put("/:id", authorizeRoles("admin", "seller"), validate(couponSchema), couponController.updateCoupon);
+router.put(
+  '/:id',
+  authorizeRoles('admin', 'seller'),
+  validate(couponSchema),
+  couponController.updateCoupon
+);
 
 /**
  * @swagger
@@ -272,7 +290,11 @@ router.put("/:id", authorizeRoles("admin", "seller"), validate(couponSchema), co
  *       404:
  *         description: Coupon not found
  */
-router.delete("/:id", authorizeRoles("admin", "seller"), couponController.deleteCoupon);
+router.delete(
+  '/:id',
+  authorizeRoles('admin', 'seller'),
+  couponController.deleteCoupon
+);
 /**
  * @swagger
  * tags:
@@ -319,6 +341,6 @@ router.delete("/:id", authorizeRoles("admin", "seller"), couponController.delete
  *       429:
  *         description: Rate limit exceeded
  */
-router.post("/validate", couponRateLimit, couponController.validateCoupon);
+router.post('/validate', couponRateLimit, couponController.validateCoupon);
 
 export default router;

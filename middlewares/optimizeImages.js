@@ -1,6 +1,6 @@
-import sharp from "sharp";
-import fs from "fs/promises";
-import path from "path";
+import sharp from 'sharp';
+import fs from 'fs/promises';
+import path from 'path';
 
 const defaultOptions = {
   maxWidth: 1200,
@@ -12,7 +12,7 @@ const defaultOptions = {
 
 // Check if an image should be optimized
 function shouldOptimizeImage(filename) {
-  const imageExtensions = [".jpg", ".jpeg", ".png", ".webp", ".gif"];
+  const imageExtensions = ['.jpg', '.jpeg', '.png', '.webp', '.gif'];
   const ext = path.extname(filename).toLowerCase();
   return imageExtensions.includes(ext);
 }
@@ -45,7 +45,7 @@ async function optimizeSingleImage(file, options) {
     const originalFormat = path
       .extname(file.filename)
       .toLowerCase()
-      .replace(".", "");
+      .replace('.', '');
 
     // Skip if image is already small and we're not converting to WebP
     if (
@@ -67,13 +67,13 @@ async function optimizeSingleImage(file, options) {
     let sharpInstance = sharp(imageBuffer).rotate().resize({
       width: options.maxWidth,
       withoutEnlargement: true,
-      fit: "inside",
+      fit: 'inside',
     });
 
     // Decide on output format
-    if (options.convertToWebP && originalFormat !== "gif") {
+    if (options.convertToWebP && originalFormat !== 'gif') {
       // Convert to WebP
-      outputFormat = "webp";
+      outputFormat = 'webp';
       outputFilename = getWebPFilename(file.filename);
       outputPath = path.join(path.dirname(filePath), outputFilename);
 
@@ -88,8 +88,8 @@ async function optimizeSingleImage(file, options) {
     } else {
       // Keep original format but optimize
       switch (originalFormat) {
-        case "jpg":
-        case "jpeg":
+        case 'jpg':
+        case 'jpeg':
           optimizedBuffer = await sharpInstance
             .jpeg({
               quality: options.quality,
@@ -99,7 +99,7 @@ async function optimizeSingleImage(file, options) {
             .toBuffer();
           break;
 
-        case "png":
+        case 'png':
           optimizedBuffer = await sharpInstance
             .png({
               compressionLevel: 9,
@@ -109,7 +109,7 @@ async function optimizeSingleImage(file, options) {
             .toBuffer();
           break;
 
-        case "webp":
+        case 'webp':
           optimizedBuffer = await sharpInstance
             .webp({
               quality: options.quality,
@@ -118,9 +118,9 @@ async function optimizeSingleImage(file, options) {
             .toBuffer();
           break;
 
-        case "gif":
+        case 'gif':
           if (options.convertToWebP) {
-            outputFormat = "webp";
+            outputFormat = 'webp';
             outputFilename = getWebPFilename(file.filename);
             outputPath = path.join(path.dirname(filePath), outputFilename);
 
@@ -194,7 +194,7 @@ export const optimizeImages = (userOptions = {}) => {
         return next();
       }
 
-      console.log("Starting image optimization with WebP conversion...");
+      console.log('Starting image optimization with WebP conversion...');
 
       // Collect all files
       const allFiles = [];
@@ -233,10 +233,10 @@ export const optimizeImages = (userOptions = {}) => {
       // Wait for all optimizations to complete
       await Promise.all(optimizationPromises);
 
-      console.log("Image optimization with WebP conversion completed");
+      console.log('Image optimization with WebP conversion completed');
       next();
     } catch (error) {
-      console.error("Error in optimizeImages middleware:", error);
+      console.error('Error in optimizeImages middleware:', error);
       // Don't stop the request if optimization fails
       next();
     }
@@ -246,6 +246,6 @@ export const optimizeImages = (userOptions = {}) => {
 // Export additional utility function for WebP checking
 export const checkWebPSupport = (req) => {
   // Check if client supports WebP via Accept header
-  const acceptHeader = req.headers.accept || "";
-  return acceptHeader.includes("image/webp");
+  const acceptHeader = req.headers.accept || '';
+  return acceptHeader.includes('image/webp');
 };

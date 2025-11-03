@@ -1,11 +1,15 @@
-import express from "express";
-import * as reviewController from "../controllers/reviewController.js";
-import validate from "../middlewares/validate.js";
-import { createReviewSchema, updateReviewSchema, moderateReviewSchema } from "../validations/reviewValidator.js";
-import { isAuthenticated } from "../middlewares/auth.js";
-import { authorizeRoles } from "../middlewares/roles.js";
-import { reviewRateLimit } from "../middlewares/rateLimiter.js";
-import  {checkReviewOwnership} from '../middlewares/ownershipMiddleware.js';
+import express from 'express';
+import * as reviewController from '../controllers/reviewController.js';
+import validate from '../middlewares/validate.js';
+import {
+  createReviewSchema,
+  updateReviewSchema,
+  moderateReviewSchema,
+} from '../validations/reviewValidator.js';
+import { isAuthenticated } from '../middlewares/auth.js';
+import { authorizeRoles } from '../middlewares/roles.js';
+import { reviewRateLimit } from '../middlewares/rateLimiter.js';
+import { checkReviewOwnership } from '../middlewares/ownershipMiddleware.js';
 const router = express.Router();
 
 /**
@@ -88,7 +92,7 @@ const router = express.Router();
  *                 total:
  *                   type: integer
  */
-router.get("/product/:productId", reviewController.getProductReviews);
+router.get('/product/:productId', reviewController.getProductReviews);
 
 // Routes private
 router.use(isAuthenticated);
@@ -138,7 +142,12 @@ router.use(isAuthenticated);
  *       429:
  *         description: Rate limit exceeded
  */
-router.post("/",reviewRateLimit, validate(createReviewSchema), reviewController.createReview);
+router.post(
+  '/',
+  reviewRateLimit,
+  validate(createReviewSchema),
+  reviewController.createReview
+);
 
 /**
  * @swagger
@@ -161,7 +170,7 @@ router.post("/",reviewRateLimit, validate(createReviewSchema), reviewController.
  *                   items:
  *                     $ref: '#/components/schemas/Review'
  */
-router.get("/me", reviewController.getUserReviews);
+router.get('/me', reviewController.getUserReviews);
 
 /**
  * @swagger
@@ -209,7 +218,12 @@ router.get("/me", reviewController.getUserReviews);
  *       404:
  *         description: Review not found
  */
-router.put("/:id", checkReviewOwnership, validate(updateReviewSchema), reviewController.updateReview);
+router.put(
+  '/:id',
+  checkReviewOwnership,
+  validate(updateReviewSchema),
+  reviewController.updateReview
+);
 
 /**
  * @swagger
@@ -233,7 +247,7 @@ router.put("/:id", checkReviewOwnership, validate(updateReviewSchema), reviewCon
  *       404:
  *         description: Review not found
  */
-router.delete("/:id", checkReviewOwnership, reviewController.deleteReview);
+router.delete('/:id', checkReviewOwnership, reviewController.deleteReview);
 /**
  * @swagger
  * tags:
@@ -284,6 +298,11 @@ router.delete("/:id", checkReviewOwnership, reviewController.deleteReview);
  *       404:
  *         description: Review not found
  */
-router.patch("/:id/moderate", authorizeRoles("admin"), validate(moderateReviewSchema), reviewController.moderateReview);
+router.patch(
+  '/:id/moderate',
+  authorizeRoles('admin'),
+  validate(moderateReviewSchema),
+  reviewController.moderateReview
+);
 
 export default router;

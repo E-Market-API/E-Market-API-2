@@ -1,5 +1,5 @@
 // services/mailSender.js
-import { transporter } from "../config/mail.js";
+import { transporter } from '../config/mail.js';
 
 export const sendMail = async ({ to, subject, text, html }) => {
   try {

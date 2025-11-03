@@ -1,16 +1,21 @@
-import express from "express";
-import * as CartController from "../controllers/cartController.js";
-import validate from "../middlewares/validate.js";
-import { cartSchema } from "../validations/cartSchema.js";
-import { getLimiter, modifyLimiter } from "../middlewares/rateLimiter.js";
+import express from 'express';
+import * as CartController from '../controllers/cartController.js';
+import validate from '../middlewares/validate.js';
+import { cartSchema } from '../validations/cartSchema.js';
+import { getLimiter, modifyLimiter } from '../middlewares/rateLimiter.js';
 
 const router = express.Router();
 
-router.get("/", getLimiter, CartController.getCart);
-router.post("/", modifyLimiter, validate(cartSchema), CartController.addToCart);
-router.put("/", modifyLimiter, validate(cartSchema), CartController.updateCartItemQuantity);
-router.delete("/", modifyLimiter, CartController.removeCartItem);
-router.delete("/clear", modifyLimiter, CartController.clearCart);
+router.get('/', getLimiter, CartController.getCart);
+router.post('/', modifyLimiter, validate(cartSchema), CartController.addToCart);
+router.put(
+  '/',
+  modifyLimiter,
+  validate(cartSchema),
+  CartController.updateCartItemQuantity
+);
+router.delete('/', modifyLimiter, CartController.removeCartItem);
+router.delete('/clear', modifyLimiter, CartController.clearCart);
 
 export default router;
 
@@ -21,7 +26,7 @@ export default router;
  * tags:
  *   name: Cart
  *   description: Authenticated user cart management
- * 
+ *
  * /cart:
  *   get:
  *     summary: Get authenticated user's cart
@@ -59,7 +64,7 @@ export default router;
  *         description: Product added or updated in cart
  *       201:
  *         description: Cart created
- * 
+ *
  *   put:
  *     summary: Update cart item quantity (authenticated)
  *     tags: [Cart]
@@ -83,7 +88,7 @@ export default router;
  *     responses:
  *       200:
  *         description: Cart updated successfully
- * 
+ *
  *   delete:
  *     summary: Remove a product from cart (authenticated)
  *     tags: [Cart]
@@ -103,7 +108,7 @@ export default router;
  *     responses:
  *       200:
  *         description: Product removed successfully
- * 
+ *
  * /cart/clear:
  *   delete:
  *     summary: Clear authenticated user's cart
@@ -137,7 +142,7 @@ export default router;
  *         description: Guest cart retrieved successfully
  *       404:
  *         description: Cart not found
- * 
+ *
  *   post:
  *     summary: Add product to guest cart
  *     tags: [Guest Cart]
@@ -169,7 +174,7 @@ export default router;
  *         description: Product added or updated
  *       201:
  *         description: New guest cart created
- * 
+ *
  *   put:
  *     summary: Update quantity in guest cart
  *     tags: [Guest Cart]
@@ -194,7 +199,7 @@ export default router;
  *     responses:
  *       200:
  *         description: Cart updated successfully
- * 
+ *
  *   delete:
  *     summary: Remove product from guest cart
  *     tags: [Guest Cart]

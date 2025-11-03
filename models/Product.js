@@ -1,21 +1,21 @@
-import mongoose from "mongoose";
-import softDeletePlugin from "./plugins/softDeletePlugin.js";
+import mongoose from 'mongoose';
+import softDeletePlugin from './plugins/softDeletePlugin.js';
 // import publishedPlugin from "./plugins/publishedPlugin.js";
-import publishedPlugin from "./plugins/publishedPlugin.js";
+import publishedPlugin from './plugins/publishedPlugin.js';
 const productSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: [true, "Product title is required"],
+    required: [true, 'Product title is required'],
     trim: true,
   },
   description: {
     type: String,
-    required: [true, "Product description is required"],
+    required: [true, 'Product description is required'],
   },
   price: {
     type: Number,
-    required: [true, "Product price is required"],
-    min: [0, "Price cannot be negative"],
+    required: [true, 'Product price is required'],
+    min: [0, 'Price cannot be negative'],
   },
   ex_price: {
     type: Number,
@@ -23,14 +23,14 @@ const productSchema = new mongoose.Schema({
   },
   stock: {
     type: Number,
-    required: [true, "Product stock is required"],
-    min: [0, "Stock cannot be negative"],
+    required: [true, 'Product stock is required'],
+    min: [0, 'Stock cannot be negative'],
     default: 0,
   },
   categories: {
     type: [mongoose.Schema.Types.ObjectId],
     required: true,
-    ref: "Category",
+    ref: 'Category',
   },
   primaryImage: {
     type: String,
@@ -46,8 +46,8 @@ const productSchema = new mongoose.Schema({
   },
   seller_id: {
     type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true
+    ref: 'User',
+    required: true,
   },
   createdAt: {
     type: Date,
@@ -62,11 +62,11 @@ const productSchema = new mongoose.Schema({
 productSchema.plugin(softDeletePlugin);
 productSchema.plugin(publishedPlugin);
 
-productSchema.index({ title: "text", description: "text" });
+productSchema.index({ title: 'text', description: 'text' });
 productSchema.index({ price: 1 });
 productSchema.index({ categories: 1 });
-productSchema.index({ createdAt: -1 }); 
+productSchema.index({ createdAt: -1 });
 
-const Product = mongoose.model("Product", productSchema);
+const Product = mongoose.model('Product', productSchema);
 
 export default Product;

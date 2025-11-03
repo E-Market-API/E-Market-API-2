@@ -1,12 +1,15 @@
-import Cart from "../models/Cart.js";
-import Order from "../models/Order.js";
-import StockService from "./StockService.js";
-import DiscountService from "./discountService.js";
+import Cart from '../models/Cart.js';
+import Order from '../models/Order.js';
+import StockService from './StockService.js';
+import DiscountService from './discountService.js';
 
 class OrderService {
-  static async createOrder(userId, couponCodes, session) {
-    const cart = await Cart.findOne({ userId }).populate("items.productId").session(session);
-    if (!cart || !cart.items.length) throw new Error("Cart is empty");
+  static async createOrder(userId, couponCodes, session = null ) {
+    const cart = await Cart.findOne({ userId })
+      .populate('items.productId')
+      .session(session);
+
+    if (!cart || !cart.items.length) throw new Error('Cart is empty');
 
     // Check & decrease stock
     for (const item of cart.items) {
@@ -15,7 +18,10 @@ class OrderService {
     }
 
     // Calculate total
-    const totalAmount = cart.items.reduce((sum, i) => sum + i.productId.price * i.quantity, 0);
+    const totalAmount = cart.items.reduce(
+      (sum, i) => sum + i.productId.price * i.quantity,
+      0
+    );
 
     // Validate coupons
     let totalDiscount = 0;
@@ -23,7 +29,8 @@ class OrderService {
     const validCoupons = [];
 
     for (const code of couponCodes) {
-      const { valid, coupon, message } = await DiscountService.validateCouponForUser(code, userId, totalAmount);
+      const { valid, coupon, message } =
+        await DiscountService.validateCouponForUser(code, userId, totalAmount);
 
       if (!valid) {
         throw new Error(`Coupon "${code}" is invalid: ${message}`);
@@ -44,7 +51,7 @@ class OrderService {
       [
         {
           userId,
-          items: cart.items.map(i => ({
+          items: cart.items.map((i) => ({
             productId: i.productId._id,
             quantity: i.quantity,
             price: i.productId.price,
@@ -53,11 +60,9 @@ class OrderService {
           discount: totalDiscount,
           finalAmount,
           appliedCoupons: appliedCouponIds,
-          status: "pending",
+          status: 'pending',
         },
-      ],
-      { session }
-    );
+      ]);
 
     // Mark coupons as used
     for (const c of validCoupons) {

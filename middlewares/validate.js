@@ -4,7 +4,7 @@ const validate = (schema) => async (req, res, next) => {
     next();
   } catch (err) {
     const errors = {};
-    err.inner.forEach(e => {
+    err.inner.forEach((e) => {
       if (!errors[e.path]) {
         errors[e.path] = e.message;
       }
@@ -12,6 +12,5 @@ const validate = (schema) => async (req, res, next) => {
     res.status(400).json({ errors });
   }
 };
-
 
 export default validate;

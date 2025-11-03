@@ -1,27 +1,51 @@
-import express from "express";
-import * as OrderController from "../controllers/orderController.js";
-import { isAuthenticated, isAdmin } from "../middlewares/auth.js";
-import { authorizeRoles } from "../middlewares/roles.js";
-import { isAdminOrOwner } from "../middlewares/adminOrOwne.js"
-import { getLimiter, modifyLimiter } from "../middlewares/rateLimiter.js";
+import express from 'express';
+import * as OrderController from '../controllers/orderController.js';
+import { isAuthenticated, isAdmin } from '../middlewares/auth.js';
+import { authorizeRoles } from '../middlewares/roles.js';
+import { isAdminOrOwner } from '../middlewares/adminOrOwne.js';
+import { getLimiter, modifyLimiter } from '../middlewares/rateLimiter.js';
 
 const router = express.Router();
 
 router.use(isAuthenticated);
 
-router.get("/", isAdmin, getLimiter, OrderController.getOrders);
-router.get("/deleted", isAdmin, getLimiter, OrderController.getDeletedOrders);
-router.get("/:userId", isAuthenticated, getLimiter, isAdminOrOwner, OrderController.getUserOrders);
+router.get('/', getLimiter,isAdmin, OrderController.getOrders);
+router.get('/deleted', isAdmin, getLimiter, OrderController.getDeletedOrders);
+router.get(
+  '/:userId',
+  isAuthenticated,
+  getLimiter,
+  isAdminOrOwner,
+  OrderController.getUserOrders
+);
 
-router.post("/", authorizeRoles("user"), modifyLimiter, OrderController.createOrder);
-router.patch("/:id/status", authorizeRoles("user"), modifyLimiter, OrderController.updateOrderStatus);
+router.post(
+  '/',
+  authorizeRoles('user'),
+  modifyLimiter,
+  OrderController.createOrder
+);
+router.patch(
+  '/:id/status',
+  authorizeRoles('user'),
+  modifyLimiter,
+  OrderController.updateOrderStatus
+);
 
-router.delete("/:id/soft", isAdmin, modifyLimiter, OrderController.softDeleteOrder);
-router.patch("/:id/restore", isAdmin, modifyLimiter, OrderController.restoreOrder);
+router.delete(
+  '/:id/soft',
+  isAdmin,
+  modifyLimiter,
+  OrderController.softDeleteOrder
+);
+router.patch(
+  '/:id/restore',
+  isAdmin,
+  modifyLimiter,
+  OrderController.restoreOrder
+);
 
 export default router;
-
-
 
 // ======================= swager documentation =================================
 /**

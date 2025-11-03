@@ -1,5 +1,5 @@
-import Category from "../models/Category.js";
-import { faker } from "@faker-js/faker";
+import Category from '../models/Category.js';
+import { faker } from '@faker-js/faker';
 
 /**
  * Creates one or more unique categories in the database.
@@ -8,18 +8,21 @@ import { faker } from "@faker-js/faker";
  * @returns {Promise<Category[]>} - Array of created category documents
  */
 export const categoryFactory = async (count = 1, overrides = {}) => {
-    // Generate unique category names
-    const uniqueNames = faker.helpers.uniqueArray(faker.commerce.department, count);
+  // Generate unique category names
+  const uniqueNames = faker.helpers.uniqueArray(
+    faker.commerce.department,
+    count
+  );
 
-    // Create all categories
-    const categories = await Promise.all(
-        uniqueNames.map(async (name) => {
-            return Category.create({
-                name: overrides.name || name,
-                ...overrides,
-            });
-        })
-    );
+  // Create all categories
+  const categories = await Promise.all(
+    uniqueNames.map(async (name) => {
+      return Category.create({
+        name: overrides.name || name,
+        ...overrides,
+      });
+    })
+  );
 
-    return categories;
+  return categories;
 };

@@ -1,34 +1,90 @@
-import express from "express";
-import * as userController from "../controllers/UserController.js";
-import validate from "../middlewares/validate.js";
-import { userSchema } from "../validations/userSchema.js";
-import { checkOwnership } from "../middlewares/ownershipMiddleware.js";
-import { createUpload } from "../config/multerConfig.js";
-import { isAuthenticated } from "../middlewares/auth.js";
-import { authorizeRoles } from "../middlewares/roles.js";
-
+import express from 'express';
+import * as userController from '../controllers/UserController.js';
+import validate from '../middlewares/validate.js';
+import { userSchema } from '../validations/userSchema.js';
+import { checkOwnership } from '../middlewares/ownershipMiddleware.js';
+import { createUpload } from '../config/multerConfig.js';
+import { isAuthenticated } from '../middlewares/auth.js';
+import { authorizeRoles } from '../middlewares/roles.js';
 
 const router = express.Router();
 router.use(isAuthenticated);
 
-router.get("/filter",isAuthenticated, authorizeRoles("admin"), userController.filterUsersByRole);
-router.get("/sellers", userController.searchSellers);
-router.post("/", validate(userSchema),isAuthenticated,authorizeRoles("admin"), userController.createUser);
-router.get("/",isAuthenticated,authorizeRoles("admin"), userController.getUsers);
-router.get("/deleted",isAuthenticated,authorizeRoles("admin"), userController.getDeletedUsers);
+router.get(
+  '/filter',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.filterUsersByRole
+);
+router.get('/sellers', userController.searchSellers);
+router.post(
+  '/',
+  validate(userSchema),
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.createUser
+);
+router.get(
+  '/',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.getUsers
+);
+router.get(
+  '/deleted',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.getDeletedUsers
+);
 
-router.get("/:id",isAuthenticated,authorizeRoles("admin"), userController.getUserById);
+router.get(
+  '/:id',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.getUserById
+);
 // router.patch("/:id",isAuthenticated,createUpload("avatars", "avatar", 1), validate(userSchema),checkOwnership, userController.updateUser);
-router.patch("/:id", isAuthenticated,createUpload("avatars", "avatar", 1), checkOwnership,userController.updateUser);
+router.patch(
+  '/:id',
+  isAuthenticated,
+  createUpload('avatars', 'avatar', 1),
+  checkOwnership,
+  userController.updateUser
+);
+router.delete(
+  '/:id',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.deleteUser
+);
 
-router.delete("/:id/soft",isAuthenticated,authorizeRoles("admin"), userController.softDeleteUser);
-router.patch("/:id/restore",isAuthenticated,authorizeRoles("admin"), userController.restoreUser);
+router.delete(
+  '/:id/soft',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.softDeleteUser
+);
+router.patch(
+  '/:id/restore',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.restoreUser
+);
 
-router.delete("/:id/avatar", isAuthenticated, checkOwnership, userController.deleteAvatar);
-router.patch("/:id/role", isAuthenticated, authorizeRoles("admin"), userController.changeRole);
+router.delete(
+  '/:id/avatar',
+  isAuthenticated,
+  checkOwnership,
+  userController.deleteAvatar
+);
+router.put(
+  '/:id/role',
+  isAuthenticated,
+  authorizeRoles('admin'),
+  userController.changeRole
+);
 
 export default router;
-
 
 /**
  * @swagger

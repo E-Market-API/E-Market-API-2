@@ -1,6 +1,6 @@
-import multer from "multer";
-import path from "path";
-import fs from "fs";
+import multer from 'multer';
+import path from 'path';
+import fs from 'fs';
 
 // Configuration générique du storage
 const createStorage = (uploadPath) => {
@@ -13,7 +13,7 @@ const createStorage = (uploadPath) => {
       cb(null, uploadDir);
     },
     filename: (req, file, cb) => {
-      const uniqueSuffix = Date.now() + "-" + Math.round(Math.random() * 1e9);
+      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1e9);
       cb(null, uniqueSuffix + path.extname(file.originalname));
     },
   });
@@ -30,7 +30,7 @@ const imageFilter = (req, file, cb) => {
   if (extname && mimetype) {
     cb(null, true);
   } else {
-    cb(new Error("Seules les images sont autorisées (JPEG, PNG, GIF, WebP)"));
+    cb(new Error('Seules les images sont autorisées (JPEG, PNG, GIF, WebP)'));
   }
 };
 
@@ -51,7 +51,6 @@ export const createUpload = (uploadPath, fieldName, maxCount = 1) => {
     return multer(uploadConfig).array(fieldName, maxCount); // req.files
   }
 };
-
 
 export const createUploadFields = (uploadPath, fieldsArray) => {
   const uploadConfig = {

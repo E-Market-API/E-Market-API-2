@@ -1,16 +1,18 @@
-import mongoose from "mongoose";
-import { userFactory } from "../factories/userFactory.js";
-import dotenv from "dotenv";
-import { categoryFactory } from "../factories/categoryFactory.js";
-import { cartFactory } from "../factories/cartFactory.js";
-import { orderFactory } from "../factories/orderFactory.js";
-import {  couponFactory  } from "../factories/couponFactory.js";
-import {  reviewFactory  } from "../factories/reviewFactory.js";
-import coupon from "../models/Coupon.js";
-import User from "../models/User.js";
-import productFactory from "../factories/productFactory.js";
+import mongoose from 'mongoose';
+import { userFactory } from '../factories/userFactory.js';
+import dotenv from 'dotenv';
+import { categoryFactory } from '../factories/categoryFactory.js';
+import { cartFactory } from '../factories/cartFactory.js';
+import { orderFactory } from '../factories/orderFactory.js';
+import { couponFactory } from '../factories/couponFactory.js';
+import { reviewFactory } from '../factories/reviewFactory.js';
+import coupon from '../models/Coupon.js';
+import User from '../models/User.js';
+import productFactory from '../factories/productFactory.js';
 
-dotenv.config();
+//dotenv.config();
+const env = process.env.NODE_ENV || 'development'; // Default to development
+dotenv.config({ path: `./.env.${env}` });
 
 const seedDB = async () => {
   try {
@@ -19,30 +21,30 @@ const seedDB = async () => {
 
     // Clear DB
     await mongoose.connection.dropDatabase();
-    console.log("Database cleared.");
+    console.log('Database cleared.');
 
     // Creat an admin
     await userFactory(1, {
-      fullname: "Admin User",
-      email: "admin@test.com",
-      password: "password",
-      role: "admin",
+      fullname: 'Admin User',
+      email: 'admin@test.com',
+      password: 'password',
+      role: 'admin',
     });
 
     // Creat a seller
     await userFactory(1, {
-      fullname: "seller User",
-      email: "seller@test.com",
-      password: "password",
-      role: "seller",
+      fullname: 'seller User',
+      email: 'seller@test.com',
+      password: 'password',
+      role: 'seller',
     });
 
     // Creat a user
     await userFactory(1, {
-      fullname: " User",
-      email: "user@test.com",
-      password: "password",
-      role: "user",
+      fullname: ' User',
+      email: 'user@test.com',
+      password: 'password',
+      role: 'user',
     });
     await userFactory(5); // seed users
     await categoryFactory(6); // seed categories
@@ -58,9 +60,9 @@ const seedDB = async () => {
     await reviewFactory(10); // seed reviews
 
     await mongoose.connection.close();
-    console.log("Database seeding completed.");
+    console.log('Database seeding completed.');
   } catch (err) {
-    console.error("Seeding error:", err);
+    console.error('Seeding error:', err);
     await mongoose.connection.close();
   }
 };
