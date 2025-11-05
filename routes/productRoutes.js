@@ -30,7 +30,6 @@ router.post(
 router.get(
   '/',
   productRateLimit,
-  cacheMiddleware('products', 600),
   productController.getProducts
 );
 //router.get("/", productController.getProducts);
