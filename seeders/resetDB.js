@@ -1,7 +1,8 @@
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 
-dotenv.config();
+const env = process.env.NODE_ENV || 'development'; // Default to development
+dotenv.config({ path: `./.env.${env}` });
 
 const resetDB = async () => {
   try {
