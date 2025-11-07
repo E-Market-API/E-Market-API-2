@@ -1,0 +1,199 @@
+type: collection.insomnia.rest/5.0
+name: Order
+meta:
+  id: wrk_fee2353efa0740c697897879f3584d71
+  created: 1760688458539
+  modified: 1760688458539
+  description: ""
+collection:
+  - name: Order
+    meta:
+      id: fld_0c2f6bb98e654a46ac272cb7dc1b2f07
+      created: 1760688458542
+      modified: 1760688458542
+      sortKey: -1760688454270
+      description: ""
+    children:
+      - url: "{{base_url}}/orders"
+        name: Create
+        meta:
+          id: req_9cb1488378b645d9af33595395126dba
+          created: 1760688458544
+          modified: 1761749925004
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454269
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "coupons":["SAVE23"]
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders/68f215cc70bab68be7afe65a/status"
+        name: update status
+        meta:
+          id: req_652984e46e494409862833907c4dc0f9
+          created: 1760688458546
+          modified: 1761749925004
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454268
+        method: PATCH
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "newStatus":"delivered"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZjIwYzQ1NzBiYWI2OGJlN2FmZTYzMSIsInJvbGUiOiJ1c2VyIiwiaWF0IjoxNzYwNjk2NTI3LCJleHAiOjE3NjEzMDEzMjd9.mlDqC5AGev3grPhtrmfj8zVdD_BB0JLGWrLHnCx8MJg
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders"
+        name: Orders
+        meta:
+          id: req_7387f2864202476fa13dac1378295d1f
+          created: 1760688458547
+          modified: 1760688458547
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454267
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders/deleted"
+        name: Deleted orders
+        meta:
+          id: req_fda8f033ebbb441b9abb58ca7866740e
+          created: 1760688458548
+          modified: 1760688458548
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454266
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2/soft"
+        name: Soft Delete
+        meta:
+          id: req_7e34c77cf4844eb2b9d25c855a20cee3
+          created: 1760688458550
+          modified: 1760688458550
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454265
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2"
+        name: Delete
+        meta:
+          id: req_5c00cb25f7b04ee4b69f98cc967191d3
+          created: 1760688458552
+          modified: 1760688458552
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454264
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2/restore"
+        name: Restore
+        meta:
+          id: req_0089f7c944c346feb99a62a852397069
+          created: 1760688458554
+          modified: 1760688458554
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454263
+        method: PATCH
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/orders/68f63467cb88cd458a55f607"
+        name: User Orders
+        meta:
+          id: req_3310b6f56e364d83b505183e1786f8ca
+          created: 1760958288328
+          modified: 1760965798717
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454266.5
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+    authentication:
+      type: bearer
+      disabled: false
+      token: "{{token}}"
+      prefix: ""
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_3d47779bbb6b055feab84ef382f0b241b5bcb300
+    created: 1760688458563
+    modified: 1760688458563
+environments:
+  name: Base Environment
+  meta:
+    id: env_3d47779bbb6b055feab84ef382f0b241b5bcb300
+    created: 1760688458557
+    modified: 1760688458557
+    isPrivate: false

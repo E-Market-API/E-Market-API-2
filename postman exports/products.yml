@@ -1,0 +1,452 @@
+type: collection.insomnia.rest/5.0
+name: Products
+meta:
+  id: wrk_00d6d0dbb1be4a71a7fdeea385b4fe31
+  created: 1760353786377
+  modified: 1760621456919
+  description: ""
+collection:
+  - name: Products
+    meta:
+      id: fld_b6ef943bae4d4080b744bb196260fd14
+      created: 1760353786381
+      modified: 1760621456907
+      sortKey: -1760353783376
+      description: ""
+    children:
+      - url: "{{base_url}}/products"
+        name: Create
+        meta:
+          id: req_71585917e7b0468bb1d6f3cfb94286d2
+          created: 1760353786385
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783375
+        method: POST
+        body:
+          mimeType: multipart/form-data
+          params:
+            - description: ""
+              disabled: false
+              id: pair_cedb9e5bdbb3408f855ad0d4eb7a8c0f
+              name: title
+              value: product 8
+            - description: ""
+              disabled: false
+              id: pair_8bcc762fd6a244de9bb667a8b1cedcb4
+              name: description
+              value: product description 8
+            - description: ""
+              disabled: false
+              id: pair_9d88900b12e34e3f8853a22f8a864376
+              name: price
+              value: "200"
+            - description: ""
+              disabled: false
+              id: pair_f81b13c362d54e54801432d09e882a99
+              multiline: false
+              name: categories[]
+              type: text
+              value: 68f207c619fde0f9bde56461
+            - description: ""
+              disabled: false
+              id: pair_1563f84203944abfb9565aa693e88b03
+              name: seller_id
+              value: 68ef59dd0cf5b3544ee17157
+            - description: ""
+              disabled: false
+              fileName: /home/ayoubfetti/Downloads/js.png
+              id: pair_49ef26cdfc8d4c4b898f80be8714949e
+              name: primaryImage
+              type: file
+              value: ""
+            - description: ""
+              disabled: false
+              fileName: /home/ayoubfetti/Downloads/js.png
+              id: pair_e3c4adf907f64fe2be17cfc83a48a7de
+              multiline: true
+              name: secondaryImages
+              type: file
+              value: ""
+            - description: ""
+              disabled: false
+              fileName: /home/ayoubfetti/Downloads/js.png
+              id: pair_77a4ea0d951f444e84ffdba01dcec05e
+              name: secondaryImages
+              type: file
+              value: ""
+            - description: ""
+              disabled: false
+              fileName: /home/ayoubfetti/Downloads/js.png
+              id: pair_9c1ae59c79da4d1a989c8e31163b4c7b
+              name: secondaryImages
+              type: file
+              value: ""
+            - description: ""
+              disabled: false
+              id: pair_812ef9c6942c41fba263b7ae3ca52363
+              name: stock
+              value: "20"
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWY1OWRkMGNmNWIzNTQ0ZWUxNzE1NyIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA2OTE1MjgsImV4cCI6MTc2MTI5NjMyOH0.bUaN9GV0hH3oBDN4DnEY79GvDWXX3NECTO6JGdmFOMk
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/68efc74414a1aac4439f6bf6"
+        name: Update
+        meta:
+          id: req_a3b4fdac435744198fec1d4d2a3a4ab3
+          created: 1760353786389
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783374
+        method: PUT
+        body:
+          mimeType: multipart/form-data
+          params:
+            - description: ""
+              disabled: false
+              id: pair_88a56c904b554e8daf3795ac7c6dc790
+              name: title
+              value: product updated 5000
+            - description: ""
+              disabled: false
+              id: pair_4d8fcc615a234731bd9d91e59cd8ce27
+              name: description
+              value: Product description is required
+            - description: ""
+              disabled: false
+              id: pair_43b562852910428d967bae00ecab4739
+              name: price
+              value: "250"
+            - description: ""
+              disabled: false
+              id: pair_a41ce36e2c724e0abbee49e7b4760550
+              name: stock
+              value: "10"
+            - description: ""
+              disabled: false
+              id: pair_adc462be620f4b76ac6418aaa0090710
+              name: categories[]
+              value: 68ee500b30f625e84bbf3b1d
+            - description: ""
+              disabled: false
+              id: pair_e1d8101e4b9b4fb19111b2030a6316ee
+              name: seller_id
+              value: 68ee4e33dd4ec51c0679f408
+            - description: ""
+              disabled: false
+              fileName: C:\Users\lenovo\Pictures\phone 2.jpeg
+              id: pair_e75e9e5898fa44a3baa12eafbc198a5b
+              name: primaryImage
+              type: file
+              value: ""
+            - description: ""
+              disabled: false
+              fileName: C:\Users\lenovo\Pictures\les énergies renouvelables.webp
+              id: pair_4074eead8fc4476f84938bda0f118a27
+              name: secondaryImages
+              type: file
+              value: ""
+        headers:
+          - name: Content-Type
+            value: multipart/form-data
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWU0ZTMzZGQ0ZWM1MWMwNjc5ZjQwOCIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA1MzY0ODAsImV4cCI6MTc2MTE0MTI4MH0.JZXc3e6Y9il2l1P0eitQ3nARfTzEX6O0xPn057bTBMU
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/68efc74414a1aac4439f6bf6"
+        name: Get By id
+        meta:
+          id: req_ba5887a84bdd411399d76dfa578274b9
+          created: 1760353786393
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783368.75
+        method: GET
+        body:
+          mimeType: application/json
+          text: "{\r
+
+            \    \"title\":\"product 1\",\r
+
+            \    \"description\":\"product description\",\r
+
+            \    \"price\":\"200\",\r
+
+            \    \"stock\":\"50\",\r
+
+            \    \"categories\":[\"68e68fb52225b77a97b77bf7\"]\r
+
+            }"
+        headers:
+          - name: Content-Type
+            value: application/json
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWU0ZTMzZGQ0ZWM1MWMwNjc5ZjQwOCIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA1MjUyNjQsImV4cCI6MTc2MTEzMDA2NH0.EgOZKiAKzgpdfT1TccEvP9IlB5wEbgiG-x9A0OCyIGs
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/68e780c0103177cc928095de"
+        name: Delete
+        meta:
+          id: req_2e44eaa65fe5416ba007e9d1af5f2fae
+          created: 1760353786395
+          modified: 1760621456910
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783372
+        method: DELETE
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/68ee50674777072ac2026255/soft"
+        name: Soft Delete
+        meta:
+          id: req_151395c24975418ebd96ef9c33e6066b
+          created: 1760353786398
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783371
+        method: DELETE
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWU0ZTMzZGQ0ZWM1MWMwNjc5ZjQwOCIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA0NzM2MjYsImV4cCI6MTc2MTA3ODQyNn0.U8U96sPDzo6AKQw7iOWiwWbjOJ3AfAm_wIWkmjj11xM
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/68ee50674777072ac2026255/restore"
+        name: Restore
+        meta:
+          id: req_8a84fb46e8304217a1e46757cff7de7a
+          created: 1760353786400
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783370
+        method: PATCH
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWU0ZTMzZGQ0ZWM1MWMwNjc5ZjQwOCIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA0NzM2MjYsImV4cCI6MTc2MTA3ODQyNn0.U8U96sPDzo6AKQw7iOWiwWbjOJ3AfAm_wIWkmjj11xM
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/products"
+        name: Get all
+        meta:
+          id: req_ad3d320af76b4ec594d1170abaf112d5
+          created: 1760353786402
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783369
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/deleted"
+        name: Get all Soft Deleted
+        meta:
+          id: req_6fa045da259e4e00ac3aa0365bac8f62
+          created: 1760353786404
+          modified: 1760621456911
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783368
+        method: GET
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/search"
+        name: search
+        meta:
+          id: req_b68d17ced74f4aef8550a087c433bbcc
+          created: 1760353786406
+          modified: 1762474183648
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783367
+        method: GET
+        parameters:
+          - disabled: true
+            id: pair_1c660b12200a48d1a070f05a3168f9c1
+            name: title
+            value: product 6
+          - disabled: true
+            id: pair_fc64a39dce024f92aaa46e914bae557c
+            name: categories
+            value: 68ee500b30f625e84bbf3b1d
+          - disabled: true
+            id: pair_74d98692de8b48f7ba17896d78fecb7e
+            name: minPrice
+            value: "250"
+          - disabled: true
+            id: pair_f8296214c95947bc8f8e2fef5111778d
+            name: maxPrice
+            value: "300"
+          - description: ""
+            disabled: false
+            id: pair_7d9e2eb70b5f455aa86d135a4ecc7670
+            name: sortBy
+            value: price
+          - description: ""
+            disabled: false
+            id: pair_a3c97b8a0d98474a8581fc021ef177ab
+            name: sortOrder
+            value: desc
+          - description: ""
+            disabled: false
+            id: pair_6626f302170a41aa8099f1d41cfdff15
+            name: page
+            value: "1"
+          - description: ""
+            disabled: false
+            id: pair_4999c7d7e2324c7a81eea17e50cad503
+            name: limit
+            value: "3"
+          - description: ""
+            disabled: false
+            id: pair_2425c20ed85f43d2bf850e8b14d27238
+            name: fields
+            value: title, price,description
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/products/published"
+        name: Get Published
+        meta:
+          id: req_c7a9d89227f245b5a2a98feac5e4aacf
+          created: 1760476310543
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783368.5
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/products/68efc74414a1aac4439f6bf6/publish"
+        name: Publish a Product
+        meta:
+          id: req_a9779b3725c14cca8206e7e035c27606
+          created: 1760561248953
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783373
+        method: PATCH
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWU0ZTMzZGQ0ZWM1MWMwNjc5ZjQwOCIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA1MjUyNjQsImV4cCI6MTc2MTEzMDA2NH0.EgOZKiAKzgpdfT1TccEvP9IlB5wEbgiG-x9A0OCyIGs
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{ _.base_url }}/products/seller/68ee4e33dd4ec51c0679f408"
+        name: Get Seller's Products
+        meta:
+          id: req_71d3fe6e7d654ff387f478cac7e5f4f7
+          created: 1760561437362
+          modified: 1762471505584
+          isPrivate: false
+          description: ""
+          sortKey: -1760353783368.625
+        method: GET
+        headers:
+          - name: User-Agent
+            value: insomnia/11.6.1
+        authentication:
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWU0ZTMzZGQ0ZWM1MWMwNjc5ZjQwOCIsInJvbGUiOiJzZWxsZXIiLCJpYXQiOjE3NjA1MjUyNjQsImV4cCI6MTc2MTEzMDA2NH0.EgOZKiAKzgpdfT1TccEvP9IlB5wEbgiG-x9A0OCyIGs
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_5b66277ae8d229f2b0ab03a1b6d2cd59c93bd171
+    created: 1760621456943
+    modified: 1760621456943
+environments:
+  name: Base Environment
+  meta:
+    id: env_5b66277ae8d229f2b0ab03a1b6d2cd59c93bd171
+    created: 1760353786408
+    modified: 1760621456905
+    isPrivate: false

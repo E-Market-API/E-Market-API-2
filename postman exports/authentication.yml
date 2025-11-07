@@ -1,0 +1,121 @@
+type: collection.insomnia.rest/5.0
+name: Authentication
+meta:
+  id: wrk_0b84307e1ff547d2979e9c0a3d73745e
+  created: 1760353881438
+  modified: 1760360056596
+  description: ""
+collection:
+  - name: Authentication
+    meta:
+      id: fld_baba71b33d964c30933dd40a720908cc
+      created: 1760353881448
+      modified: 1760360056588
+      sortKey: -1760353878968
+      description: ""
+    children:
+      - url: "{{base_url}}/auth/register"
+        name: Register
+        meta:
+          id: req_cf065fd1286d4aa4bd339018998dfbff
+          created: 1760353881465
+          modified: 1762264437153
+          isPrivate: false
+          description: ""
+          sortKey: -1760353878967
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "fullname":"salah fetti",
+                "email":"salah@gmail.com",
+                "password":"salah123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/auth/login"
+        name: Login
+        meta:
+          id: req_2662715c8ac446ceb319a7f7793a1eb4
+          created: 1760353881467
+          modified: 1761749850076
+          isPrivate: false
+          description: ""
+          sortKey: -1760353878966
+        method: POST
+        body:
+          mimeType: application/json
+          text: |-
+            {
+                "email":"ayoub@gmail.com",
+                "password":"ayoub123"
+            }
+        headers:
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{base_url}}/auth/profile"
+        name: Profile
+        meta:
+          id: req_eb79ba004ba743f7b99f4b7acdecdff7
+          created: 1760353881470
+          modified: 1760360056594
+          isPrivate: false
+          description: ""
+          sortKey: -1760353878965
+        method: GET
+        body:
+          mimeType: text/plain
+          text: "{\r
+
+            \    \"email\":\"jhon@gmail.com\",\r
+
+            \    \"password\":\"password\"\r
+
+            }"
+        headers:
+          - name: Content-Type
+            value: text/plain
+        authentication:
+          disabled: false
+          prefix: ""
+          token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWNiNWNlN2ZmZGMyM2FhMzMyNDdmNyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2MDM0MzgyOCwiZXhwIjoxNzYwOTQ4NjI4fQ.tCLeaO5wRCOMTMUvYO0hR_SvbbDEuqetARuDeJ4HIfs
+          type: bearer
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_ee8fafde5dc4d4f81455dd207a1629d507ff3956
+    created: 1760360056632
+    modified: 1760360056632
+environments:
+  name: Base Environment
+  meta:
+    id: env_ee8fafde5dc4d4f81455dd207a1629d507ff3956
+    created: 1760353881474
+    modified: 1760360056585
+    isPrivate: false

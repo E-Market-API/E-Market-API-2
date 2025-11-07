@@ -1,0 +1,176 @@
+type: collection.insomnia.rest/5.0
+name: Cart Guest
+meta:
+  id: wrk_63fd98ae4fee42cb97092db0221d32aa
+  created: 1760688464354
+  modified: 1760688464354
+  description: ""
+collection:
+  - name: Cart Guest
+    meta:
+      id: fld_f16e35406c3347e5a984519816ed0bd9
+      created: 1760688464356
+      modified: 1760688464356
+      sortKey: -1760688454274
+      description: ""
+    children:
+      - url: "{{_['base_url']}}/guest-cart"
+        name: Add to cart
+        meta:
+          id: req_560eeae441534c03aac59eb391404df7
+          created: 1760688464364
+          modified: 1760688464364
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454273
+        method: POST
+        body:
+          mimeType: application/json
+          text: "{\r
+
+            \   \"productId\":\"68ee5249e324ed156b2f1107\",\r
+
+            \   \"quantity\":\"2\"\r
+
+            }"
+        headers:
+          - name: session-id
+            value: "{{sessionId}}"
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{_['base_url']}}/guest-cart"
+        name: Update item quantity
+        meta:
+          id: req_123ca816a2624d3e9a8dab63b1f9fb8d
+          created: 1760688464366
+          modified: 1760688464366
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454272
+        method: PUT
+        body:
+          mimeType: application/json
+          text: "{\r
+
+            \   \"productId\":\"68ee5249e324ed156b2f1107\",\r
+
+            \   \"quantity\":\"1\"\r
+
+            }"
+        headers:
+          - name: session-id
+            value: "{{sessionId}}"
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{_['base_url']}}/guest-cart"
+        name: Remove item
+        meta:
+          id: req_5e841477bee84c1aaefe1bb5791526de
+          created: 1760688464370
+          modified: 1760688464370
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454271
+        method: DELETE
+        body:
+          mimeType: application/json
+          text: "{\r
+
+            \   \"productId\":\"68ee5249e324ed156b2f1107\"\r
+
+            }"
+        headers:
+          - name: session-id
+            value: "{{sessionId}}"
+          - name: Content-Type
+            value: application/json
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{_['base_url']}}/guest-cart/clear"
+        name: Clear cart
+        meta:
+          id: req_449418d9a8a0403188311b0528da871c
+          created: 1760688464372
+          modified: 1760688464372
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454270
+        method: DELETE
+        headers:
+          - name: session-id
+            value: "{{sessionId}}"
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+      - url: "{{_['base_url']}}/guest-cart"
+        name: Cart
+        meta:
+          id: req_626095ac6d7a4b708a777b102b743363
+          created: 1760688464374
+          modified: 1760688464374
+          isPrivate: false
+          description: ""
+          sortKey: -1760688454269
+        method: GET
+        body:
+          mimeType: text/plain
+          text: "{\r
+
+            \   \"productId\":\"68e780ba103177cc928095dc\",\r
+
+            \   \"quantity\":\"20\"\r
+
+            }"
+        headers:
+          - name: session-id
+            value: "{{sessionId}}"
+          - name: Content-Type
+            value: text/plain
+        settings:
+          renderRequestBody: true
+          encodeUrl: true
+          followRedirects: global
+          cookies:
+            send: true
+            store: true
+          rebuildPath: true
+cookieJar:
+  name: Default Jar
+  meta:
+    id: jar_c8251b1e3095edc33b51c3539ffded2b61cb386c
+    created: 1760688464380
+    modified: 1760688464380
+environments:
+  name: Base Environment
+  meta:
+    id: env_c8251b1e3095edc33b51c3539ffded2b61cb386c
+    created: 1760688464376
+    modified: 1760688464376
+    isPrivate: false
