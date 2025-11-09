@@ -162,10 +162,57 @@ export const deleteProduct = async (req, res, next) => {
   }
 };
 
+
 export const getProducts = async (req, res, next) => {
   try {
-    const Products = await Product.find().notDeleted().populate('categories');
-    res.status(200).json({ data: Products });
+    const {
+      page = 1,
+      limit = 10,
+      sortBy = 'createdAt',
+      sortOrder = 'desc',
+      fields,
+    } = req.query;
+
+    const pageNum = Math.max(1, Number(page) || 1);
+    const limitNum = Math.min(100, Math.max(1, Number(limit) || 10));
+    const skip = (pageNum - 1) * limitNum;
+    const sort = { [sortBy]: sortOrder === 'asc' ? 1 : -1 };
+
+    // projection (select specific fields)
+    const projection = fields
+      ? fields
+          .split(',')
+          .map((f) => f.trim())
+          .filter(Boolean)
+          .join(' ')
+      : '';
+
+    const filter = {}; // Add any filtering logic if needed
+
+    const [products, total] = await Promise.all([
+      Product.find(filter)
+        .notDeleted()
+        .populate('categories')
+        .sort(sort)
+        .skip(skip)
+        .limit(limitNum)
+        .select(projection)
+        .lean()
+        .exec(),
+      Product.countDocuments(filter).notDeleted().exec(),
+    ]);
+
+    // const Products = await Product.find().notDeleted().populate('categories');
+    return res.status(200).json({
+      meta: {
+        total,
+        page: pageNum,
+        limit: limitNum,
+        pages: Math.ceil(total / limitNum),
+      },
+      count: products.length,
+      data: products,
+    });
   } catch (error) {
     next(error);
   }

@@ -48,7 +48,7 @@ router.get(
 
 // Get seller's products
 router.get(
-  '/:sellerId',
+  '/seller/:sellerId',
   isAuthenticated,
   productController.getProductsBySeller
 );
