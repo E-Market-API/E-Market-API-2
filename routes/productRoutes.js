@@ -46,6 +46,9 @@ router.get(
   productController.searchProducts
 );
 
+// Get a single product by ID
+router.get('/:id', productController.getProductById);
+
 // Get seller's products
 router.get(
   '/:sellerId',
@@ -53,8 +56,6 @@ router.get(
   productController.getProductsBySeller
 );
 
-// Get a single product by ID
-router.get('/:id', productController.getProductById);
 
 // Update a product
 router.put(

@@ -185,7 +185,7 @@ export const getPublishedProducts = async (req, res, next) => {
 
 export const getProductById = async (req, res, next) => {
   try {
-    const product = await Product.findById(req.params.id);
+    const product = await Product.findById(req.params.id).populate("categories", "name");
 
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });

@@ -24,12 +24,24 @@ import { isAuthenticated } from './middlewares/auth.js';
 import swaggerJsDoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 import swaggerOptions from './config/swagger.js';
+import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const env = process.env.NODE_ENV || 'development'; // Default to development
 dotenv.config({ path: `./.env.${env}` });
 const uri = process.env.DB_URI;
 //dotenv.config();
 const app = express();
+app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}))
 app.use(express.json());
 // console.log(config);
 
@@ -40,7 +52,7 @@ if (process.env.NODE_ENV !== 'test') {
   // Connect to MongoDB
   connectDB();
   // Start server
-  app.listen(PORT, () =>
+  app.listen(PORT,() =>
     console.log(`Server running on http://localhost:${PORT}`)
   );
 }
@@ -73,9 +85,15 @@ app.use('/api/cart', isAuthenticated, cartRoutes);
 app.use('/api/guest-cart', cartRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/notifications', notificationRoutes);
+app.get("/api/test", (req, res) => {
+  res.json({ message: "Connexion réussie ✅" });
+});
 
 // Catch all unknown routes
 app.use(notFound);
 app.use(errorHandler);
+
+
+
 
 export default app;
