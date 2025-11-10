@@ -244,3 +244,13 @@ export const filterUsersByRole = async (req, res, next) => {
     next(error);
   }
 };
+
+// get loged in user profile
+export const profile = async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user.id).select('-password');
+    res.json({ user });
+  } catch (err) {
+    next(err);
+  }
+};

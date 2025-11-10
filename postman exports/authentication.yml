@@ -4,7 +4,7 @@ meta:
   id: wrk_0b84307e1ff547d2979e9c0a3d73745e
   created: 1760353881438
   modified: 1760360056596
-  description: ""
+  description: ''
 collection:
   - name: Authentication
     meta:
@@ -12,16 +12,16 @@ collection:
       created: 1760353881448
       modified: 1760360056588
       sortKey: -1760353878968
-      description: ""
+      description: ''
     children:
-      - url: "{{base_url}}/auth/register"
+      - url: '{{base_url}}/auth/register'
         name: Register
         meta:
           id: req_cf065fd1286d4aa4bd339018998dfbff
           created: 1760353881465
           modified: 1762264437153
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353878967
         method: POST
         body:
@@ -43,14 +43,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/auth/login"
+      - url: '{{base_url}}/auth/login'
         name: Login
         meta:
           id: req_2662715c8ac446ceb319a7f7793a1eb4
           created: 1760353881467
           modified: 1761749850076
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353878966
         method: POST
         body:
@@ -71,14 +71,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/auth/profile"
+      - url: '{{base_url}}/auth/profile'
         name: Profile
         meta:
           id: req_eb79ba004ba743f7b99f4b7acdecdff7
           created: 1760353881470
           modified: 1760360056594
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353878965
         method: GET
         body:
@@ -95,7 +95,7 @@ collection:
             value: text/plain
         authentication:
           disabled: false
-          prefix: ""
+          prefix: ''
           token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY4ZWNiNWNlN2ZmZGMyM2FhMzMyNDdmNyIsInJvbGUiOiJhZG1pbiIsImlhdCI6MTc2MDM0MzgyOCwiZXhwIjoxNzYwOTQ4NjI4fQ.tCLeaO5wRCOMTMUvYO0hR_SvbbDEuqetARuDeJ4HIfs
           type: bearer
         settings:

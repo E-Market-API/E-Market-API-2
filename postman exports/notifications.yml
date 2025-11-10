@@ -4,23 +4,23 @@ meta:
   id: wrk_351ca669d3dc4372abd067a0b19ad522
   created: 1761217824224
   modified: 1762520518184
-  description: ""
+  description: ''
 collection:
-  - url: "{{ _.base_url }}/notifications"
+  - url: '{{ _.base_url }}/notifications'
     name: get notifications
     meta:
       id: req_9c11dc27ae7540dd8b0688270d33ff44
       created: 1761217830727
       modified: 1762520518180
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1761217830727
     method: GET
     headers:
       - name: User-Agent
         value: insomnia/11.6.2
     authentication:
-      token: "{{ _.token }}"
+      token: '{{ _.token }}'
       type: bearer
     settings:
       renderRequestBody: true
@@ -30,21 +30,21 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.base_url }}/notifications/68fa095df73a0c448c3080fa/read"
+  - url: '{{ _.base_url }}/notifications/68fa095df73a0c448c3080fa/read'
     name: read notification
     meta:
       id: req_62e12f0b01f84890bc187fc66baadf3f
       created: 1761218371795
       modified: 1762520518175
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1761218371795
     method: PATCH
     headers:
       - name: User-Agent
         value: insomnia/11.6.2
     authentication:
-      token: "{{ _.token }}"
+      token: '{{ _.token }}'
       type: bearer
     settings:
       renderRequestBody: true

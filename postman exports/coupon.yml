@@ -4,16 +4,16 @@ meta:
   id: wrk_a875e03c29114e02a57775be6faaf657
   created: 1760450401559
   modified: 1760621172184
-  description: ""
+  description: ''
 collection:
-  - url: "{{ _.base_url }}/coupons/"
+  - url: '{{ _.base_url }}/coupons/'
     name: create
     meta:
       id: req_24a25bcdb75d474baa488b249bc14c33
       created: 1760450425731
       modified: 1761749685421
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1760450425731
     method: POST
     body:
@@ -47,14 +47,14 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.base_url }}/coupons/68ef5a580cf5b3544ee1715a"
+  - url: '{{ _.base_url }}/coupons/68ef5a580cf5b3544ee1715a'
     name: update
     meta:
       id: req_b22d81be026e4edeacf2a08e96939c91
       created: 1760450828349
       modified: 1760690211509
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1760450828349
     method: PUT
     body:
@@ -88,14 +88,14 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.base_url }}/coupons/validate"
+  - url: '{{ _.base_url }}/coupons/validate'
     name: validate
     meta:
       id: req_009b2a1d6ce748f994802d2ff2311803
       created: 1760450933812
       modified: 1760690211509
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1760450933812
     method: POST
     body:
@@ -120,19 +120,19 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.base_url }}/coupons/68ef5a580cf5b3544ee1715a"
+  - url: '{{ _.base_url }}/coupons/68ef5a580cf5b3544ee1715a'
     name: delete
     meta:
       id: req_9596b4a74e17446ab5ff17ebcdb701f0
       created: 1760451000401
       modified: 1760690211509
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1760451000401
     method: DELETE
     body:
       mimeType: application/json
-      text: ""
+      text: ''
     headers:
       - name: Content-Type
         value: application/json
@@ -149,14 +149,14 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.base_url }}/coupons/"
+  - url: '{{ _.base_url }}/coupons/'
     name: getAll
     meta:
       id: req_dedabef94999476a9f1014e90542aed1
       created: 1760451041799
       modified: 1761749685421
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1760451041799
     method: GET
     headers:
@@ -173,14 +173,14 @@ collection:
         send: true
         store: true
       rebuildPath: true
-  - url: "{{ _.base_url }}/coupons/68f9f1592a303710ac40b850"
+  - url: '{{ _.base_url }}/coupons/68f9f1592a303710ac40b850'
     name: getById
     meta:
       id: req_fd0af9545efd40adb84a68e06734b712
       created: 1760451112949
       modified: 1761749685421
       isPrivate: false
-      description: ""
+      description: ''
       sortKey: -1760451112949
     method: GET
     headers:

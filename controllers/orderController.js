@@ -6,7 +6,7 @@ import Product from '../models/Product.js';
 
 export const createOrder = async (req, res, next) => {
   let session = null;
-  
+
   try {
     // Only use transactions in production or when explicitly supported
     if (process.env.NODE_ENV === 'production') {
@@ -18,7 +18,7 @@ export const createOrder = async (req, res, next) => {
     const couponCodes = req.body.coupons || [];
 
     const result = await OrderService.createOrder(userId, couponCodes, session);
-    
+
     const productIds = result.order.items.map((i) => i.productId);
     const products = await Product.find(
       { _id: { $in: productIds } },
@@ -54,7 +54,6 @@ export const createOrder = async (req, res, next) => {
     }
   }
 };
-
 
 export const updateOrderStatus = async (req, res, next) => {
   try {

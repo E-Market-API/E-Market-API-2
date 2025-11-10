@@ -4,6 +4,7 @@ import path from 'path';
 import { notificationEmitter } from '../events/notificationEmitter.js';
 import User from '../models/User.js';
 import cacheService from '../services/cacheService.js';
+import Review from '../models/Review.js';
 
 // helper function for invalide cache
 const invalidateProductCache = async () => {
@@ -190,8 +191,15 @@ export const getProductById = async (req, res, next) => {
     if (!product) {
       return res.status(404).json({ error: 'Product not found' });
     }
+    const { averageRating, totalReviews } = await Review.calculateAverageRating(product._id);
 
-    res.status(200).json(product);
+    res.status(200).json({
+      data: {
+        product,
+        averageRating,
+        totalReviews,
+      },
+    });
   } catch (error) {
     next(error);
   }
@@ -242,7 +250,7 @@ export const searchProducts = async (req, res) => {
       minPrice,
       maxPrice,
       page = 1,
-      limit = 10,
+      limit = 8,
       sortBy = 'createdAt',
       sortOrder = 'desc',
       fields,
@@ -277,9 +285,9 @@ export const searchProducts = async (req, res) => {
     // Choose fields to return
     const projection = fields
       ? fields
-          .split(',')
-          .map((f) => f.trim())
-          .join(' ')
+        .split(',')
+        .map((f) => f.trim())
+        .join(' ')
       : '';
 
     // Fetch results + total count in parallel for better response time

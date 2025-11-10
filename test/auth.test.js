@@ -65,13 +65,11 @@ describe('Auth API', function () {
       await userFactory(1, { email: 'duplicate@test.com' });
 
       // Puis on tente de créer un autre utilisateur avec le même email
-      const res = await request(app)
-        .post('/api/auth/register')
-        .send({
-          fullname: 'Dup User',
-          email: 'duplicate@test.com',
-          password: '123456',
-        });
+      const res = await request(app).post('/api/auth/register').send({
+        fullname: 'Dup User',
+        email: 'duplicate@test.com',
+        password: '123456',
+      });
 
       // Vérification du statut et du message d'erreur
       expect(res.status).to.equal(400);

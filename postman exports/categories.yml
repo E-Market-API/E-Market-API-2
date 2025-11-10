@@ -4,7 +4,7 @@ meta:
   id: wrk_059b9ffb2dad4e0aaf99cfbbadc78e8c
   created: 1760353865538
   modified: 1760688948945
-  description: ""
+  description: ''
 collection:
   - name: Categories
     meta:
@@ -12,16 +12,16 @@ collection:
       created: 1760353865548
       modified: 1760688948932
       sortKey: -1760353864466
-      description: ""
+      description: ''
     children:
-      - url: "{{base_url}}/categories"
+      - url: '{{base_url}}/categories'
         name: Create
         meta:
           id: req_937ee38a759a412ba240877549b8bef0
           created: 1760353865550
           modified: 1760688948942
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864465
         method: POST
         body:
@@ -38,14 +38,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories/68e68e75139258d7d83b35ee"
+      - url: '{{base_url}}/categories/68e68e75139258d7d83b35ee'
         name: Update
         meta:
           id: req_29e6396a8dfd4ef7bcb315e73ee6c72a
           created: 1760353865553
           modified: 1760688948935
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864464
         method: PATCH
         body:
@@ -62,14 +62,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories/68e68e75139258d7d83b35ee"
+      - url: '{{base_url}}/categories/68e68e75139258d7d83b35ee'
         name: Delete
         meta:
           id: req_7ccdd69036ec459aae45cfc36ed11cb1
           created: 1760353865556
           modified: 1760688948938
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864463
         method: DELETE
         settings:
@@ -80,14 +80,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories"
+      - url: '{{base_url}}/categories'
         name: Get all
         meta:
           id: req_89bc88db1c484c128a0713bbd5d63c92
           created: 1760353865559
           modified: 1760688948940
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864462
         method: GET
         settings:
@@ -98,14 +98,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories/68e68fb52225b77a97b77bf7"
+      - url: '{{base_url}}/categories/68e68fb52225b77a97b77bf7'
         name: Get By id
         meta:
           id: req_933a7e79603b42818798b041d46a1415
           created: 1760353865561
           modified: 1760688948941
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864461
         method: GET
         settings:
@@ -116,14 +116,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories/68e797c28c5ada54ea460c56/soft"
+      - url: '{{base_url}}/categories/68e797c28c5ada54ea460c56/soft'
         name: Soft Delete
         meta:
           id: req_299c588b8e56438db1c1f27e2f1566f2
           created: 1760353865563
           modified: 1760688948934
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864460
         method: DELETE
         settings:
@@ -134,14 +134,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories/68e797c28c5ada54ea460c56/restore"
+      - url: '{{base_url}}/categories/68e797c28c5ada54ea460c56/restore'
         name: Restore
         meta:
           id: req_6c973c8c498a4fea9cec19c1dec004db
           created: 1760353865565
           modified: 1760688948937
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864459
         method: PATCH
         settings:
@@ -152,14 +152,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/categories/deleted"
+      - url: '{{base_url}}/categories/deleted'
         name: Get all Soft Deleted
         meta:
           id: req_f26c0f4e141a4a82b58eb33c2e6a084c
           created: 1760353865567
           modified: 1760688948943
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353864458
         method: GET
         settings:

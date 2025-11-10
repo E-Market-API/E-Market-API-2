@@ -97,12 +97,12 @@ describe('Product API', function () {
     });
   });
 
-   describe('POST /api/products', () => {
+  describe('POST /api/products', () => {
     it('shouldnt create a new product without valid token ', async () => {
       try {
         const res = await request(app)
           .post('/api/products')
-          .set('Authorization',`Bearer hdhdhdfijfjf`)
+          .set('Authorization', `Bearer hdhdhdfijfjf`)
           .send({
             title: 'product 1',
             description: 'some text',

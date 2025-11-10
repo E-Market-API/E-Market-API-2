@@ -4,7 +4,7 @@ meta:
   id: wrk_99bab118b019454d843f4584c71b6174
   created: 1760688461769
   modified: 1760688461769
-  description: ""
+  description: ''
 collection:
   - name: Cart
     meta:
@@ -12,16 +12,16 @@ collection:
       created: 1760688461773
       modified: 1760949837318
       sortKey: -1760688454272
-      description: ""
+      description: ''
     children:
-      - url: "{{base_url}}/cart"
+      - url: '{{base_url}}/cart'
         name: Add to cart
         meta:
           id: req_f4ba858524524979b824fa7e87a8df2c
           created: 1760688461777
           modified: 1761749807169
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454271
         method: POST
         body:
@@ -42,14 +42,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/cart"
+      - url: '{{base_url}}/cart'
         name: Update item quantity
         meta:
           id: req_9b738f2d36d8449fabf46d7d88f32560
           created: 1760688461779
           modified: 1760688461779
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454270
         method: PUT
         body:
@@ -72,14 +72,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/cart"
+      - url: '{{base_url}}/cart'
         name: Remove item
         meta:
           id: req_2880b8b1b33849498fb1af71265c685d
           created: 1760688461780
           modified: 1760688461780
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454269
         method: DELETE
         body:
@@ -100,14 +100,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/cart/clear"
+      - url: '{{base_url}}/cart/clear'
         name: Clear cart
         meta:
           id: req_cdcf0bdf1c654b288933ec7c4a4cf1aa
           created: 1760688461781
           modified: 1760688461781
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454268
         method: DELETE
         settings:
@@ -118,14 +118,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/cart"
+      - url: '{{base_url}}/cart'
         name: Cart
         meta:
           id: req_cee0e6b6f836416291d05dbff67be94c
           created: 1760688461783
           modified: 1760688461783
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454267
         method: GET
         settings:
@@ -139,8 +139,8 @@ collection:
     authentication:
       type: bearer
       disabled: false
-      token: "{{token}}"
-      prefix: ""
+      token: '{{token}}'
+      prefix: ''
 cookieJar:
   name: Default Jar
   meta:

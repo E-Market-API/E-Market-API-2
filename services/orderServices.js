@@ -4,7 +4,7 @@ import StockService from './StockService.js';
 import DiscountService from './discountService.js';
 
 class OrderService {
-  static async createOrder(userId, couponCodes, session = null ) {
+  static async createOrder(userId, couponCodes, session = null) {
     const cart = await Cart.findOne({ userId })
       .populate('items.productId')
       .session(session);
@@ -47,22 +47,21 @@ class OrderService {
     const finalAmount = Math.max(totalAmount - totalDiscount, 0);
 
     // Create order
-    const [order] = await Order.create(
-      [
-        {
-          userId,
-          items: cart.items.map((i) => ({
-            productId: i.productId._id,
-            quantity: i.quantity,
-            price: i.productId.price,
-          })),
-          totalAmount,
-          discount: totalDiscount,
-          finalAmount,
-          appliedCoupons: appliedCouponIds,
-          status: 'pending',
-        },
-      ]);
+    const [order] = await Order.create([
+      {
+        userId,
+        items: cart.items.map((i) => ({
+          productId: i.productId._id,
+          quantity: i.quantity,
+          price: i.productId.price,
+        })),
+        totalAmount,
+        discount: totalDiscount,
+        finalAmount,
+        appliedCoupons: appliedCouponIds,
+        status: 'pending',
+      },
+    ]);
 
     // Mark coupons as used
     for (const c of validCoupons) {

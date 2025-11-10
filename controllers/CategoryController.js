@@ -1,4 +1,5 @@
 import Category from '../models/Category.js';
+import Product from '../models/Product.js';
 
 export const createCategory = async (req, res, next) => {
   try {
@@ -51,7 +52,11 @@ export const deleteCategory = async (req, res, next) => {
 export const getCategories = async (req, res, next) => {
   try {
     const categories = await Category.find().notDeleted();
-    res.status(200).json({ categories });
+    res.status(200).json({
+      success: true,
+      message: 'Categories fetched successfully',
+      data: categories,
+    });
   } catch (error) {
     next(error);
   }
@@ -106,6 +111,35 @@ export const getDeletedCategories = async (req, res, next) => {
   try {
     const categories = await Category.find().deleted();
     res.status(200).json({ categories });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// get categories with products number
+export const categorisProductNumber = async (req, res, next) => {
+  try {
+    const categories = await Category.find().notDeleted();
+
+    const categoriesWithCounts = await Promise.all(
+      categories.map(async (cat) => {
+        const productCount = await Product.countDocuments({
+          categories: cat._id,
+          deletedAt: null, // optional, if you want only non-deleted products
+          published: true, // optional, only published products
+        });
+        return {
+          ...cat.toObject(), // convert Mongoose document to plain object
+          productCount,
+        };
+      })
+    );
+
+    res.status(200).json({
+      success: true,
+      message: 'Categories fetched successfully',
+      data: categoriesWithCounts,
+    });
   } catch (error) {
     next(error);
   }

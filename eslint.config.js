@@ -14,12 +14,16 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': ['error', { 
-        argsIgnorePattern: '^(next|error|_|sellerId)',
-        varsIgnorePattern: '^(_|coupon|productFactory|uri|Order|outputFormat)'
-      }],
-      'no-unexpected-multiline': 'off'
-    }
+      'no-unused-vars': [
+        'error',
+        {
+          argsIgnorePattern: '^(next|error|_|sellerId)',
+          varsIgnorePattern:
+            '^(_|coupon|productFactory|uri|Order|outputFormat)',
+        },
+      ],
+      'no-unexpected-multiline': 'off',
+    },
   },
   {
     files: ['test/**/*.js', '**/*.test.js'],
@@ -29,7 +33,7 @@ export default defineConfig([
       },
     },
     rules: {
-      'no-unused-vars': 'off'
-    }
+      'no-unused-vars': 'off',
+    },
   },
 ]);

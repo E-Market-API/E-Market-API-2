@@ -4,7 +4,7 @@ meta:
   id: wrk_63fd98ae4fee42cb97092db0221d32aa
   created: 1760688464354
   modified: 1760688464354
-  description: ""
+  description: ''
 collection:
   - name: Cart Guest
     meta:
@@ -12,7 +12,7 @@ collection:
       created: 1760688464356
       modified: 1760688464356
       sortKey: -1760688454274
-      description: ""
+      description: ''
     children:
       - url: "{{_['base_url']}}/guest-cart"
         name: Add to cart
@@ -21,7 +21,7 @@ collection:
           created: 1760688464364
           modified: 1760688464364
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454273
         method: POST
         body:
@@ -35,7 +35,7 @@ collection:
             }"
         headers:
           - name: session-id
-            value: "{{sessionId}}"
+            value: '{{sessionId}}'
           - name: Content-Type
             value: application/json
         settings:
@@ -53,7 +53,7 @@ collection:
           created: 1760688464366
           modified: 1760688464366
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454272
         method: PUT
         body:
@@ -67,7 +67,7 @@ collection:
             }"
         headers:
           - name: session-id
-            value: "{{sessionId}}"
+            value: '{{sessionId}}'
           - name: Content-Type
             value: application/json
         settings:
@@ -85,7 +85,7 @@ collection:
           created: 1760688464370
           modified: 1760688464370
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454271
         method: DELETE
         body:
@@ -97,7 +97,7 @@ collection:
             }"
         headers:
           - name: session-id
-            value: "{{sessionId}}"
+            value: '{{sessionId}}'
           - name: Content-Type
             value: application/json
         settings:
@@ -115,12 +115,12 @@ collection:
           created: 1760688464372
           modified: 1760688464372
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454270
         method: DELETE
         headers:
           - name: session-id
-            value: "{{sessionId}}"
+            value: '{{sessionId}}'
         settings:
           renderRequestBody: true
           encodeUrl: true
@@ -136,7 +136,7 @@ collection:
           created: 1760688464374
           modified: 1760688464374
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454269
         method: GET
         body:
@@ -150,7 +150,7 @@ collection:
             }"
         headers:
           - name: session-id
-            value: "{{sessionId}}"
+            value: '{{sessionId}}'
           - name: Content-Type
             value: text/plain
         settings:

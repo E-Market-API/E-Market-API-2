@@ -4,7 +4,7 @@ meta:
   id: wrk_c668b461508a43f2968809fe6c95d2f4
   created: 1760353902819
   modified: 1760688942939
-  description: ""
+  description: ''
 collection:
   - name: Users
     meta:
@@ -12,16 +12,16 @@ collection:
       created: 1760353902830
       modified: 1760688942927
       sortKey: -1760353901377
-      description: ""
+      description: ''
     children:
-      - url: "{{base_url}}/users"
+      - url: '{{base_url}}/users'
         name: Create
         meta:
           id: req_8112ad0b35b5433393f557c9086f32cd
           created: 1760353902849
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901376
         method: POST
         body:
@@ -37,7 +37,7 @@ collection:
           - name: Content-Type
             value: application/json
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -47,14 +47,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users/68e678e0d2a87cff299beed7"
+      - url: '{{base_url}}/users/68e678e0d2a87cff299beed7'
         name: Update
         meta:
           id: req_83dd502835a74f778a029acc9336ec17
           created: 1760353902852
           modified: 1760688942933
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901375
         method: PATCH
         body:
@@ -79,18 +79,18 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users"
+      - url: '{{base_url}}/users'
         name: Get all
         meta:
           id: req_23495a2f8aa046e199b8e1b482d9401c
           created: 1760353902856
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901373
         method: GET
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -100,18 +100,18 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users/6900a7ebd34fb2da1f13ae27"
+      - url: '{{base_url}}/users/6900a7ebd34fb2da1f13ae27'
         name: Get by id
         meta:
           id: req_c4f32d221cfc466a8bae75aa4f6c091a
           created: 1760353902858
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901372
         method: GET
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -121,18 +121,18 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users/6900a7ebd34fb2da1f13ae27/soft"
+      - url: '{{base_url}}/users/6900a7ebd34fb2da1f13ae27/soft'
         name: Soft Delete
         meta:
           id: req_90592ab71fbf4758b79b404a0909994a
           created: 1760353902859
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901371
         method: DELETE
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -142,14 +142,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users/68e79004a50a237e1adf9bda/restore"
+      - url: '{{base_url}}/users/68e79004a50a237e1adf9bda/restore'
         name: Restore
         meta:
           id: req_dfcaca7302e84f44a09b82cf0b2435da
           created: 1760353902860
           modified: 1760688942938
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901370
         method: PATCH
         settings:
@@ -160,18 +160,18 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users/deleted"
+      - url: '{{base_url}}/users/deleted'
         name: Get all Soft Deleted
         meta:
           id: req_a7121227f49549d19bd943dfc0d27468
           created: 1760353902861
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901369
         method: GET
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -181,49 +181,50 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/users/68ff781f26aee1c3c46c3c45"
+      - url: '{{base_url}}/users/68ff781f26aee1c3c46c3c45'
         name: Update profile
         meta:
           id: req_f5ffb14c7d574bcea14a6cf3e7c8a7d5
           created: 1760526407551
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901374.5
         method: PATCH
         body:
           mimeType: multipart/form-data
           params:
-            - description: ""
+            - description: ''
               disabled: false
               id: pair_c0d68325986841d29da240ab39a3b3c3
               name: fullname
               value: user
-            - description: ""
+            - description: ''
               disabled: false
               id: pair_fb359cef7189484f861c38ffe0487df7
               name: email
               value: user@test.com
-            - description: ""
+            - description: ''
               disabled: false
               id: pair_28b4b005b09641e3baa93d57de407fe1
               name: password
               value: password
-            - description: ""
+            - description: ''
               disabled: false
-              fileName: C:\Users\LENOVO\Pictures\Screenshots\Capture d'écran 2025-07-23
+              fileName:
+                C:\Users\LENOVO\Pictures\Screenshots\Capture d'écran 2025-07-23
                 171201.png
               id: pair_d014c427a65f495cba596a6ab66c9be3
               name: avatar
               type: file
-              value: ""
+              value: ''
         headers:
           - name: Content-Type
             value: multipart/form-data
           - name: User-Agent
             value: insomnia/11.6.1
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -233,21 +234,21 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/users/68ff781f26aee1c3c46c3c45/avatar"
+      - url: '{{ _.base_url }}/users/68ff781f26aee1c3c46c3c45/avatar'
         name: deleteAvatar
         meta:
           id: req_020f66c4d77044799a833cb10b83e4a0
           created: 1760540259282
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760353901374.75
         method: DELETE
         headers:
           - name: User-Agent
             value: insomnia/11.6.1
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -257,14 +258,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/users/68ff781f26aee1c3c46c3c45/role"
+      - url: '{{ _.base_url }}/users/68ff781f26aee1c3c46c3c45/role'
         name: change Role
         meta:
           id: req_c8b9c748c3474d5dbb39bec6e8b16319
           created: 1760605753553
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760605753653
         method: PATCH
         body:
@@ -279,7 +280,7 @@ collection:
           - name: User-Agent
             value: insomnia/11.6.1
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -289,21 +290,21 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/users/sellers"
+      - url: '{{ _.base_url }}/users/sellers'
         name: serach sellers
         meta:
           id: req_86527718301e466eb5675825a6dc487f
           created: 1760614169692
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760614169692
         method: GET
         headers:
           - name: User-Agent
             value: insomnia/11.6.1
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true
@@ -313,21 +314,21 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{ _.base_url }}/users/filter?role=user"
+      - url: '{{ _.base_url }}/users/filter?role=user'
         name: Filter By Role
         meta:
           id: req_3238360159ea4ea6ba5fc948ebf55d57
           created: 1760695948810
           modified: 1761750149214
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760695948810
         method: GET
         headers:
           - name: User-Agent
             value: insomnia/11.6.1
         authentication:
-          token: "{{ _.token }}"
+          token: '{{ _.token }}'
           type: bearer
         settings:
           renderRequestBody: true

@@ -4,7 +4,7 @@ meta:
   id: wrk_fee2353efa0740c697897879f3584d71
   created: 1760688458539
   modified: 1760688458539
-  description: ""
+  description: ''
 collection:
   - name: Order
     meta:
@@ -12,16 +12,16 @@ collection:
       created: 1760688458542
       modified: 1760688458542
       sortKey: -1760688454270
-      description: ""
+      description: ''
     children:
-      - url: "{{base_url}}/orders"
+      - url: '{{base_url}}/orders'
         name: Create
         meta:
           id: req_9cb1488378b645d9af33595395126dba
           created: 1760688458544
           modified: 1761749925004
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454269
         method: POST
         body:
@@ -41,14 +41,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders/68f215cc70bab68be7afe65a/status"
+      - url: '{{base_url}}/orders/68f215cc70bab68be7afe65a/status'
         name: update status
         meta:
           id: req_652984e46e494409862833907c4dc0f9
           created: 1760688458546
           modified: 1761749925004
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454268
         method: PATCH
         body:
@@ -71,14 +71,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders"
+      - url: '{{base_url}}/orders'
         name: Orders
         meta:
           id: req_7387f2864202476fa13dac1378295d1f
           created: 1760688458547
           modified: 1760688458547
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454267
         method: GET
         settings:
@@ -89,14 +89,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders/deleted"
+      - url: '{{base_url}}/orders/deleted'
         name: Deleted orders
         meta:
           id: req_fda8f033ebbb441b9abb58ca7866740e
           created: 1760688458548
           modified: 1760688458548
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454266
         method: GET
         settings:
@@ -107,14 +107,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2/soft"
+      - url: '{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2/soft'
         name: Soft Delete
         meta:
           id: req_7e34c77cf4844eb2b9d25c855a20cee3
           created: 1760688458550
           modified: 1760688458550
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454265
         method: DELETE
         settings:
@@ -125,14 +125,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2"
+      - url: '{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2'
         name: Delete
         meta:
           id: req_5c00cb25f7b04ee4b69f98cc967191d3
           created: 1760688458552
           modified: 1760688458552
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454264
         method: DELETE
         settings:
@@ -143,14 +143,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2/restore"
+      - url: '{{base_url}}/orders/68ef6838e58f30b2d4fe4fb2/restore'
         name: Restore
         meta:
           id: req_0089f7c944c346feb99a62a852397069
           created: 1760688458554
           modified: 1760688458554
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454263
         method: PATCH
         settings:
@@ -161,14 +161,14 @@ collection:
             send: true
             store: true
           rebuildPath: true
-      - url: "{{base_url}}/orders/68f63467cb88cd458a55f607"
+      - url: '{{base_url}}/orders/68f63467cb88cd458a55f607'
         name: User Orders
         meta:
           id: req_3310b6f56e364d83b505183e1786f8ca
           created: 1760958288328
           modified: 1760965798717
           isPrivate: false
-          description: ""
+          description: ''
           sortKey: -1760688454266.5
         method: GET
         settings:
@@ -182,8 +182,8 @@ collection:
     authentication:
       type: bearer
       disabled: false
-      token: "{{token}}"
-      prefix: ""
+      token: '{{token}}'
+      prefix: ''
 cookieJar:
   name: Default Jar
   meta:
